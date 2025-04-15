@@ -1,0 +1,6 @@
+projectKey=javame-project
+serverUrl=http://s4.java21.net:9000
+serverVersion=25.1.0.102122
+dashboardUrl=http://s4.java21.net:9000/dashboard?id=javame-project
+ceTaskId=9165f448-2b34-4639-9845-003aeaa4e8e6
+ceTaskUrl=http://s4.java21.net:9000/api/ce/task?id=9165f448-2b34-4639-9845-003aeaa4e8e6
