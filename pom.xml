@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
+
         <module>javame-auth</module>
         <module>javame-eureka</module>
         <module>javame-frontend</module>
