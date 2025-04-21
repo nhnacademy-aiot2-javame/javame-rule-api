@@ -10,8 +10,8 @@ public class Sensor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sensor_number", nullable = false)
-    private long sensorNumber;
+    @Column(name = "sensor_no", nullable = false)
+    private long sensorNo;
 
     @Column(name = "sensor_type", nullable = false)
     private String sensorType;
@@ -27,15 +27,15 @@ public class Sensor {
 
   }
 
-    public Sensor(long sensorNumber, String sensorType, long threshold, Company company) {
-        this.sensorNumber = sensorNumber;
+    public Sensor(long sensorNo, String sensorType, long threshold, Company company) {
+        this.sensorNo = sensorNo;
         this.sensorType = sensorType;
         this.threshold = threshold;
         this.company = company;
     }
 
-    public long getSensorNumber() {
-        return sensorNumber;
+    public long getSensorNo() {
+        return sensorNo;
     }
 
     public String getSensorType() {
