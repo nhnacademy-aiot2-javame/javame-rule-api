@@ -1,21 +1,18 @@
 package com.nhnacademy.exam.javameruleapi.sensor.service;
 
+import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorThresholdRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorThresholdUpdateRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdUpdateRequest;
-import org.springframework.stereotype.Service;
+import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorUpdateRequest;
 
 public interface SensorService {
 
-    SensorResponse register(SensorThresholdRegisterRequest sensorThresholdRegisterRequest);
+    SensorResponse register(SensorRegisterRequest sensorRegisterRequest);
 
-    SensorResponse getSensorThreshold(long sensorNo);
+    SensorResponse getSensor(long sensorNo);
 
-    SensorResponse update(SensorThresholdUpdateRequest sensorThresholdUpdateRequest);
+    SensorResponse update(SensorUpdateRequest sensorUpdateRequest);
 
-    Void delete(long sensorNo);
+    void delete(long sensorNo);
 
 
 }

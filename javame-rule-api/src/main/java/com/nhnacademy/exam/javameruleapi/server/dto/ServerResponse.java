@@ -1,11 +1,12 @@
 package com.nhnacademy.exam.javameruleapi.server.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Getter
+@Builder
 public class ServerResponse {
 
     private final long serverNo;
@@ -20,9 +21,9 @@ public class ServerResponse {
 
     private final Double diskUsageThreshold;
 
-    private final long diskTemperatureThreshold;
+    private final Double diskTemperatureThreshold;
 
-    private final String;
+    private final String companyDomain;
 
 
 

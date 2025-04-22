@@ -1,8 +1,8 @@
 package com.nhnacademy.exam.javameruleapi.sensor.controller;
 
+import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorThresholdRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorThresholdUpdateRequest;
+import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/sensors")
+@RequestMapping("/api/v1/sensors")
 public class SensorController {
 
     private final SensorService sensorService;
@@ -21,8 +21,8 @@ public class SensorController {
     }
 
     @PostMapping
-    ResponseEntity<SensorResponse> registerSensorThreshold(@Validated @RequestBody SensorThresholdRegisterRequest sensorThresholdRegisterRequest){
-        SensorResponse sensorResponse = sensorService.register(sensorThresholdRegisterRequest);
+    ResponseEntity<SensorResponse> registerSensorThreshold(@Validated @RequestBody SensorRegisterRequest sensorRegisterRequest){
+        SensorResponse sensorResponse = sensorService.register(sensorRegisterRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(sensorResponse);
@@ -30,13 +30,13 @@ public class SensorController {
 
     @GetMapping("/{sensor-id}")
     ResponseEntity<SensorResponse> getSensorThreshold(@PathVariable("sensor-id") long sensorNo){
-        SensorResponse sensorResponse = sensorService.getSensorThreshold(sensorNo);
+        SensorResponse sensorResponse = sensorService.getSensor(sensorNo);
         return ResponseEntity.ok(sensorResponse);
     }
 
     @PutMapping("/{sensor-id}")
-    ResponseEntity<SensorResponse> updateSensorThreshold(@Validated @RequestBody SensorThresholdUpdateRequest sensorThresholdUpdateRequest){
-        SensorResponse sensorResponse = sensorService.update(sensorThresholdUpdateRequest);
+    ResponseEntity<SensorResponse> updateSensorThreshold(@Validated @RequestBody SensorUpdateRequest sensorUpdateRequest){
+        SensorResponse sensorResponse = sensorService.update(sensorUpdateRequest);
         return ResponseEntity.ok(sensorResponse);
     }
 

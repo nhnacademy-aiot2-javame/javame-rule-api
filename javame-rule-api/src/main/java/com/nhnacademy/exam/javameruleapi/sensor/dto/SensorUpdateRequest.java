@@ -5,15 +5,11 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SensorThresholdRegisterRequest {
+public class SensorUpdateRequest {
 
     private final long sensorNo;
 
-    private final String sensorType;
+    private final String companyDomain;
 
-    private final long threshold;
-
-    private final Company company;
-
-
+    private final String sensorId;
 }

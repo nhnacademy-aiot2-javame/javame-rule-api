@@ -1,11 +1,20 @@
 package com.nhnacademy.exam.javameruleapi.sensor.domain;
 
+import com.nhnacademy.exam.javameruleapi.dataType.domain.DataType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="sensors")
 @ToString
+@Getter
+@NoArgsConstructor
 public class Sensor {
 
     @Id
@@ -13,40 +22,15 @@ public class Sensor {
     @Column(name = "sensor_no", nullable = false)
     private long sensorNo;
 
-    @Column(name = "sensor_type", nullable = false)
-    private String sensorType;
+    @Column(name = "company_domain")
+    private String companyDomain;
 
-    @Column(name = "threshold", nullable = false)
-    private long threshold;
+    @Column(name = "sensor_id")
+    private String sensorId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_domain", nullable = false)
-    private Company company;
 
-    public Sensor(){
-
-  }
-
-    public Sensor(long sensorNo, String sensorType, long threshold, Company company) {
-        this.sensorNo = sensorNo;
-        this.sensorType = sensorType;
-        this.threshold = threshold;
-        this.company = company;
-    }
-
-    public long getSensorNo() {
-        return sensorNo;
-    }
-
-    public String getSensorType() {
-        return sensorType;
-    }
-
-    public long getThreshold() {
-        return threshold;
-    }
-
-    public Company getCompany() {
-        return company;
+    public Sensor(String companyDomain, String sensorId){
+        this.companyDomain = companyDomain;
+        this.sensorId = sensorId;
     }
 }

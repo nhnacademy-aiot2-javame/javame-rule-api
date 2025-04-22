@@ -1,6 +1,7 @@
 package com.nhnacademy.exam.javameruleapi.server.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -8,6 +9,7 @@ import lombok.ToString;
 @Table(name = "servers")
 @ToString
 @Getter
+@Builder
 public class Server {
 
     @Id
@@ -39,22 +41,8 @@ public class Server {
     @Column(name = "company_domain")
     private String companyDomain; // db에서 찾아서
 
-    public Server() { };
+    public Server() { }
 
-    public Server( long serverNo, Double cpuUsageThreshold, Double cpuTemperatureThreshold,
-                  Double memoryUsageThreshold, Double memoryTemperatureThreshold, Double diskUsageThreshold,
-                  Double diskTemperatureThreshold, String iphost, String companyDomain) {
-
-        this.cpuUsageThreshold = cpuUsageThreshold;
-        this.cpuTemperatureThreshold = cpuTemperatureThreshold;
-        this.memoryUsageThreshold = memoryUsageThreshold;
-        this.memoryTemperatureThreshold = memoryTemperatureThreshold;
-        this.diskUsageThreshold = diskUsageThreshold;
-        this.diskTemperatureThreshold = diskTemperatureThreshold;
-        this.iphost = iphost;
-        this.companyDomain = companyDomain;
-
-    }
 }
 
 

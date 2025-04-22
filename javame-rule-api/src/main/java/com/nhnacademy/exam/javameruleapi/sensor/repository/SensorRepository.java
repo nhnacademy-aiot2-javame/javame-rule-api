@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SensorRepository extends JpaRepository<Sensor, Long> {
 
-    Boolean existsSensorBySensorNo(long sensorNo);
+    Boolean existsSensorBySensorId(String sensorId);
 
+    Sensor getSensorBySensorNo(long sensorNo);
 
+    Sensor update(Sensor sensor);
 }

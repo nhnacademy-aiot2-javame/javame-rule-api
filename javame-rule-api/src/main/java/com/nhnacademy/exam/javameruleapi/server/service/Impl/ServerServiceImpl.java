@@ -22,7 +22,11 @@ public class ServerServiceImpl implements ServerService {
         this.serverRepository = serverRepository;
     }
 
-    public ServerResponse responseMapper()
+    public ServerResponse responseMapper(Server server){
+        return new ServerResponse(Server.builder()
+                .cpuUsageThreshold(server.getCpuUsageThreshold())
+                )
+    }
 
 
     @Override
@@ -31,22 +35,19 @@ public class ServerServiceImpl implements ServerService {
         if(isExist){
             throw new AlreadyExistException("이미 존재하는 서버입니다.");
         }
-        Server server = new Server(
-                serverThresholdRegisterRequest.getServerNo(),
-                serverThresholdRegisterRequest.getCpuUsageThreshold(),
-                serverThresholdRegisterRequest.getCpuTemperatureThreshold(),
-                serverThresholdRegisterRequest.getMemoryUsageThreshold(),
-                serverThresholdRegisterRequest.getMemoryTemperatureThreshold(),
-                serverThresholdRegisterRequest.getDiskUsageThreshold(),
-                serverThresholdRegisterRequest.getDiskTemperatureThreshold(),
-                serverThresholdRegisterRequest.getIphost(),
-                serverThresholdRegisterRequest.getCompanyDomain()
-                );
+        Server server = Server.builder()
+                .cpuUsageThreshold(serverThresholdRegisterRequest.getCpuUsageThreshold())
+                .cpuTemperatureThreshold(serverThresholdRegisterRequest.getCpuTemperatureThreshold())
+                .memoryUsageThreshold(serverThresholdRegisterRequest.getMemoryUsageThreshold())
+                .memoryTemperatureThreshold(serverThresholdRegisterRequest.getMemoryTemperatureThreshold())
+                .diskUsageThreshold(serverThresholdRegisterRequest.getDiskUsageThreshold())
+                .diskTemperatureThreshold(serverThresholdRegisterRequest.diskTemperatureThreshold)
+                .build();
 
         serverRepository.save(server);
 
 
-        return
+        return responseMapper(server);
     }
 
     @Override
