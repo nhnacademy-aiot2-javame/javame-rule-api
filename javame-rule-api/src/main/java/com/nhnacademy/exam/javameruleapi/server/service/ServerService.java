@@ -1,18 +1,18 @@
 package com.nhnacademy.exam.javameruleapi.server.service;
 
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdUpdateRequest;
+import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
+import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 
 public interface ServerService {
 
-    ServerResponse register(ServerThresholdRegisterRequest serverThresholdRegisterRequest);
+    ServerResponse register(String serverId, ServerRegisterRequest serverRegisterRequest);
 
-    ServerResponse getServerThreshold(long serverNo);
+    ServerResponse update(long serverNo, ServerUpdateRequest serverUpdateRequest);
 
-    ServerResponse update(ServerThresholdUpdateRequest serverThresholdUpdateRequest);
+    ServerResponse getServer(long serverNo);
 
-    Void delete(long serverNo);
+    void delete(long serverNo);
 
 
     }

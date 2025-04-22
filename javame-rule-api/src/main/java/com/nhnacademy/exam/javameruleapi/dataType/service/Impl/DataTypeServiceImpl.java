@@ -7,11 +7,15 @@ import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeResponse;
 import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.dataType.repository.DataTypeRepository;
 import com.nhnacademy.exam.javameruleapi.dataType.service.DataTypeService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class DataTypeServiceImpl implements DataTypeService {
 
     private final DataTypeRepository dataTypeRepository;

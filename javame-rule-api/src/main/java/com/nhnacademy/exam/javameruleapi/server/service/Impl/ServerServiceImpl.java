@@ -3,8 +3,8 @@ package com.nhnacademy.exam.javameruleapi.server.service.Impl;
 import com.nhnacademy.exam.javameruleapi.server.common.Exception.AlreadyExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdUpdateRequest;
+import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
+import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
 import jakarta.transaction.Transactional;
@@ -22,46 +22,33 @@ public class ServerServiceImpl implements ServerService {
         this.serverRepository = serverRepository;
     }
 
-    public ServerResponse responseMapper(Server server){
-        return new ServerResponse(Server.builder()
-                .cpuUsageThreshold(server.getCpuUsageThreshold())
-                )
-    }
-
 
     @Override
-    public ServerResponse register(ServerThresholdRegisterRequest serverThresholdRegisterRequest) {
-        Boolean isExist = serverRepository.existsServerByServerNo(serverThresholdRegisterRequest.getServerNo());
+    public ServerResponse register(String serverId, ServerRegisterRequest serverRegisterRequest) {
+        Boolean isExist = serverRepository.existsServerByServerId(serverId);
         if(isExist){
             throw new AlreadyExistException("이미 존재하는 서버입니다.");
         }
-        Server server = Server.builder()
-                .cpuUsageThreshold(serverThresholdRegisterRequest.getCpuUsageThreshold())
-                .cpuTemperatureThreshold(serverThresholdRegisterRequest.getCpuTemperatureThreshold())
-                .memoryUsageThreshold(serverThresholdRegisterRequest.getMemoryUsageThreshold())
-                .memoryTemperatureThreshold(serverThresholdRegisterRequest.getMemoryTemperatureThreshold())
-                .diskUsageThreshold(serverThresholdRegisterRequest.getDiskUsageThreshold())
-                .diskTemperatureThreshold(serverThresholdRegisterRequest.diskTemperatureThreshold)
-                .build();
-
+        Server server = serverRegisterRequest.toEntity();
         serverRepository.save(server);
-
-
-        return responseMapper(server);
+        return ServerResponse.from(server);
     }
 
     @Override
-    public ServerResponse getServerThreshold(long serverNo) {
-        return null;
+    public ServerResponse getServer(long serverNo) {
+        Server server = serverRepository.getServerByServerNo(serverNo);
+        return ServerResponse.from(server);
     }
 
     @Override
-    public ServerResponse update(ServerThresholdUpdateRequest serverThresholdUpdateRequest) {
-        return null;
+    public ServerResponse update(long serverNo, ServerUpdateRequest serverUpdateRequest) {
+        Server server = serverRepository.getServerByServerNo(serverNo);
+        return ServerResponse.from(server);
     }
 
     @Override
-    public Void delete(long serverNo) {
-        return null;
+    public void delete(long serverNo) {
+        Server targetServer = serverRepository.getServerByServerNo(serverNo);
+        serverRepository.delete(targetServer);
     }
 }

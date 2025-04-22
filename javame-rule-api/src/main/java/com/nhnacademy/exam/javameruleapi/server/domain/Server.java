@@ -17,6 +17,9 @@ public class Server {
     @Column(name = "server_no", nullable = false)
     public long serverNo;
 
+    @Column(name = "server_id")
+    public String serverId;
+
     @Column(name = "cpu_usage_threshold")
     public Double cpuUsageThreshold; //cpu 사용량 임계치
 
@@ -38,7 +41,7 @@ public class Server {
     @Column(name = "ip_host")
     public String iphost;
 
-    @Column(name = "company_domain")
+    @Column(name = "company_domain", nullable = false)
     private String companyDomain; // db에서 찾아서
 
     public Server() { }

@@ -5,8 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServerRepository extends JpaRepository<Server, Long> {
 
-    Boolean existsServerByServerNo(long serverNo);
+    Boolean existsServerByServerId(String serverId);
 
-
-
+    Server getServerByServerNo(long serverNo);
 }

@@ -7,8 +7,12 @@ import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
+@Transactional
 @Service
 public class SensorServiceImpl implements SensorService {
 

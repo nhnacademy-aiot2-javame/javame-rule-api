@@ -1,8 +1,8 @@
 package com.nhnacademy.exam.javameruleapi.server.controller;
 
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerThresholdUpdateRequest;
+import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
+import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/servers")
+@RequestMapping("/api/v1/servers")
 public class ServerController {
 
     private final ServerService serverService;
@@ -20,8 +20,8 @@ public class ServerController {
     }
 
     @PostMapping
-    public ResponseEntity<ServerResponse> registerServerThreshold(@Validated @RequestBody ServerThresholdRegisterRequest serverThresholdRegisterRequest){
-        ServerResponse serverResponse = serverService.register(serverThresholdRegisterRequest);
+    public ResponseEntity<ServerResponse> registerServerThreshold(@Validated @RequestBody ServerRegisterRequest serverRegisterRequest, String serverId){
+        ServerResponse serverResponse = serverService.register(serverId, serverRegisterRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(serverResponse);
@@ -29,14 +29,14 @@ public class ServerController {
 
     @GetMapping("/{server-no}")
     public ResponseEntity<ServerResponse> getServerThreshold(@PathVariable("server-no") long serverNo){
-        ServerResponse serverResponse = serverService.getServerThreshold(serverNo);
+        ServerResponse serverResponse = serverService.getServer(serverNo);
         return ResponseEntity
                 .ok(serverResponse);
     }
 
     @PutMapping("/{server-no}")
-    public ResponseEntity<ServerResponse> updateServerThreshold(@Validated @RequestBody ServerThresholdUpdateRequest serverThresholdUpdateRequest){
-        ServerResponse serverResponse = serverService.update(serverThresholdUpdateRequest);
+    public ResponseEntity<ServerResponse> updateServerThreshold(@Validated @RequestBody ServerUpdateRequest serverUpdateRequest, long serverNo){
+        ServerResponse serverResponse = serverService.update(serverNo, serverUpdateRequest);
         return ResponseEntity
                 .ok(serverResponse);
     }
