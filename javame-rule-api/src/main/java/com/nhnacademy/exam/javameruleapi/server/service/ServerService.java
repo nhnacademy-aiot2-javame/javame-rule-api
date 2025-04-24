@@ -4,9 +4,13 @@ import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 
+import java.util.List;
+
 public interface ServerService {
 
-    ServerResponse register(String serverId, ServerRegisterRequest serverRegisterRequest);
+    ServerResponse register(ServerRegisterRequest serverRegisterRequest);
+
+    List<ServerResponse> getServers(String companyDomain);
 
     ServerResponse update(long serverNo, ServerUpdateRequest serverUpdateRequest);
 
@@ -14,8 +18,7 @@ public interface ServerService {
 
     void delete(long serverNo);
 
-
-    }
+}
 
 
 

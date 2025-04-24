@@ -1,6 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.dataType.service.Impl;
 
-import com.nhnacademy.exam.javameruleapi.dataType.common.Exception.AlreadyExistException;
+import com.nhnacademy.exam.javameruleapi.dataType.common.Exception.AlreadyDataTypeExistException;
 import com.nhnacademy.exam.javameruleapi.dataType.domain.DataType;
 import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeResponse;
@@ -33,7 +33,7 @@ public class DataTypeServiceImpl implements DataTypeService {
     public DataTypeResponse register(DataTypeRegisterRequest dataTypeRegisterRequest) {
         Boolean isExist = dataTypeRepository.findDataTypeByDataTypeName(dataTypeRegisterRequest.getDataTypeName());
         if(isExist){
-            throw new AlreadyExistException("이미 존재하는 데이터 타입입니다.");
+            throw new AlreadyDataTypeExistException("이미 존재하는 데이터 타입입니다.");
         }
         DataType dataType = new DataType(dataTypeRegisterRequest.getSensor(), dataTypeRegisterRequest.getDataTypeName(), dataTypeRegisterRequest.getThreshold());
         dataTypeRepository.save(dataType);
@@ -50,7 +50,7 @@ public class DataTypeServiceImpl implements DataTypeService {
     @Override
     public DataTypeResponse update(DataTypeUpdateRequest dataTypeUpdateRequest) {
       DataType foundDataType = dataTypeRepository.getDataTypeByDataTypeNo(dataTypeUpdateRequest.getDataTypeNo());
-      dataTypeRepository.update(foundDataType);
+      dataTypeRepository.save(foundDataType);
       return responseMapper(foundDataType);
 
     }

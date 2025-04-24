@@ -28,7 +28,7 @@ public class ServerResponse {
 
     private final String companyDomain;
 
-    public static ServerResponse from(Server server){
+    public static ServerResponse from(Server server){ //static method가 뭐지??
         return ServerResponse.builder()
                 .serverNo(server.getServerNo())
                 .serverId(server.getServerId())
@@ -41,4 +41,18 @@ public class ServerResponse {
                 .build();
                     }
 
+    public ServerResponse(long serverNo, String serverId, Double cpuUsageThreshold,
+                          Double cpuTemperatureThreshold, Double memoryUsageThreshold,
+                          Double memoryTemperatureThreshold, Double diskUsageThreshold,
+                          Double diskTemperatureThreshold, String companyDomain) {
+        this.serverNo = serverNo;
+        this.serverId = serverId;
+        this.cpuUsageThreshold = cpuUsageThreshold;
+        this.cpuTemperatureThreshold = cpuTemperatureThreshold;
+        this.memoryUsageThreshold = memoryUsageThreshold;
+        this.memoryTemperatureThreshold = memoryTemperatureThreshold;
+        this.diskUsageThreshold = diskUsageThreshold;
+        this.diskTemperatureThreshold = diskTemperatureThreshold;
+        this.companyDomain = companyDomain;
+    }
 }

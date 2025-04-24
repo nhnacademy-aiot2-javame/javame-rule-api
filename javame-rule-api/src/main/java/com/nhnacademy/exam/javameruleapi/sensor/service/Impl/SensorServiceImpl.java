@@ -1,6 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.sensor.service.Impl;
 
-import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.AlreadyExistException;
+import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.AlreadySensorExistException;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
@@ -10,6 +10,8 @@ import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Transactional
@@ -30,7 +32,7 @@ public class SensorServiceImpl implements SensorService {
     public SensorResponse register(SensorRegisterRequest sensorRegisterRequest) {
         Boolean isExist = sensorRepository.existsSensorBySensorId(sensorRegisterRequest.getSensorId());
         if(isExist){
-            throw new AlreadyExistException("이미 존재하는 센서입니다.");
+            throw new AlreadySensorExistException("이미 존재하는 센서입니다.");
         }
         Sensor sensor = new Sensor(sensorRegisterRequest.getCompanyDomain(), sensorRegisterRequest.getSensorId());
         return responseMapper(sensor);
@@ -38,20 +40,24 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public SensorResponse getSensor(long sensorNo) {
-        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo);
+        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(sensorNo);
+        Sensor sensor = optional.get();
+
         return responseMapper(sensor);
     }
 
     @Override
     public SensorResponse update(SensorUpdateRequest sensorUpdateRequest) {
-        Sensor targetSensor = sensorRepository.getSensorBySensorNo(sensorUpdateRequest.getSensorNo());
-        sensorRepository.update(targetSensor);
+        Optional<Sensor> optional =sensorRepository.getSensorBySensorNo(sensorUpdateRequest.getSensorNo());
+        Sensor targetSensor = optional.get();
+                sensorRepository.save(targetSensor);
         return responseMapper(targetSensor);
     }
 
     @Override
     public void delete(long sensorNo) {
-        Sensor target = sensorRepository.getSensorBySensorNo(sensorNo);
+        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(sensorNo);
+        Sensor target = optional.get();
         sensorRepository.delete(target);
     }
 }

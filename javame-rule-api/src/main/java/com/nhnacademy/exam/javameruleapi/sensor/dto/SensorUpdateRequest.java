@@ -12,4 +12,7 @@ public class SensorUpdateRequest {
     private final String companyDomain;
 
     private final String sensorId;
+
+
+
 }

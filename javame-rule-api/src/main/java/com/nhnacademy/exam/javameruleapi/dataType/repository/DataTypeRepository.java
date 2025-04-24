@@ -14,5 +14,5 @@ public interface DataTypeRepository extends JpaRepository<DataType, Long> {
 
     void delete(DataType dataType);
 
-    void update(DataType foundDataType);
+
 }

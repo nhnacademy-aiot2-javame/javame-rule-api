@@ -33,4 +33,9 @@ public class Sensor {
         this.companyDomain = companyDomain;
         this.sensorId = sensorId;
     }
+
+    public void update(String companyDomain, String sensorId){
+        this.companyDomain = companyDomain;
+        this.sensorId = sensorId;
+    }
 }

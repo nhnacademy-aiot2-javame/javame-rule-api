@@ -7,32 +7,34 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
 public class ServerRegisterRequest {
 
     @NotNull
-    public String iphost;
+    private final String iphost;
     @NotNull
-    public String companyDomain;
+    private final String companyDomain;
+
+    @NotNull
+    private final String serverId;
 
     // 선택적 값
-    public Double cpuUsageThreshold;
-    public Double cpuTemperatureThreshold;
+    private final Double cpuUsageThreshold;
+    private final Double cpuTemperatureThreshold;
 
-    public Double memoryUsageThreshold;
-    public Double memoryTemperatureThreshold;
+    private final Double memoryUsageThreshold;
+    private final Double memoryTemperatureThreshold;
 
-    public Double diskUsageThreshold;
-    public Double diskTemperatureThreshold;
+    private final Double diskUsageThreshold;
+    private final Double diskTemperatureThreshold;
 
-    @Builder
-    public ServerRegisterRequest(String iphost, String companyDomain,
+    public ServerRegisterRequest(String iphost, String companyDomain, String serverId,
                                  Double cpuUsageThreshold, Double cpuTemperatureThreshold,
                                  Double memoryUsageThreshold, Double memoryTemperatureThreshold,
-                                 Double diskUsageThreshold, Double diskTemperatureThreshold){
+                                 Double diskUsageThreshold, Double diskTemperatureThreshold) {
         this.iphost = iphost;
         this.companyDomain = companyDomain;
+        this.serverId = serverId;
         this.cpuUsageThreshold = cpuUsageThreshold;
         this.cpuTemperatureThreshold = cpuTemperatureThreshold;
         this.memoryUsageThreshold = memoryUsageThreshold;
@@ -41,6 +43,7 @@ public class ServerRegisterRequest {
         this.diskTemperatureThreshold = diskTemperatureThreshold;
     }
 
+    @Builder
     //toEntity 메서드
     public Server toEntity(){
         return Server.builder()
