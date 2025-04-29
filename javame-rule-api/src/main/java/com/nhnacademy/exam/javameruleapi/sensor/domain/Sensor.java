@@ -20,7 +20,7 @@ public class Sensor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sensor_no", nullable = false)
-    private long sensorNo;
+    private Long sensorNo;
 
     @Column(name = "company_domain")
     private String companyDomain;
@@ -29,7 +29,7 @@ public class Sensor {
     private String sensorId;
 
 
-    public Sensor(String companyDomain, String sensorId){
+    public Sensor(String companyDomain, String sensorId) {
         this.companyDomain = companyDomain;
         this.sensorId = sensorId;
     }

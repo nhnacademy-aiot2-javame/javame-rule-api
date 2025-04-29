@@ -5,6 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+/**
+ *
+ */
 public class SensorResponse {
 
     private final long sensorNo;

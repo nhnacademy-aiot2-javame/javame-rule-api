@@ -28,13 +28,24 @@ public class DataType {
     @Column(name = "dataType_name", nullable = false)
     private String dataTypeName;
 
-    @Column(name = "threshold")
-    private Double threshold;
+    @Column(name = "min_threshold")
+    private Double minThreshold;
 
-    public DataType(Sensor sensor, String dataTypeName, Double threshold){
+    @Column(name = "max_threshold")
+    private Double maxThreshold;
+
+    public DataType(Sensor sensor, String dataTypeName, Double minThreshold, Double maxThreshold){
         this.sensor = sensor;
         this.dataTypeName = dataTypeName;
-        this.threshold = threshold;
+        this.minThreshold = minThreshold;
+        this.maxThreshold = maxThreshold;
+    }
+
+    public void update(String dataTypeName, Double minThreshold, Double maxThreshold){
+
+        this.dataTypeName = dataTypeName;
+        this.minThreshold = minThreshold;
+        this.maxThreshold = maxThreshold;
     }
 
 }

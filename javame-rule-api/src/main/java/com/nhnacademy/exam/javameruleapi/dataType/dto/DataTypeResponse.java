@@ -14,6 +14,8 @@ public class DataTypeResponse {
 
     private final String dataTypeName;
 
-    private final Double threshold;
+    private final Double minThreshold;
+
+    private final Double maxThreshold;
 
 }

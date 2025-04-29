@@ -2,15 +2,16 @@ package com.nhnacademy.exam.javameruleapi.sensor.controller;
 
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/v1/sensors")
+@RequestMapping("/sensors")
 public class SensorController {
 
     private final SensorService sensorService;
@@ -21,7 +22,7 @@ public class SensorController {
     }
 
     @PostMapping
-    ResponseEntity<SensorResponse> registerSensorThreshold(@Validated @RequestBody SensorRegisterRequest sensorRegisterRequest){
+    ResponseEntity<SensorResponse> registerSensor(@Validated @RequestBody SensorRegisterRequest sensorRegisterRequest){
         SensorResponse sensorResponse = sensorService.register(sensorRegisterRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -29,19 +30,20 @@ public class SensorController {
     }
 
     @GetMapping("/{sensor-id}")
-    ResponseEntity<SensorResponse> getSensorThreshold(@PathVariable("sensor-id") long sensorNo){
+    ResponseEntity<SensorResponse> getSensor(@PathVariable("sensor-id") long sensorNo){
         SensorResponse sensorResponse = sensorService.getSensor(sensorNo);
         return ResponseEntity.ok(sensorResponse);
     }
 
-    @PutMapping("/{sensor-id}")
-    ResponseEntity<SensorResponse> updateSensorThreshold(@Validated @RequestBody SensorUpdateRequest sensorUpdateRequest){
-        SensorResponse sensorResponse = sensorService.update(sensorUpdateRequest);
-        return ResponseEntity.ok(sensorResponse);
+    @GetMapping
+    ResponseEntity<List<SensorResponse>> getSensors(@RequestParam String companyDomain){
+        List<SensorResponse> sensorResponses = sensorService.getSensors(companyDomain);
+        return ResponseEntity.ok(sensorResponses);
     }
 
+
     @DeleteMapping("/{sensor-id}")
-    ResponseEntity<Void> deleteThreshold(@PathVariable("sensor-id") long sensorNo){
+    ResponseEntity<Void> deleteSensor(@PathVariable("sensor-id") long sensorNo){
         sensorService.delete(sensorNo);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

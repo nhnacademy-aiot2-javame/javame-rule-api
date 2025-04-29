@@ -76,32 +76,6 @@ public class SensorRepositoryTest {
 
 
     @Test
-    @DisplayName("센서 업데이트")
-    @Order(3)
-    void update(){
-        Optional<Sensor> optional = sensorRepository.getSensorBySensorId("temperature_sensor2");
-        Assertions.assertTrue(optional.isPresent());
-        Sensor target = optional.get();
-
-        target.update(
-                "javaYou_domain",
-                "humidity_sensor2"
-        );
-
-        sensorRepository.save(target);
-        Optional<Sensor> optional2 = sensorRepository.getSensorBySensorId("humidity_sensor2");
-        Assertions.assertTrue(optional2.isPresent());
-        Sensor foundSensor = optional2.get();
-
-        Assertions.assertAll(
-                ()-> Assertions.assertEquals("javaYou_domain", foundSensor.getCompanyDomain()),
-                ()-> Assertions.assertEquals("humidity_sensor2", foundSensor.getSensorId())
-        );
-    }
-
-
-
-    @Test
     @DisplayName("센서 삭제")
     @Order(4)
     void delete(){

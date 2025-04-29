@@ -7,11 +7,18 @@ import lombok.Getter;
 @Getter
 public class DataTypeUpdateRequest {
 
-    private final long dataTypeNo;
-
-    private final long sensorNo;
-
+    /**
+     *
+     */
     private final String dataTypeName;
 
-    private final Double threshold;
+    /**
+     *
+     */
+    private final Double minThreshold;
+
+    /**
+     *
+     */
+    private final Double maxThreshold;
 }

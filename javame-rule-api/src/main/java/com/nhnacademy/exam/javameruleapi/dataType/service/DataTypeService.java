@@ -10,7 +10,7 @@ public interface DataTypeService {
 
     DataTypeResponse getDataType(long dataTypeNo);
 
-    DataTypeResponse update(DataTypeUpdateRequest dataTypeUpdateRequest);
+    DataTypeResponse update(long dataTypeNo, DataTypeUpdateRequest dataTypeUpdateRequest);
 
-    void delete(long dataTypeNo);
+    Void delete(long dataTypeNo);
 }

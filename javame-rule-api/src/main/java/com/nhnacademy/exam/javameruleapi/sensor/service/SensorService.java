@@ -2,7 +2,8 @@ package com.nhnacademy.exam.javameruleapi.sensor.service;
 
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorUpdateRequest;
+
+import java.util.List;
 
 public interface SensorService {
 
@@ -10,9 +11,10 @@ public interface SensorService {
 
     SensorResponse getSensor(long sensorNo);
 
-    SensorResponse update(SensorUpdateRequest sensorUpdateRequest);
+    List<SensorResponse> getSensors(String companyDomain);
 
     void delete(long sensorNo);
+
 
 
 }

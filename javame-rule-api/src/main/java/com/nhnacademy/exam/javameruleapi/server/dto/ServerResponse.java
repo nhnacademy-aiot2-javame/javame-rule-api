@@ -12,47 +12,23 @@ public class ServerResponse {
 
     private final long serverNo;
 
-    private final String serverId;
-
-    private final Double cpuUsageThreshold;
-
-    private final Double cpuTemperatureThreshold;
-
-    private final Double memoryUsageThreshold;
-
-    private final Double memoryTemperatureThreshold;
-
-    private final Double diskUsageThreshold;
-
-    private final Double diskTemperatureThreshold;
-
     private final String companyDomain;
 
-    public static ServerResponse from(Server server){ //static method가 뭐지??
+    private final String iphost;
+
+
+
+    public static ServerResponse from(Server server){ //static method가 뭐지??-> 객체를 생성하지 않고 메서드 불러서 씀.
         return ServerResponse.builder()
                 .serverNo(server.getServerNo())
-                .serverId(server.getServerId())
-                .cpuUsageThreshold(server.getCpuUsageThreshold())
-                .cpuTemperatureThreshold(server.getCpuTemperatureThreshold())
-                .memoryUsageThreshold(server.getMemoryUsageThreshold())
-                .memoryTemperatureThreshold(server.getMemoryTemperatureThreshold())
-                .diskUsageThreshold(server.getDiskUsageThreshold())
-                .diskTemperatureThreshold(server.getDiskTemperatureThreshold())
+                .companyDomain(server.getCompanyDomain())
+                .iphost(server.getIphost())
                 .build();
-                    }
+    }
 
-    public ServerResponse(long serverNo, String serverId, Double cpuUsageThreshold,
-                          Double cpuTemperatureThreshold, Double memoryUsageThreshold,
-                          Double memoryTemperatureThreshold, Double diskUsageThreshold,
-                          Double diskTemperatureThreshold, String companyDomain) {
+    public ServerResponse(long serverNo, String companyDomain, String iphost) {
         this.serverNo = serverNo;
-        this.serverId = serverId;
-        this.cpuUsageThreshold = cpuUsageThreshold;
-        this.cpuTemperatureThreshold = cpuTemperatureThreshold;
-        this.memoryUsageThreshold = memoryUsageThreshold;
-        this.memoryTemperatureThreshold = memoryTemperatureThreshold;
-        this.diskUsageThreshold = diskUsageThreshold;
-        this.diskTemperatureThreshold = diskTemperatureThreshold;
         this.companyDomain = companyDomain;
+        this.iphost = iphost;
     }
 }

@@ -1,16 +1,18 @@
 package com.nhnacademy.exam.javameruleapi.sensor.service.Impl;
 
 import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.AlreadySensorExistException;
+import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.SensorNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -40,24 +42,24 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public SensorResponse getSensor(long sensorNo) {
-        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(sensorNo);
-        Sensor sensor = optional.get();
+        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(()-> new SensorNotExistException("존재하지 않는 센서 입니다."));
 
         return responseMapper(sensor);
     }
 
     @Override
-    public SensorResponse update(SensorUpdateRequest sensorUpdateRequest) {
-        Optional<Sensor> optional =sensorRepository.getSensorBySensorNo(sensorUpdateRequest.getSensorNo());
-        Sensor targetSensor = optional.get();
-                sensorRepository.save(targetSensor);
-        return responseMapper(targetSensor);
+    public List<SensorResponse> getSensors(String companyDomain) {
+        List<Sensor> sensors = sensorRepository.getSensorsByCompanyDomain(companyDomain).orElseThrow(()-> new SensorNotExistException("해당 companyDomain으로 센서가 존재하지 않습니다."));
+        List<SensorResponse> sensorResponses = new ArrayList<>();
+        for (Sensor sensor : sensors){
+            sensorResponses.add(new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId()));
+        }
+        return sensorResponses;
     }
 
     @Override
     public void delete(long sensorNo) {
-        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(sensorNo);
-        Sensor target = optional.get();
-        sensorRepository.delete(target);
+        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(()-> new SensorNotExistException("존재하지 않는 센서입니다."));
+        sensorRepository.delete(sensor);
     }
 }

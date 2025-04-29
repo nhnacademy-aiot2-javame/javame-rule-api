@@ -16,7 +16,7 @@ public interface ServerService {
 
     ServerResponse getServer(long serverNo);
 
-    void delete(long serverNo);
+    Void delete(long serverNo);
 
 }
 

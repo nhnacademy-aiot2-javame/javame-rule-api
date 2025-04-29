@@ -1,6 +1,5 @@
 package com.nhnacademy.exam.javameruleapi.server.controller;
 
-import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
@@ -45,7 +44,7 @@ public class ServerController {
     }
 
     @PutMapping("/{server-no}")
-    public ResponseEntity<ServerResponse> updateServer(@Validated @RequestBody ServerUpdateRequest serverUpdateRequest, long serverNo){
+    public ResponseEntity<ServerResponse> updateServer(@Validated @RequestBody ServerUpdateRequest serverUpdateRequest, @PathVariable("server-no") long serverNo){
         ServerResponse serverResponse = serverService.update(serverNo, serverUpdateRequest);
         return ResponseEntity
                 .ok(serverResponse);
