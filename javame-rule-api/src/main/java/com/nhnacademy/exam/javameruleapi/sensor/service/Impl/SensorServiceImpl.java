@@ -7,6 +7,9 @@ import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
 import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
+import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
+import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
+import com.nhnacademy.exam.javameruleapi.sensorData.repository.SensorDataRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,9 +24,11 @@ import java.util.Optional;
 public class SensorServiceImpl implements SensorService {
 
     private final SensorRepository sensorRepository;
+    private final SensorDataRepository sensorDataRepository;
 
-    public SensorServiceImpl(SensorRepository sensorRepository) {
+    public SensorServiceImpl(SensorRepository sensorRepository, SensorDataRepository sensorDataRepository) {
         this.sensorRepository = sensorRepository;
+        this.sensorDataRepository = sensorDataRepository;
     }
 
     SensorResponse responseMapper(Sensor sensor){
@@ -32,17 +37,42 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public SensorResponse register(SensorRegisterRequest sensorRegisterRequest) {
-        Boolean isExist = sensorRepository.existsSensorBySensorId(sensorRegisterRequest.getSensorId());
-        if(isExist){
+
+        // 센서아이디와 companyDomain이 둘다 존재할 때 에러 발생.
+        boolean isDuplicated = sensorRepository.existsSensorBySensorIdAndCompanyDomain(
+                sensorRegisterRequest.getSensorId(),
+                sensorRegisterRequest.getCompanyDomain()
+        );
+
+        if(isDuplicated){
             throw new AlreadySensorExistException("이미 존재하는 센서입니다.");
         }
+
         Sensor sensor = new Sensor(sensorRegisterRequest.getCompanyDomain(), sensorRegisterRequest.getSensorId());
-        return responseMapper(sensor);
+        Sensor savedSensor = sensorRepository.save(sensor);
+
+        // 센서 이름만 받으니까 이름만으로 SensorData 객체 만들기
+        List<SensorData> sensorDataList = sensorRegisterRequest.getSensorDataList().stream()
+                .map(dto -> new SensorData(sensor, dto.getSensorDataName(), null, null )) // minThreshold, maxThreshold는 null로 설정
+                .toList();
+
+        sensorDataRepository.saveAll(sensorDataList);
+
+        return responseMapper(savedSensor);
     }
 
     @Override
     public SensorResponse getSensor(long sensorNo) {
         Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(()-> new SensorNotExistException("존재하지 않는 센서 입니다."));
+
+        List<SensorDataResponse> sensorDataResponseList = sensor.getSensorDataList().stream()
+                .map(data -> new SensorDataResponse(
+                        data.getSensorDataNo(),
+                        data.getSensor(),
+                        data.getSensorDataName(),
+                        data.getMinThreshold(),
+                        data.getMaxThreshold()
+                )).toList();
 
         return responseMapper(sensor);
     }
@@ -58,8 +88,9 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public void delete(long sensorNo) {
+    public Void delete(long sensorNo) {
         Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(()-> new SensorNotExistException("존재하지 않는 센서입니다."));
         sensorRepository.delete(sensor);
+        return null;
     }
 }

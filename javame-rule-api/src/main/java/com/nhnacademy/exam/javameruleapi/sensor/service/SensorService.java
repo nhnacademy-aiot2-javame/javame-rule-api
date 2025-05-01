@@ -13,7 +13,7 @@ public interface SensorService {
 
     List<SensorResponse> getSensors(String companyDomain);
 
-    void delete(long sensorNo);
+    Void delete(long sensorNo);
 
 
 

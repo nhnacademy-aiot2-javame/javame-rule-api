@@ -1,4 +1,4 @@
-package com.nhnacademy.exam.javameruleapi.dataType.dto;
+package com.nhnacademy.exam.javameruleapi.sensorData.dto;
 
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import lombok.AllArgsConstructor;
@@ -6,13 +6,11 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class DataTypeResponse {
+public class SensorDataResponse {
 
-    private final long dataTypeNo;
+    private final long sensorDataNo;
 
-    private final Sensor sensor;
-
-    private final String dataTypeName;
+    private final String sensorDataName;
 
     private final Double minThreshold;
 

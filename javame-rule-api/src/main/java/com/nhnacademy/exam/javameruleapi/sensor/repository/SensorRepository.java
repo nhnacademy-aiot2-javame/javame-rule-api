@@ -10,11 +10,13 @@ public interface SensorRepository extends JpaRepository<Sensor, Long> {
 
     Boolean existsSensorBySensorId(String sensorId);
 
+    Boolean existsSensorByCompanyDomain(String companyDomain);
+
     Optional<Sensor> getSensorBySensorNo(long sensorNo);
 
     Optional<Sensor> getSensorBySensorId(String sensorId);
 
     Optional<List<Sensor>> getSensorsByCompanyDomain(String companyDomain);
 
-    // 조회는 sensorNo, sensorId 둘다 로 가능한가?
+    boolean existsSensorBySensorIdAndCompanyDomain(String sensorId, String companyDomain);
 }

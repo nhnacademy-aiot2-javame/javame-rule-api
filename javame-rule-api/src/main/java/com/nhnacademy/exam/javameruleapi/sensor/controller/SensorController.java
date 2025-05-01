@@ -30,12 +30,14 @@ public class SensorController {
     }
 
     @GetMapping("/{sensor-id}")
+    //sensorDataList도 같이 보여주도록 수정
     ResponseEntity<SensorResponse> getSensor(@PathVariable("sensor-id") long sensorNo){
         SensorResponse sensorResponse = sensorService.getSensor(sensorNo);
         return ResponseEntity.ok(sensorResponse);
     }
 
     @GetMapping
+    //sensorDataList같이 보여줄 수 있게 수정
     ResponseEntity<List<SensorResponse>> getSensors(@RequestParam String companyDomain){
         List<SensorResponse> sensorResponses = sensorService.getSensors(companyDomain);
         return ResponseEntity.ok(sensorResponses);

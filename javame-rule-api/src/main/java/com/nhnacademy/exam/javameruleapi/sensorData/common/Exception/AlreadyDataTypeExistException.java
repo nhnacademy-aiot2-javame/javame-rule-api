@@ -1,4 +1,4 @@
-package com.nhnacademy.exam.javameruleapi.dataType.common.Exception;
+package com.nhnacademy.exam.javameruleapi.sensorData.common.Exception;
 
 public class AlreadyDataTypeExistException extends RuntimeException {
     public AlreadyDataTypeExistException(String message) {

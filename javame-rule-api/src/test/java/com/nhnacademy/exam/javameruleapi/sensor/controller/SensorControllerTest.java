@@ -12,8 +12,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -26,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = SensorController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class SensorControllerTest {
 
@@ -44,7 +46,7 @@ public class SensorControllerTest {
     void setUp() {
         sensorRegisterRequest = new SensorRegisterRequest("nhn_domain", "mock_sensor_id");
         sensor = new Sensor(sensorRegisterRequest.getCompanyDomain(), sensorRegisterRequest.getSensorId());
-
+        ReflectionTestUtils.setField(sensor, "sensorNo", 1L);
     }
 
 
@@ -99,11 +101,13 @@ public class SensorControllerTest {
     void getSensors() throws Exception {
 
         List<SensorResponse> sensorResponses = new ArrayList<>();
+        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
         SensorResponse sensorResponse2 = new SensorResponse(2L, "nhn_domain", "mock_sensor_id2");
         sensorResponses.add(sensorResponse);
         sensorResponses.add(sensorResponse2);
 
         Mockito.when(sensorService.getSensors(Mockito.anyString())).thenReturn(sensorResponses);
+
 
         mockMvc.perform(
                 get("/sensors?companyDomain=nhn_domain")
@@ -115,7 +119,7 @@ public class SensorControllerTest {
                 .andExpect(jsonPath("$[0].sensorId").value("mock_sensor_id"))
                 .andExpect(jsonPath("$[1].sensorNo").value(2))
                 .andExpect(jsonPath("$[1].companyDomain").value("nhn_domain"))
-                .andExpect(jsonPath("$[1].sensorId").value("mock_sensor_id"))
+                .andExpect(jsonPath("$[1].sensorId").value("mock_sensor_id2"))
                 .andDo(print());
 
 }

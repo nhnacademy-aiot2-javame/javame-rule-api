@@ -1,10 +1,11 @@
-package com.nhnacademy.exam.javameruleapi.dataType.controller;
+package com.nhnacademy.exam.javameruleapi.sensorData.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeResponse;
-import com.nhnacademy.exam.javameruleapi.dataType.dto.DataTypeUpdateRequest;
-import com.nhnacademy.exam.javameruleapi.dataType.service.DataTypeService;
+import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
+import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterRequest;
+import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
+import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
+import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
@@ -14,9 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -28,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @AutoConfigureMockMvc
-@WebMvcTest(controllers = DataTypeController.class) //controller 만 bean으로 로드, 나머지는 직접 주입 필요.
-public class DataTypeControllerTest {
+@SpringBootTest
+public class SensorDataControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,36 +40,41 @@ public class DataTypeControllerTest {
     private SensorService sensorService;
 
     @MockitoBean
-    private DataTypeService dataTypeService; // 서비스 계층을 모킹해서 주입
+    private SensorDataService sensorDataService; // 서비스 계층을 모킹해서 주입
 
     private Sensor sensor;
-    private DataTypeRegisterRequest dataTypeRegisterRequest;
-    private DataTypeResponse dataTypeResponse;
+    private SensorDataRegisterRequest sensorDataRegisterRequest;
+    private SensorData sensorData;
+    private SensorDataResponse sensorDataResponse;
+
     @Autowired
     private ServerService serverService;
 
     @BeforeEach
     void setUp(){
         sensor = new Sensor("test_domain", "main_sensor");
-        dataTypeRegisterRequest = new DataTypeRegisterRequest
+        sensorDataRegisterRequest = new SensorDataRegisterRequest
                 (sensor, "test_dataName", 55.2, 99.9);
+        sensorData = new SensorData(sensorDataRegisterRequest.getSensor(), sensorDataRegisterRequest.getSensorDataName(), sensorDataRegisterRequest.getMinThreshold(), sensorDataRegisterRequest.getMaxThreshold());
+        ReflectionTestUtils.setField(sensorData, "dataTypeNo", 3L);
 
-        dataTypeResponse = new DataTypeResponse
-                (3L, sensor, "test_dataName", 55.2, 99.9);
+
     }
 
     @Test
     @DisplayName("등록 테스트")
     void registerDataType() throws Exception {
 
+        sensorDataResponse = new SensorDataResponse
+                (3L, sensor, "test_dataName", 55.2, 99.9);
 
-        Mockito.when(dataTypeService.register(Mockito.any(DataTypeRegisterRequest.class))).thenReturn(dataTypeResponse);
+        Mockito.when(sensorDataService.register(Mockito.any(SensorDataRegisterRequest.class))).thenReturn(sensorDataResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonRequest = objectMapper.writeValueAsString(dataTypeRegisterRequest);
+        String jsonRequest = objectMapper.writeValueAsString(sensorDataRegisterRequest);
 
         mockMvc.perform(
-                post("/data-types")
+                post("/sensor-datas")
                         .content(jsonRequest)
                         .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,10 +92,12 @@ public class DataTypeControllerTest {
     @DisplayName("데이터 타입 조회")
     void getDataType() throws Exception {
 
-        Mockito.when(dataTypeService.getDataType(Mockito.anyLong())).thenReturn(dataTypeResponse);
+        sensorDataResponse = new SensorDataResponse(3L, sensor, sensorData.getSensorDataName(), sensorData.getMinThreshold(), sensorData.getMaxThreshold());
+
+        Mockito.when(sensorDataService.getSensorData(Mockito.anyLong())).thenReturn(sensorDataResponse);
 
         mockMvc.perform(
-                get("/data-types/3")
+                get("/sensor-datas/3")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         )
@@ -108,14 +117,21 @@ public class DataTypeControllerTest {
     @DisplayName("데이터 타입 수정")
     void update() throws Exception{
 
-        DataTypeUpdateRequest dataTypeUpdateRequest = new DataTypeUpdateRequest("real_dataName", 33.3, 56.2);
+        SensorDataUpdateRequest sensorDataUpdateRequest = new SensorDataUpdateRequest("real_dataName", 33.3, 56.2);
 
-        dataTypeResponse = new DataTypeResponse(3L, sensor, "real_dataName", 33.3, 56.2 );
+        sensorDataResponse = new SensorDataResponse(3L, sensor, "real_dataName", 33.3, 56.2 );
 
-        Mockito.when(dataTypeService.update(Mockito.anyLong(), Mockito.any(DataTypeUpdateRequest.class))).thenReturn(dataTypeResponse);
+        Mockito.when(sensorDataService.update(Mockito.anyLong(), Mockito.any(SensorDataUpdateRequest.class))).thenReturn(sensorDataResponse);
 
         mockMvc.perform(
-                put("/data-types/3")
+                put("/sensor-datas/3")
+                        .content("""
+                                {
+                                "dataTypeName":"real_dataName",
+                                "minThreshold":33.3,
+                                "maxThreshold":56.2
+                                }
+                                """)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         )
@@ -132,10 +148,10 @@ public class DataTypeControllerTest {
     @DisplayName("데이터 타입 삭제")
     void delete() throws Exception {
 
-        Mockito.doNothing().when(dataTypeService).delete(Mockito.anyLong());
+        Mockito.doNothing().when(sensorDataService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/data-types/3")
+                MockMvcRequestBuilders.delete("/sensor-datas/3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         )

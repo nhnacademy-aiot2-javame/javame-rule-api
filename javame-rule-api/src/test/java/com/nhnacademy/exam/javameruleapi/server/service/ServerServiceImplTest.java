@@ -1,6 +1,4 @@
 package com.nhnacademy.exam.javameruleapi.server.service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.exam.javameruleapi.server.common.Exception.AlreadyServerExistException;
 import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
@@ -187,12 +185,6 @@ public class ServerServiceImplTest {
 
         Assertions.assertNull(serverResponse);
     }
-
-
-
-
-
-
 
 
     }

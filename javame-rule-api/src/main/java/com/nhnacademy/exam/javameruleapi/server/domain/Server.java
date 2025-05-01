@@ -20,7 +20,7 @@ public class Server {
     @Column(name = "company_domain", nullable = false)
     private String companyDomain; // db에서 찾아서
 
-    @Column(name = "ip_host", unique = true)
+    @Column(name = "iphost", unique = true)
     private String iphost;
 
     public void update(String iphost){

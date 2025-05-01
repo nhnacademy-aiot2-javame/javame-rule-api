@@ -1,16 +1,16 @@
-package com.nhnacademy.exam.javameruleapi.dataType.dto;
+package com.nhnacademy.exam.javameruleapi.sensorData.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class DataTypeUpdateRequest {
+public class SensorDataUpdateRequest {
 
     /**
      *
      */
-    private final String dataTypeName;
+    private final String sensorDataName;
 
     /**
      *

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "serverdatas")
+@Table(name = "server_datas")
 @ToString
 @Getter
 public class ServerData {
@@ -16,7 +16,6 @@ public class ServerData {
     @Column(name = "server_data_no", nullable = false)
     public Long serverDataNo;
 
-    // forein key ... 다대다 인지 일대 다 인지 설정 필요
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "server_no", nullable = false)
     private Server server;

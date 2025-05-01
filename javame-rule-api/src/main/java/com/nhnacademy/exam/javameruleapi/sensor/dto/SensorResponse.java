@@ -1,18 +1,27 @@
 package com.nhnacademy.exam.javameruleapi.sensor.dto;
 
+import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
+import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 /**
  *
  */
 public class SensorResponse {
 
-    private final long sensorNo;
+    private long sensorNo;
 
-    private final String companyDomain;
+    private String companyDomain;
 
-    private final String sensorId;
+    private String sensorId;
+
+    private List<SensorDataResponse> sensorDataList;
+
 }

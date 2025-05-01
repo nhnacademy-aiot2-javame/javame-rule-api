@@ -1,4 +1,4 @@
-package com.nhnacademy.exam.javameruleapi.dataType.dto;
+package com.nhnacademy.exam.javameruleapi.sensorData.dto;
 
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import lombok.AllArgsConstructor;
@@ -6,26 +6,21 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class DataTypeRegisterRequest {
-
-    /**
-     *
-     */
-    private final Sensor sensor;
+public class SensorDataRegisterRequest {
 
     /**
      *  데이터 타입 이름 ex) "temperature", "humidity"
      */
-    private final String dataTypeName;
+    private String sensorDataName;
 
     /**
      * 최소 임계값
      */
-    private final Double minThreshold;
+    private Double minThreshold;
 
     /**
      *  최대 임계값
      */
-    private final Double maxThreshold;
+    private Double maxThreshold;
 
 }
