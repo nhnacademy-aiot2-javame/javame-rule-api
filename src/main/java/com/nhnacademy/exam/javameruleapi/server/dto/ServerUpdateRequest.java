@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+/**
+ * 서버 업데이트 요청
+ */
 public class ServerUpdateRequest {
 
     public String iphost;

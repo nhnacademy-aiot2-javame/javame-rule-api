@@ -16,6 +16,8 @@ public interface ServerService {
 
     ServerResponse getServer(long serverNo);
 
+    ServerResponse getServer(String iphost);
+
     Void delete(long serverNo);
 
 }

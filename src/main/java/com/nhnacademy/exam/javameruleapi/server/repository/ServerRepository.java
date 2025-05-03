@@ -44,11 +44,11 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
      */
     Optional<Server> getServerByServerNo(long serverNo);
 
-    /**
-     *
-     * @param serverNo
-     * @return
-     * select
-     */
-    Object existsServerByServerNo(long serverNo);
+//    /**
+//     *
+//     * @param serverNo
+//     * @return
+//     * select
+//     */
+//    Object existsServerByServerNo(long serverNo);
 }
