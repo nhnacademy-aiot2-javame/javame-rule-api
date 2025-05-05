@@ -68,6 +68,12 @@ public class ServerDataServiceImpl implements ServerDataService {
             throw new ServerDataNotExistsException("서버 데이터가 존재하지 않습니다.");
         }
         ServerData updateTargetServerData = serverDataRepository.getServerDataByServerDataNo(serverDataNo);
+        updateTargetServerData.update(
+                serverDataUpdateRequest.getServerDataCategory(),
+                serverDataUpdateRequest.getServerDataTopic(),
+                serverDataUpdateRequest.getMinThreshold(),
+                serverDataUpdateRequest.getMaxThreshold()
+        );
         ServerData updatedServerData = serverDataRepository.save(updateTargetServerData);
         log.debug("updatedServerData:{}", updatedServerData);
 
