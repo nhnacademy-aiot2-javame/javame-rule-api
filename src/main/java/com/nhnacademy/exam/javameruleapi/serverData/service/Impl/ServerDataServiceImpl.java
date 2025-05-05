@@ -69,6 +69,7 @@ public class ServerDataServiceImpl implements ServerDataService {
         }
         ServerData updateTargetServerData = serverDataRepository.getServerDataByServerDataNo(serverDataNo);
         ServerData updatedServerData = serverDataRepository.save(updateTargetServerData);
+        log.debug("updatedServerData:{}", updatedServerData);
 
         return responseMapper(updatedServerData);
     }

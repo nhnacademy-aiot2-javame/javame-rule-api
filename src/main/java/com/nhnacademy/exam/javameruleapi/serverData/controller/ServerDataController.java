@@ -36,7 +36,7 @@ public class ServerDataController {
     }
 
     @PutMapping("/{server-data-no}")
-    public ResponseEntity<ServerDataResponse> updateServerData(@PathVariable long serverDataNo, @Validated ServerDataUpdateRequest serverDataUpdateRequest){
+    public ResponseEntity<ServerDataResponse> updateServerData(@PathVariable ("server-data-no") long serverDataNo, @Validated @RequestBody ServerDataUpdateRequest serverDataUpdateRequest){
         ServerDataResponse serverDataResponse = serverDataService.updateServerData(serverDataNo, serverDataUpdateRequest);
         return ResponseEntity
                 .ok(serverDataResponse);
