@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Sensor {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sensor_no", nullable = false)
