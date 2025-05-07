@@ -1,7 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.serverData.service.Impl;
 
-import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
-import com.nhnacademy.exam.javameruleapi.server.domain.Server;
+
 import com.nhnacademy.exam.javameruleapi.serverData.domain.ServerData;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
