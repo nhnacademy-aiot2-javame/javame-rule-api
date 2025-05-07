@@ -46,6 +46,12 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
+    public ServerResponse getServer(String iphost) {
+        Server server = serverRepository.getServerByIphost(iphost).orElseThrow(()-> new ServerNotExistException("존재하지 않는 서버입니다."));
+        return ServerResponse.from(server);
+    }
+
+    @Override
     public List<ServerResponse> getServers(String companyDomain) {
         List<Server> servers = serverRepository.getServersByCompanyDomain(companyDomain).orElseThrow(()->new NoServerExistException("해당 도메인에 대한 서버 리스트가 존재하지 않습니다."));
         List<ServerResponse> serverResponses = new ArrayList<>();

@@ -114,10 +114,10 @@ public class ServerControllerTest {
         Mockito.when(serverService.getServers(Mockito.anyString())).thenReturn(serverResponses);
 
         mockMvc.perform(
-                get("/servers?companyDomain=javaMe.com")
+                get("/servers/domain")
+                        .param("domain","javaMe.com")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].serverNo").value(1))
                 .andExpect(jsonPath("$[0].companyDomain").value("javaMe.com"))

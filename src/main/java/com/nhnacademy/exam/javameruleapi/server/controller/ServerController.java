@@ -36,8 +36,15 @@ public class ServerController {
                 .ok(serverResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ServerResponse>> getServers(@RequestParam("companyDomain") String companyDomain) {
+    @GetMapping("/iphost")
+    public ResponseEntity<ServerResponse> getServer(@RequestParam("iphost") String iphost) {
+        ServerResponse serverResponse = serverService.getServer(iphost);
+        return ResponseEntity
+                .ok(serverResponse);
+    }
+
+    @GetMapping("/domain")
+    public ResponseEntity<List<ServerResponse>> getServers(@RequestParam("domain") String companyDomain) {
         List<ServerResponse> servers = serverService.getServers(companyDomain);
         return ResponseEntity
                 .ok(servers);

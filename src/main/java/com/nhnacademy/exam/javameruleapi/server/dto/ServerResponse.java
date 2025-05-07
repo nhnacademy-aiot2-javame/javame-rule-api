@@ -17,7 +17,6 @@ public class ServerResponse {
     private final String iphost;
 
 
-
     public static ServerResponse from(Server server){ //static method가 뭐지??-> 객체를 생성하지 않고 메서드 불러서 씀.
         return ServerResponse.builder()
                 .serverNo(server.getServerNo())

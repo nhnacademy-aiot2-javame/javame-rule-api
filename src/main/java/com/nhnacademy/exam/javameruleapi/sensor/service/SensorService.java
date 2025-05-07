@@ -16,5 +16,4 @@ public interface SensorService {
     Void delete(long sensorNo);
 
 
-
 }
