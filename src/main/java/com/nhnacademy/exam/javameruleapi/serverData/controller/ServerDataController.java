@@ -24,13 +24,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/server-datas")
 public class ServerDataController {
 
+    /**
+     * 서버 데이터와 관련된 비즈니스 로직을 처리하는 서비스.
+     */
     private final ServerDataService serverDataService;
 
-
+    /**
+     *
+     * @param serverDataService
+     */
     public ServerDataController(ServerDataService serverDataService) {
         this.serverDataService = serverDataService;
     }
 
+    /**
+     * 서버 데이터를 등록합니다.
+     *
+     * @param serverDataRegisterRequest 등록할 서버 데이터 요청 DTO
+     * @return 생성된 서버 데이터 응답 DTO
+     * @response 201 CREATED - 서버 데이터가 성공적으로 생성됨
+     */
     @PostMapping
     public ResponseEntity<ServerDataResponse> registerServerData(@Validated @RequestBody ServerDataRegisterRequest serverDataRegisterRequest) {
         ServerDataResponse serverDataResponse = serverDataService.registerServerData(serverDataRegisterRequest);
@@ -39,6 +52,13 @@ public class ServerDataController {
                 .body(serverDataResponse);
     }
 
+    /**
+     *  서버 데이터를 조회합니다.
+     *
+     * @param serverDataNo 조회할 서버 데이터 번호
+     * @return 조회된 서버 데이터 응답 DTO
+     * @response 200 OK - 서버 데이터 조회 성공
+     */
     @GetMapping("/{server-data-no}")
     public ResponseEntity<ServerDataResponse> getServerData(@PathVariable("server-data-no") long serverDataNo) {
         ServerDataResponse serverDataResponse = serverDataService.getServerData(serverDataNo);
@@ -46,6 +66,14 @@ public class ServerDataController {
                 .ok(serverDataResponse);
     }
 
+    /**
+     * 서버 데이터를 수정합니다.
+     *
+     * @param serverDataNo 수정할 서버 데이터 번호
+     * @param serverDataUpdateRequest 수정할 서버 데이터 요청 DTO
+     * @return 수정된 서버 데이터 응답 DTO
+     * @response 200 OK - 서버 데이터 수정 성공
+     */
     @PutMapping("/{server-data-no}")
     public ResponseEntity<ServerDataResponse> updateServerData(@PathVariable("server-data-no") long serverDataNo, @Validated @RequestBody ServerDataUpdateRequest serverDataUpdateRequest) {
         ServerDataResponse serverDataResponse = serverDataService.updateServerData(serverDataNo, serverDataUpdateRequest);
@@ -53,6 +81,11 @@ public class ServerDataController {
                 .ok(serverDataResponse);
     }
 
+    /**
+     *
+     * @param serverDataNo 삭제할 서버 데이터 번호
+     * @return 응답 상태 204 (No Content)
+     */
     @DeleteMapping("/{server-data-no}")
     public ResponseEntity<Void> deleteServerData(@PathVariable("server-data-no") long serverDataNo) {
         Void serverDataResponse = serverDataService.delete(serverDataNo);
