@@ -1,6 +1,5 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.dto;
 
-import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import lombok.Getter;
 public class SensorDataRegisterRequest {
 
     /**
-     *
+     * 센서 고유 ID.
      */
     private String sensorId;
 
@@ -24,12 +23,12 @@ public class SensorDataRegisterRequest {
     private Double minThreshold;
 
     /**
-     *  최대 임계값
+     *  최대 임계값.
      */
     private Double maxThreshold;
 
     /**
-     *
+     * 센서 데이터가 등록된 회사 도메인.
      */
     private String companyDomain;
 
