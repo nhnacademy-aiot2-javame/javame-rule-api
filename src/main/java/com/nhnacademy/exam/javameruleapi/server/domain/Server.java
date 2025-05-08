@@ -10,7 +10,6 @@ import lombok.ToString;
 @Getter
 public class Server {
 
-    //CpuThreshold, MemoryThreshold .. 클래스 분리.. -> Category?
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +23,7 @@ public class Server {
     private String iphost;
 
     public void update(String iphost){
+
         this.iphost = iphost;
     }
 

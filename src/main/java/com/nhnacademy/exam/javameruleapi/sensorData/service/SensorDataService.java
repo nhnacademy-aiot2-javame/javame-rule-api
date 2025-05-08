@@ -6,9 +6,11 @@ import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
 
 public interface SensorDataService {
 
-    SensorDataResponse register(SensorDataRegisterRequest sensorDataRegisterRequest);
+    SensorDataResponse register(String sensorId, SensorDataRegisterRequest sensorDataRegisterRequest);
 
-    SensorDataResponse getSensorData(long sensorDataNo);
+    SensorDataResponse getSensorDataBySensorDataNo(long sensorDataNo);
+
+    SensorDataResponse getSensorDataBySensorId(String sensorId);
 
     SensorDataResponse update(long dataTypeNo, SensorDataUpdateRequest sensorDataUpdateRequest);
 

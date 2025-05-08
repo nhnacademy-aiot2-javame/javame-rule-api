@@ -43,16 +43,17 @@ public class ServerDataControllerTest {
     private ServerDataService serverDataService;
 
 
-//    private List<Server> servers;
+
     private ServerData serverData;
-//    private ServerData savedServerData;
     private ServerDataRegisterRequest serverDataRegisterRequest;
 
     @BeforeEach
     void setUp(){
 
         serverDataRegisterRequest = new ServerDataRegisterRequest(
-                "192.168.32.5", "Mail Server", "Network", 20.0, 80.0
+                "192.168.32.5", "Mail Server",
+                "Network", 20.0,
+                80.0, "nhn_academy"
         );
 
         serverData = new ServerData(
@@ -60,7 +61,9 @@ public class ServerDataControllerTest {
                 serverDataRegisterRequest.getServerDataCategory(),
                 serverDataRegisterRequest.getServerDataTopic(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold());
+                serverDataRegisterRequest.getMaxThreshold(),
+                serverDataRegisterRequest.getCompanyDomain()
+        );
 
         ReflectionTestUtils.setField(serverData, "serverDataNo", 1L);
         log.debug("serverData.getServerDataNo():{}", serverData.getServerDataNo());
@@ -94,7 +97,7 @@ public class ServerDataControllerTest {
                                 "serverDataCategory":"Mail Server",
                                 "serverDataTopic":"Network",
                                 "minThreshold":20.0,
-                                "maxThreshold":80.0                                                                          
+                                "maxThreshold":80.0
                                 }
                                 """)
                 )

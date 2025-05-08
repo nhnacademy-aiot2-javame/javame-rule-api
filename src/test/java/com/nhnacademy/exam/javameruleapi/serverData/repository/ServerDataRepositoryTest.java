@@ -58,14 +58,17 @@ public class ServerDataRepositoryTest {
         servers.add(server2);
 
         ServerDataRegisterRequest serverDataRegisterRequest = new ServerDataRegisterRequest(
-                "192.168.32.5", "Mail Server", "Network", 20.0, 80.0
+                "192.168.32.5", "Mail Server", "Network",
+                20.0, 80.0, "nhn_academy"
         );
         serverData = new ServerData(
                 serverDataRegisterRequest.getIphost(),
                 serverDataRegisterRequest.getServerDataCategory(),
                 serverDataRegisterRequest.getServerDataTopic(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold());
+                serverDataRegisterRequest.getMaxThreshold(),
+                serverDataRegisterRequest.getCompanyDomain()
+        );
 
         savedServerData = serverDataRepository.save(serverData);
     }
@@ -75,7 +78,8 @@ public class ServerDataRepositoryTest {
     @DisplayName("서버 데이터 등록")
     void registerServerData(){
         ServerDataRegisterRequest serverDataRegisterRequest = new ServerDataRegisterRequest(
-                "192.168.32.4", "DB Server", "Performance", 10.0, 95.0
+                "192.168.32.4", "DB Server", "Performance",
+                10.0, 95.0, "nhn_academy"
         );
 
        Boolean isExist = serverDataRepository.existsServerDataByIphost("192.168.32.4");
@@ -86,7 +90,9 @@ public class ServerDataRepositoryTest {
                 serverDataRegisterRequest.getServerDataCategory(),
                 serverDataRegisterRequest.getServerDataTopic(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold());
+                serverDataRegisterRequest.getMaxThreshold(),
+                serverDataRegisterRequest.getCompanyDomain()
+       );
 
        ServerData savedServerData = serverDataRepository.save(serverData);
 

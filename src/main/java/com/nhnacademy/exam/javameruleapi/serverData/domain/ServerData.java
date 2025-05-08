@@ -33,12 +33,16 @@ public class ServerData {
     @Column(name = "max_threshold")
     private Double maxThreshold; // 최대 임계값
 
-    public ServerData(String iphost, String serverDataCategory, String serverDataTopic, Double minThreshold, Double maxThreshold) {
+    @Column(name = "company_domain")
+    private String companyDomain;
+
+    public ServerData(String iphost, String serverDataCategory, String serverDataTopic, Double minThreshold, Double maxThreshold, String companyDomain) {
         this.iphost = iphost;
         this.serverDataCategory = serverDataCategory;
         this.serverDataTopic = serverDataTopic;
         this.minThreshold = minThreshold;
         this.maxThreshold = maxThreshold;
+        this.companyDomain = companyDomain;
     }
 
     public void update(String serverDataCategory, String serverDataTopic, Double minThreshold, Double maxThreshold){
