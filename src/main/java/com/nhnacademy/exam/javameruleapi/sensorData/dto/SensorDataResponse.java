@@ -8,12 +8,16 @@ import lombok.Getter;
 @Getter
 public class SensorDataResponse {
 
-    private final long sensorDataNo;
+    private String sensorId;
 
-    private final String sensorDataName;
+    private long sensorDataNo;
 
-    private final Double minThreshold;
+    private String sensorDataName;
 
-    private final Double maxThreshold;
+    private Double minThreshold;
+
+    private Double maxThreshold;
+
+    private String companyDomain;
 
 }

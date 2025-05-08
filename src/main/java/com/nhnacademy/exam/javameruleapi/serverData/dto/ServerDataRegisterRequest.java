@@ -32,6 +32,8 @@ public class ServerDataRegisterRequest {
     /**
      * 최대 임계값
      */
-    private Double maxThreshold; // 최대 임계값
+    private Double maxThreshold;
+
+    private String companyDomain;
 
 }

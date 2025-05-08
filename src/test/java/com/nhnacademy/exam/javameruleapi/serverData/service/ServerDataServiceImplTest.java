@@ -40,7 +40,8 @@ public class ServerDataServiceImplTest {
     void setUp(){
 
         serverDataRegisterRequest = new ServerDataRegisterRequest
-                ("192.168.32.5", "Mail Server", "Network", 20.0, 80.0
+                ("192.168.32.5", "Mail Server", "Network",
+                        20.0, 80.0, "nhn_academy"
         );
 
         serverData = new ServerData(
@@ -48,7 +49,9 @@ public class ServerDataServiceImplTest {
                 serverDataRegisterRequest.getServerDataCategory(),
                 serverDataRegisterRequest.getServerDataTopic(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold());
+                serverDataRegisterRequest.getMaxThreshold(),
+                serverDataRegisterRequest.getCompanyDomain()
+        );
 
         ReflectionTestUtils.setField(serverData, "serverDataNo", 1L);
         log.debug("serverData.getServerDataNo():{}", serverData.getServerDataNo());

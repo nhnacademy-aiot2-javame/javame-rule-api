@@ -1,6 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.domain;
 
-import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +18,8 @@ public class SensorData {
     @Column(name = "sensor_data_no", nullable = false)
     private long sensorDataNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sensor_no")
-    private Sensor sensor;
+    @Column(name = "sensor_id", nullable = false)
+    private String sensorId;
 
     @Column(name = "sensor_data_name", nullable = false)
     private String sensorDataName;
@@ -31,11 +30,15 @@ public class SensorData {
     @Column(name = "max_threshold")
     private Double maxThreshold;
 
-    public SensorData(Sensor sensor, String sensorDataName, Double minThreshold, Double maxThreshold){
-        this.sensor = sensor;
+    @Column(name = "company_domain", nullable = false)
+    private String companyDomain;
+
+    public SensorData(String sensorId, String sensorDataName, Double minThreshold, Double maxThreshold, String companyDomain){
+        this.sensorId = sensorId;
         this.sensorDataName = sensorDataName;
         this.minThreshold = minThreshold;
         this.maxThreshold = maxThreshold;
+        this.companyDomain = companyDomain;
     }
 
     public void update(String sensorDataName, Double minThreshold, Double maxThreshold){
@@ -45,8 +48,5 @@ public class SensorData {
         this.maxThreshold = maxThreshold;
     }
 
-    public void setSensor(Sensor sensor){
-        this.sensor = sensor;
-    }
 
 }

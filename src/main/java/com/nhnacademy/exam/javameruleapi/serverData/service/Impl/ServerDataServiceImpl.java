@@ -44,8 +44,14 @@ public class ServerDataServiceImpl implements ServerDataService {
         if(optionalServerData){
             throw new AlreadyServerDataExistsException("이미 존재하는 서버 데이터 입니다.");
         }
-          ServerData serverData = new ServerData(serverDataRegisterRequest.getIphost(), serverDataRegisterRequest.getServerDataCategory(),
-                  serverDataRegisterRequest.getServerDataTopic(), serverDataRegisterRequest.getMinThreshold(), serverDataRegisterRequest.getMaxThreshold());
+          ServerData serverData = new ServerData(
+                  serverDataRegisterRequest.getIphost(),
+                  serverDataRegisterRequest.getServerDataCategory(),
+                  serverDataRegisterRequest.getServerDataTopic(),
+                  serverDataRegisterRequest.getMinThreshold(),
+                  serverDataRegisterRequest.getMaxThreshold(),
+                  serverDataRegisterRequest.getCompanyDomain()
+          );
             ServerData savedServerData = serverDataRepository.save(serverData);
         return responseMapper(savedServerData);
     }

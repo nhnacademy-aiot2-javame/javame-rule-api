@@ -13,19 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 public class SensorRegisterRequest {
 
+
     private String companyDomain;
 
     private String sensorId;
 
-    private List<SensorDataRegisterRequest> sensorDataList;
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class SensorDataRegisterRequest {
-
-        private String sensorDataName;
-
-    }
 
 }

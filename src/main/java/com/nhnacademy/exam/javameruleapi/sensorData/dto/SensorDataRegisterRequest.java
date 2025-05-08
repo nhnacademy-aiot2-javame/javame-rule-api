@@ -9,12 +9,17 @@ import lombok.Getter;
 public class SensorDataRegisterRequest {
 
     /**
-     *  데이터 타입 이름 ex) "temperature", "humidity"
+     *
+     */
+    private String sensorId;
+
+    /**
+     *  데이터 타입 이름 ex) "temperature", "humidity".
      */
     private String sensorDataName;
 
     /**
-     * 최소 임계값
+     * 최소 임계값.
      */
     private Double minThreshold;
 
@@ -22,5 +27,10 @@ public class SensorDataRegisterRequest {
      *  최대 임계값
      */
     private Double maxThreshold;
+
+    /**
+     *
+     */
+    private String companyDomain;
 
 }

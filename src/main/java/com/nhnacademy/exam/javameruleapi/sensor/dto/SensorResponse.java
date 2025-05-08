@@ -6,14 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
-@AllArgsConstructor
-@Getter
-@NoArgsConstructor
 /**
  *
  */
+@AllArgsConstructor
+@Getter
+@NoArgsConstructor
 public class SensorResponse {
 
     private long sensorNo;
@@ -22,6 +21,5 @@ public class SensorResponse {
 
     private String sensorId;
 
-    private List<SensorDataResponse> sensorDataList;
 
 }
