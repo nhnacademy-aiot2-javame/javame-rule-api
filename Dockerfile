@@ -12,10 +12,10 @@ WORKDIR /app
 
 # 3. 빌드된 JAR 파일을 컨테이너로 복사
 # 'javame-trans-service.jar'은 예시고 자신의 레포 이름으로 설정하면 됨
-COPY target/*.jar javame-trans-service.jar
+COPY target/*.jar javame-rule-api.jar
 
 # 4. Spring Boot 앱이 실행될 포트 노출
 EXPOSE 10284
 
 # 5. Spring Boot JAR 파일 실행
-CMD ["java", "-jar", "javame-trans-service.jar"]
+CMD ["java", "-jar", "javame-rule-api.jar"]
