@@ -25,7 +25,6 @@ public class ServerRepositoryTest {
     @Autowired
     private ServerRepository serverRepository;
 
-
     @BeforeEach
     void setUp(){
         List<Server> servers = new ArrayList<>();
