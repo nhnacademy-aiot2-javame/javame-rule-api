@@ -1,0 +1,7 @@
+  javame-rule-api:
+    image: "saumonrose08/javame-rule-api:${TRANS_IMAGE_TAG}"
+//여기 주의 workFlow에서 정한 tag이미지 변수로 변경
+    container_name: javame-rule-api
+    ports:
+      - "10284:10284"
+    restart: unless-stopped
