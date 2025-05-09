@@ -1,6 +1,5 @@
 name: CI/CD for Spring Boot with Docker
 
-// 메인에 풀리퀘스트가 되거나 푸시될때 작동
 on:
   push:
     branches:
