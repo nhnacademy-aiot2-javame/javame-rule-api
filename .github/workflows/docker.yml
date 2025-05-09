@@ -15,7 +15,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      SERVICE_NAME: javame-trans-service
+      SERVICE_NAME: javame-rule-api
       //사용할 컨테이너 이름
 
     steps:
@@ -49,8 +49,8 @@ jobs:
       - name: Build & Push Docker Image
         run: |
             IMAGE_TAG=${{ github.sha }}
-            docker build -t janggon/javame-trans-service:$IMAGE_TAG .
-            docker push janggon/javame-trans-service:$IMAGE_TAG
+            docker build -t saumonrose08/javame-rule-api:$IMAGE_TAG .
+            docker push saumonrose08/javame-rule-api:$IMAGE_TAG
             echo "TRANS_IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
      
         //Docker-Hub에 레포지를 파야함(이미지를 등록할 레포) 
