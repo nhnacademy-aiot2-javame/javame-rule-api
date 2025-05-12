@@ -15,7 +15,7 @@ WORKDIR /app
 COPY target/*.jar javame-rule-api.jar
 
 # 4. Spring Boot 앱이 실행될 포트 노출
-EXPOSE 10284
+EXPOSE 10274
 
 # 5. Spring Boot JAR 파일 실행
 CMD ["java", "-jar", "javame-rule-api.jar"]
