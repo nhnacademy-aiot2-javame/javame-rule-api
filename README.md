@@ -8,6 +8,8 @@ Rule Engine에 사용될 rule-api 입니다.
 </br>
 </div>
 
+</br>
+</br>
 <div align="center">
 <h3 tabindex="-1" class="heading-element" dir="auto">사용스택</h3>
 
@@ -27,7 +29,9 @@ Rule Engine에 사용될 rule-api 입니다.
 </br>
 </br>
 </div>
-
+</br>
+</br>
+</br>
 
 <div align=center>
 <h3 tabindex="-1" class="heading-element" dir="auto">서비스 아키텍쳐</h3> 
@@ -35,15 +39,29 @@ Rule Engine에 사용될 rule-api 입니다.
 ![image](https://github.com/user-attachments/assets/e277eed9-eb88-4ce2-8cb6-2ba0fcd3f4a9)
 
 </br>
-- 부연 설명,...
+<h3 tabindex="-1" class="heading-element" dir="auto">1.사용자 → Gateway → Rule API</h3> 
+<li>센서/서버/임계치 등록</li>
+<li>등록된 임계치 목록 조회 (프론트에 표시)</li>
+
+<h3 tabindex="-1" class="heading-element" dir="auto">2.Rule API↔ MySQL</h3> 
+<li>Rule 저장 및 조회</li>
+
+<h3 tabindex="-1" class="heading-element" dir="auto">3.TransService → Rule API</h3>
+<li>임계치 주기적 조회</li>
+
 </div>
 
-
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
 
 <div align=center>
 <h3 tabindex="-1" class="heading-element" dir="auto">Test Coverage (Targe:Line coverage 80%)</h3> 
   <li>
-    "Line coverage: 93.9% (2025. 05. 15. 기준) "
+    Line coverage: 93.9% (2025. 05. 15. 기준)
   </li>
   </br>
 
