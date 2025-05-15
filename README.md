@@ -32,7 +32,8 @@ Rule Engine에 사용될 rule-api 입니다.
 <div align=center>
 <h3 tabindex="-1" class="heading-element" dir="auto">서비스 아키텍쳐</h3> 
   
-![javame-rule-api](https://github.com/user-attachments/assets/f00f51af-fb0a-46d3-8c3c-960016f75f4f)
+![image](https://github.com/user-attachments/assets/e277eed9-eb88-4ce2-8cb6-2ba0fcd3f4a9)
+
 </br>
 - 부연 설명,...
 </div>
