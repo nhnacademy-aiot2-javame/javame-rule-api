@@ -1,5 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.server.controller;
 
+import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
@@ -47,6 +48,7 @@ public class ServerController {
      * @param serverRegisterRequest 서버 등록 요청 dto
      * @return 등록된 서버 정보 응답. HTTP Status 201(CREATED)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping
     public ResponseEntity<ServerResponse> registerServer(@Validated @RequestBody ServerRegisterRequest serverRegisterRequest) {
         ServerResponse serverResponse = serverService.register(serverRegisterRequest);
@@ -61,6 +63,7 @@ public class ServerController {
      * @param serverNo 서버 번호
      * @return 서버 정보 응답. HTTP Status 200(OK).
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/{server-no}")
     public ResponseEntity<ServerResponse> getServer(@PathVariable("server-no") long serverNo) {
         ServerResponse serverResponse = serverService.getServer(serverNo);
@@ -74,6 +77,7 @@ public class ServerController {
      * @param iphost iphost
      * @return 조회된 서버 정보 응답. HTTP Status 200(OK).
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/iphost")
     public ResponseEntity<ServerResponse> getServer(@RequestParam("iphost") String iphost) {
         ServerResponse serverResponse = serverService.getServer(iphost);
@@ -87,6 +91,7 @@ public class ServerController {
      * @param companyDomain 회사 도메인
      * @return 조회된 서버 정보 리스트 응답. HTTP Status 200(OK).
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/domain")
     public ResponseEntity<List<ServerResponse>> getServers(@RequestParam("domain") String companyDomain) {
         List<ServerResponse> servers = serverService.getServers(companyDomain);
@@ -101,6 +106,7 @@ public class ServerController {
      * @param serverNo 서버 번호
      * @return 업데이트 된 서버 정보 응답. HTTP Status 200(OK).
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/{server-no}")
     public ResponseEntity<ServerResponse> updateServer(@Validated @RequestBody ServerUpdateRequest serverUpdateRequest, @PathVariable("server-no") long serverNo) {
         ServerResponse serverResponse = serverService.update(serverNo, serverUpdateRequest);
@@ -114,6 +120,7 @@ public class ServerController {
      * @param serverNo 서버 번호
      * @return 삭제된 서버 정보 응답. HTTP Status 204(No Content)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @DeleteMapping("/{server-no}")
     public ResponseEntity<Void> deleteServer(@PathVariable("server-no") long serverNo) {
         serverService.delete(serverNo);

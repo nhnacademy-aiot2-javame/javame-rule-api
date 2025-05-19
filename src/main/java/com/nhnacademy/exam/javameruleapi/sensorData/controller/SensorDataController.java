@@ -1,5 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.controller;
 
+import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
@@ -42,6 +43,7 @@ public class SensorDataController {
      * @param sensorDataRegisterRequest 센서 데이터 등록 요청
      * @return 생성된 센서 데이터 응답.HTTP 코드는 201(CREATED)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping("/{sensor-id}")
     ResponseEntity<SensorDataResponse> registerSensorData(
             @PathVariable("sensor-id") String sensorId,
@@ -58,6 +60,7 @@ public class SensorDataController {
      * @param sensorDataNo 센서 데이터 고유 번호.
      * @return 센서 데이터 응답. HTTP 코드는 200(OK)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER","ROLE_USER"})
     @GetMapping("/by-no/{sensor-data-no}")
     ResponseEntity<SensorDataResponse> getSensorDataBySensorDataNo(@PathVariable("sensor-data-no") long sensorDataNo) {
         SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorDataNo(sensorDataNo);
@@ -71,6 +74,7 @@ public class SensorDataController {
      * @param sensorId 센서 ID.
      * @return 센서 데이터 응답. HTTP 코드는 200(OK)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/by-id/{sensor-id}")
     ResponseEntity<SensorDataResponse> getSensorDataBySensorId(@PathVariable("sensor-id") String sensorId) {
         SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorId(sensorId);
@@ -85,6 +89,7 @@ public class SensorDataController {
      * @param sensorDataUpdateRequest 수정 요청 데이터
      * @return 수정된 센서 데이터 응답. HTTP 코드는 200(OK)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/{sensor-data-no}")
     ResponseEntity<SensorDataResponse> updateSensorData(@PathVariable("sensor-data-no") long sensorDataNo, @Validated @RequestBody SensorDataUpdateRequest sensorDataUpdateRequest) {
         SensorDataResponse sensorDataResponse = sensorDataService.update(sensorDataNo, sensorDataUpdateRequest);
@@ -98,6 +103,7 @@ public class SensorDataController {
      * @param sensorDataNo 삭제할 센서 데이터 번호.
      * @return 204(No Content) 응답.
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @DeleteMapping("/{sensor-data-no}")
     ResponseEntity<Void> deleteDataType(@PathVariable("sensor-data-no") long sensorDataNo) {
         sensorDataService.delete(sensorDataNo);

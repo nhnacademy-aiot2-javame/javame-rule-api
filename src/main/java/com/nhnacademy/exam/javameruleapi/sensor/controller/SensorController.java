@@ -1,5 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.sensor.controller;
 
+import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
@@ -46,6 +47,7 @@ public class SensorController {
      * @param sensorRegisterRequest 센서 등록 요청 객체
      * @return 셍성된 센서 정보와 함께 HTTP 201(CREATED) 상태 반환
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping
     ResponseEntity<SensorResponse> registerSensor(@Validated @RequestBody SensorRegisterRequest sensorRegisterRequest) {
         SensorResponse sensorResponse = sensorService.register(sensorRegisterRequest);
@@ -60,6 +62,7 @@ public class SensorController {
      * @param sensorNo 센서 번호
      * @return 센서 응답 객체와 함께 HTTP 200(OK) 반환
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/{sensor-id}")
     ResponseEntity<SensorResponse> getSensor(@PathVariable("sensor-id") long sensorNo) {
         SensorResponse sensorResponse = sensorService.getSensor(sensorNo);
@@ -72,6 +75,7 @@ public class SensorController {
      * @param companyDomain 회사 도메인
      * @return 센서 응답 객체 리스트와 함께 HTTP 200(OK) 반환
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @GetMapping
     ResponseEntity<List<SensorResponse>> getSensors(@RequestParam String companyDomain) {
         List<SensorResponse> sensorResponses = sensorService.getSensors(companyDomain);

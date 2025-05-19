@@ -1,5 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.serverData.controller;
 
+import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
@@ -44,6 +45,7 @@ public class ServerDataController {
      * @return 생성된 서버 데이터 응답 DTO
      * @response 201 CREATED - 서버 데이터가 성공적으로 생성됨
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping
     public ResponseEntity<ServerDataResponse> registerServerData(@Validated @RequestBody ServerDataRegisterRequest serverDataRegisterRequest) {
         ServerDataResponse serverDataResponse = serverDataService.registerServerData(serverDataRegisterRequest);
@@ -59,6 +61,7 @@ public class ServerDataController {
      * @return 조회된 서버 데이터 응답 DTO
      * @response 200 OK - 서버 데이터 조회 성공
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/{server-data-no}")
     public ResponseEntity<ServerDataResponse> getServerData(@PathVariable("server-data-no") long serverDataNo) {
         ServerDataResponse serverDataResponse = serverDataService.getServerData(serverDataNo);
@@ -74,6 +77,7 @@ public class ServerDataController {
      * @return 수정된 서버 데이터 응답 DTO
      * @response 200 OK - 서버 데이터 수정 성공
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/{server-data-no}")
     public ResponseEntity<ServerDataResponse> updateServerData(@PathVariable("server-data-no") long serverDataNo, @Validated @RequestBody ServerDataUpdateRequest serverDataUpdateRequest) {
         ServerDataResponse serverDataResponse = serverDataService.updateServerData(serverDataNo, serverDataUpdateRequest);
@@ -86,6 +90,7 @@ public class ServerDataController {
      * @param serverDataNo 삭제할 서버 데이터 번호
      * @return 응답 상태 204 (No Content)
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @DeleteMapping("/{server-data-no}")
     public ResponseEntity<Void> deleteServerData(@PathVariable("server-data-no") long serverDataNo) {
         Void serverDataResponse = serverDataService.delete(serverDataNo);
