@@ -60,6 +60,7 @@ public class SensorControllerTest {
 
         mockMvc.perform(
                         post("/sensors")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content("""
@@ -87,6 +88,7 @@ public class SensorControllerTest {
 
         mockMvc.perform(
                 get("/sensors/1")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
@@ -112,6 +114,7 @@ public class SensorControllerTest {
 
         mockMvc.perform(
                 get("/sensors?companyDomain=nhn_domain")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
@@ -133,6 +136,7 @@ public class SensorControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/sensors/1")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         )

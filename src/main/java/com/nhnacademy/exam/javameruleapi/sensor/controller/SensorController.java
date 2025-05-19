@@ -89,6 +89,7 @@ public class SensorController {
      * @param sensorNo 센서 번호
      * @return HTTP 204(No Content) 상태 반환
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @DeleteMapping("/{sensor-id}")
     ResponseEntity<Void> deleteSensor(@PathVariable("sensor-id") long sensorNo) {
         sensorService.delete(sensorNo);
