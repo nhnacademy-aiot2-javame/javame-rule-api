@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -88,18 +89,19 @@ public class ServerDataControllerTest {
         Mockito.when(serverDataService.registerServerData(Mockito.any(ServerDataRegisterRequest.class))).thenReturn(serverDataResponse);
 
         mockMvc.perform(
-                    post("/server-datas")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                "iphost":"192.168.32.5",
-                                "serverDataCategory":"Mail Server",
-                                "serverDataTopic":"Network",
-                                "minThreshold":20.0,
-                                "maxThreshold":80.0
-                                }
-                                """)
+                        post("/server-datas")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .content("""
+                                        {
+                                        "iphost":"192.168.32.5",
+                                        "serverDataCategory":"Mail Server",
+                                        "serverDataTopic":"Network",
+                                        "minThreshold":20.0,
+                                        "maxThreshold":80.0
+                                        }
+                                        """)
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.serverDataNo").value(1))
@@ -132,6 +134,7 @@ public class ServerDataControllerTest {
                 get("/server-datas/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
 
 
         ).andExpect(status().isOk())
@@ -173,6 +176,7 @@ public class ServerDataControllerTest {
                 put("/server-datas/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .content(
                                 """
                                 {
@@ -203,6 +207,7 @@ public class ServerDataControllerTest {
 
         mockMvc.perform(
                 delete("/server-datas/1")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNoContent())

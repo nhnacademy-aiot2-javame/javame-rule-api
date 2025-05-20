@@ -9,6 +9,8 @@ import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,6 +83,7 @@ public class SensorDataControllerTest {
 
         mockMvc.perform(
                 post("/sensor-datas/12345e")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .content(jsonRequest)
                         .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -106,6 +109,7 @@ public class SensorDataControllerTest {
 
         mockMvc.perform(
                 get("/sensor-datas/by-no/3")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         )
@@ -132,6 +136,7 @@ public class SensorDataControllerTest {
 
         mockMvc.perform(
                 get("/sensor-datas/by-id/12345e")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         )
@@ -164,6 +169,7 @@ public class SensorDataControllerTest {
                                 "maxThreshold":56.2
                                 }
                                 """)
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
         )
@@ -184,6 +190,7 @@ public class SensorDataControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/sensor-datas/3")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         )

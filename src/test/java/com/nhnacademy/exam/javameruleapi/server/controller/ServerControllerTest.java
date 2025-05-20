@@ -59,6 +59,7 @@ public class ServerControllerTest {
                                         "iphost" : "192.168.0.1"
                                         }
                                         """)
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -82,6 +83,7 @@ public class ServerControllerTest {
 
         mockMvc.perform(
                 get("/servers/1")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
@@ -116,6 +118,7 @@ public class ServerControllerTest {
         mockMvc.perform(
                 get("/servers/domain")
                         .param("domain","javaMe.com")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isOk())
@@ -154,6 +157,7 @@ public class ServerControllerTest {
                                     "iphost":"200.31.2"
                                         }
                                     """)
+                            .header("X-USER-ROLE", "ROLE_ADMIN")
                             .contentType(MediaType.APPLICATION_JSON)
                             .accept(MediaType.APPLICATION_JSON)
 
@@ -173,6 +177,7 @@ public class ServerControllerTest {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/servers/1")
+                        .header("X-USER-ROLE", "ROLE_ADMIN")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         )
