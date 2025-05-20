@@ -77,18 +77,24 @@ public class SensorRepositoryTest {
 
     @Test
     @DisplayName("센서 삭제")
-    @Order(4)
+    @Order(3)
     void delete(){
-        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(2);
-        Assertions.assertTrue(optional.isPresent());
+        Sensor sensor = new Sensor(
+            "sample_domain%d".formatted(10),
+            "temperature_sensor%d".formatted(10)
+        );
+        Sensor savedSensor = sensorRepository.save(sensor);
+        long num = savedSensor.getSensorNo();
+
+        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(num);
+        log.error(optional.get().toString());
         Sensor deleteTarget = optional.get();
 
         sensorRepository.delete(deleteTarget);
 
-        Optional<Sensor> optional2 = sensorRepository.getSensorBySensorNo(2);
+        Optional<Sensor> optional2 = sensorRepository.getSensorBySensorNo(num);
         Assertions.assertTrue(optional2.isEmpty());
 
     }
-
 
 }
