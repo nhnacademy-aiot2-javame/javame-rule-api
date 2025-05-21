@@ -29,17 +29,16 @@ public class SensorDataController {
 
     /**
      * 센서 데이터 관련 비즈니스 로직을 처리하는 서비스.
-     *
+     * <p>
      * 이 서비스는 센서 데이터의 등록, 조회, 수정, 삭제 기능을 제공.
-     * Spring의 의존성 주입(@Autowired)을 통해 자동으로 주입됨.
+     *
      */
-    @Autowired
     private SensorDataService sensorDataService;
 
     /**
      * 센서 데이터 등록.
      *
-     * @param sensorId 센서ID
+     * @param sensorId                  센서ID
      * @param sensorDataRegisterRequest 센서 데이터 등록 요청
      * @return 생성된 센서 데이터 응답.HTTP 코드는 201(CREATED)
      */
@@ -60,7 +59,7 @@ public class SensorDataController {
      * @param sensorDataNo 센서 데이터 고유 번호.
      * @return 센서 데이터 응답. HTTP 코드는 200(OK)
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER","ROLE_USER"})
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/by-no/{sensor-data-no}")
     ResponseEntity<SensorDataResponse> getSensorDataBySensorDataNo(@PathVariable("sensor-data-no") long sensorDataNo) {
         SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorDataNo(sensorDataNo);
@@ -85,7 +84,7 @@ public class SensorDataController {
     /**
      * 센서 데이터 수정.
      *
-     * @param sensorDataNo 수정할 센서 데이터 번호
+     * @param sensorDataNo            수정할 센서 데이터 번호
      * @param sensorDataUpdateRequest 수정 요청 데이터
      * @return 수정된 센서 데이터 응답. HTTP 코드는 200(OK)
      */

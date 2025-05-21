@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 센서 서비스 인터페이스.
- *
+ * <p>
  * 이 인터페이스는 센서 등록, 조회, 삭제와 관련된 비즈니스 로직을 정의합니다.
  */
 public interface SensorService {
