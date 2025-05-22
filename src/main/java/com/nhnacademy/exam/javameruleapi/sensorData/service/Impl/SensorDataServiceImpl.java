@@ -72,7 +72,7 @@ public class SensorDataServiceImpl implements SensorDataService {
         if (isExist) {
             throw new AlreadySensorDataExistException("이미 존재하는 센서 데이터 입니다.");
         }
-        Sensor foundSensor = sensorRepository.getSensorBySensorNo(sensorNo).
+        Sensor foundSensor = sensorRepository.getBySensorNo(sensorNo).
                 orElseThrow(() -> new SensorNotExistException("해당 번호의 센서는 존재하지 않습니다."));
         SensorData sensorData = new SensorData(
                 foundSensor,
@@ -113,11 +113,11 @@ public class SensorDataServiceImpl implements SensorDataService {
      */
     @Override
     public List<SensorDataResponse> getSensorDatasBySensorNo(Long sensorNo) {
-        Boolean exists = sensorDataRepository.existsSensorDataBySensorNo(sensorNo);
+        Boolean exists = sensorDataRepository.existsBySensor_SensorNo(sensorNo);
         if (!exists) {
             throw new SensorDataNotExistException("해당 센서번호에 대한 센서 데이터가 존재하지 않습니다.");
         }
-        List<SensorData> sensorDataList = sensorDataRepository.getSensorDatasBySensorNo(sensorNo);
+        List<SensorData> sensorDataList = sensorDataRepository.getSensorDataBySensor_SensorNo(sensorNo);
         List<SensorDataResponse> sensorDataResponses = new ArrayList<>();
         for (SensorData sensorData : sensorDataList) {
             SensorDataResponse resp = responseMapper(sensorData);

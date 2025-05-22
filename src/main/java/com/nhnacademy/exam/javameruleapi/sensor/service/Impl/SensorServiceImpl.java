@@ -92,7 +92,7 @@ public class SensorServiceImpl implements SensorService {
      */
     @Override
     public SensorResponse getSensor(long sensorNo) {
-        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서 입니다."));
+        Sensor sensor = sensorRepository.getBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서 입니다."));
         return responseMapper(sensor);
     }
 
@@ -126,7 +126,7 @@ public class SensorServiceImpl implements SensorService {
      */
     @Override
     public Void delete(long sensorNo) {
-        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서입니다."));
+        Sensor sensor = sensorRepository.getBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서입니다."));
         sensorRepository.delete(sensor);
         return null;
     }

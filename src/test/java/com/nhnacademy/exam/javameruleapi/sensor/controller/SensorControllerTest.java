@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,9 @@ public class SensorControllerTest {
     void register() throws Exception {
 
 
-        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
+        SensorResponse sensorResponse = new SensorResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensor.getSensorId(), sensor.getCreated_at());
         Mockito.when(sensorService.register(Mockito.any(SensorRegisterRequest.class))).thenReturn(sensorResponse);
 
         mockMvc.perform(
@@ -82,7 +85,10 @@ public class SensorControllerTest {
     @DisplayName("센서번호로 센서  조회")
     void getSensor() throws Exception{
 
-        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
+        SensorResponse sensorResponse = new SensorResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensor.getSensorId(), sensor.getCreated_at()
+        );
 
         Mockito.when(sensorService.getSensor(Mockito.anyLong())).thenReturn(sensorResponse);
 
@@ -104,8 +110,13 @@ public class SensorControllerTest {
     void getSensors() throws Exception {
 
         List<SensorResponse> sensorResponses = new ArrayList<>();
-        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
-        SensorResponse sensorResponse2 = new SensorResponse(2L, "nhn_domain", "mock_sensor_id2");
+        SensorResponse sensorResponse = new SensorResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensor.getSensorId(), sensor.getCreated_at()
+        );
+        SensorResponse sensorResponse2 = new SensorResponse(
+                2L, "nhn_domain",
+                "mock_sensor_id2", LocalDateTime.of(2025, 5, 22, 14, 30));
         sensorResponses.add(sensorResponse);
         sensorResponses.add(sensorResponse2);
 

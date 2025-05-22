@@ -36,12 +36,11 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
     Optional<SensorData> getSensorDataBySensorDataNo(long sensorDataNo);
 
     /**
-     * 센서 번호를 통해 센서 데이터 리스트를 조회합니다.
-     *
+     * 센서 번호를 통해서 센서 데이터들을 조회합니다.
      * @param sensorNo 센서 번호
-     * @return 조회된 SensorData (Optional)
+     * @return 조회된 SensorData 리스트.
      */
-    List<SensorData> getSensorDatasBySensorNo(long sensorNo);
+    List<SensorData> getSensorDataBySensor_SensorNo(long sensorNo);
 
     /**
      * 센서 데이터를 삭제합니다.
@@ -56,5 +55,5 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
      * @param sensorNo 센서 번호
      * @return 센서 데이터가 존재하면 true, 존재하지 않으면 false
      */
-    Boolean existsSensorDataBySensorNo(Long sensorNo);
+    Boolean existsBySensor_SensorNo(long sensorNo);
 }

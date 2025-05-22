@@ -8,11 +8,6 @@ import lombok.Getter;
 public class SensorDataRegisterRequest {
 
     /**
-     * 데이터 타입 이름 ex) "temperature", "humidity".
-     */
-    private String sensorDataName;
-
-    /**
      * 센서 데이터 location (예 : power_meter, server_resources_data)
      */
     private String sensorDataLocation;
@@ -21,6 +16,11 @@ public class SensorDataRegisterRequest {
      * 센서 데이터 게이트웨이 (예 : cpu, disk 등등)
      */
     private String sensorDataGateway;
+
+    /**
+     * 데이터 타입 이름 ex) "temperature", "humidity".
+     */
+    private String sensorDataName;
 
     /**
      * 최소 임계값.

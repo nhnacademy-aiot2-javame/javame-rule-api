@@ -12,12 +12,11 @@ import java.util.Optional;
 public interface SensorRepository extends JpaRepository<Sensor, Long> {
 
     /**
-     * 센서 번호를 기반으로 센서를 조회합니다.
      *
-     * @param sensorNo 센서의 고유 번호
+     * @param sensorNo 센서 번호
      * @return 조회된 센서 객체(Optional)
      */
-    Optional<Sensor> getSensorBySensorNo(long sensorNo);
+    Optional<Sensor> getBySensorNo(long sensorNo);
 
     /**
      * 센서 ID를 기반으로 센서를 조회.

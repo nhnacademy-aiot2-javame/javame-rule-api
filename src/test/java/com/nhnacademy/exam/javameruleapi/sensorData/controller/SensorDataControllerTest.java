@@ -24,6 +24,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,52 +50,62 @@ public class SensorDataControllerTest {
     private SensorDataRegisterRequest sensorDataRegisterRequest;
     private SensorData sensorData;
     private SensorDataResponse sensorDataResponse;
+    private List<SensorDataResponse> sensorDataResponses = new ArrayList<>();
 
     @Autowired
     private ServerService serverService;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         sensor = new Sensor("test_domain", "12345e");
+        ReflectionTestUtils.setField(sensor, "sensorNo", 1L);
         sensorDataRegisterRequest = new SensorDataRegisterRequest
-                ("12345e", "test_dataName", 55.2, 99.9, "nhn_academy");
+                ("입구", "24e124fffef5ccc",
+                        "sdfsgh", 59.9, 89.9);
         sensorData = new SensorData(
-                sensorDataRegisterRequest.getSensorId(),
+                sensor,
+                sensorDataRegisterRequest.getSensorDataGateway(),
+                sensorDataRegisterRequest.getSensorDataLocation(),
                 sensorDataRegisterRequest.getSensorDataName(),
                 sensorDataRegisterRequest.getMinThreshold(),
-                sensorDataRegisterRequest.getMaxThreshold(),
-                sensorDataRegisterRequest.getCompanyDomain()
+                sensorDataRegisterRequest.getMaxThreshold()
         );
         ReflectionTestUtils.setField(sensorData, "sensorDataNo", 3L);
 
-
+        sensor.addSensorData(sensorData);
     }
 
     @Test
     @DisplayName("등록 테스트")
     void registerDataType() throws Exception {
 
-        sensorDataResponse = new SensorDataResponse
-                ("12345e", 3L, "test_dataName", 55.2, 99.9, "nhn_academy");
+        sensorDataResponse = new SensorDataResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensorData.getSensorDataNo(), sensorData.getSensorDataName(),
+                sensorData.getSensorDataLocation(), sensorData.getSensorDataGateway(),
+                sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreated_at()
+        );
 
-        Mockito.when(sensorDataService.register(Mockito.anyString(), Mockito.any(SensorDataRegisterRequest.class))).thenReturn(sensorDataResponse);
+        Mockito.when(sensorDataService.register(Mockito.anyLong(), Mockito.any(SensorDataRegisterRequest.class))).thenReturn(sensorDataResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonRequest = objectMapper.writeValueAsString(sensorDataRegisterRequest);
 
         mockMvc.perform(
-                post("/sensor-datas/12345e")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .content(jsonRequest)
-                        .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-        )
+                        post("/sensor-datas/12345e")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .content(jsonRequest)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.companyDomain").value("nhn_academy"))
+                .andExpect(jsonPath("$.companyDomain").value("test_domain"))
                 .andExpect(jsonPath("$.sensorId").value("12345e"))
-                .andExpect(jsonPath("$.sensorDataName").value("test_dataName"))
-                .andExpect(jsonPath("$.minThreshold").value(55.2))
-                .andExpect(jsonPath("$.maxThreshold").value(99.9))
+                .andExpect(jsonPath("$.sensorDataLocation").value("입구"))
+                .andExpect(jsonPath("$.sensorDataGateway").value("24e124fffef5ccc"))
+                .andExpect(jsonPath("$.sensorDataName").value("sdfsgh"))
+                .andExpect(jsonPath("$.minThreshold").value(59.9))
+                .andExpect(jsonPath("$.maxThreshold").value(89.9))
                 .andDo(print());
     }
 
@@ -101,83 +114,106 @@ public class SensorDataControllerTest {
     void getSensorDataBySensorDataNo() throws Exception {
 
         sensorDataResponse = new SensorDataResponse
-                (sensor.getSensorId(),3L, sensorData.getSensorDataName(),
-                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCompanyDomain());
+                (
+                        sensor.getSensorNo(), sensor.getCompanyDomain(),
+                        sensorData.getSensorDataNo(), sensorData.getSensorDataName(),
+                        sensorData.getSensorDataLocation(), sensorData.getSensorDataGateway(),
+                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreated_at()
+                );
 
         Mockito.when(sensorDataService.getSensorDataBySensorDataNo(Mockito.anyLong())).thenReturn(sensorDataResponse);
 
         mockMvc.perform(
-                get("/sensor-datas/by-no/3")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        )
+                        get("/sensor-datas/by-no/3")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sensorDataNo").value(3))
-                .andExpect(jsonPath("$.companyDomain").value("nhn_academy"))
+                .andExpect(jsonPath("$.companyDomain").value("test_domain"))
                 .andExpect(jsonPath("$.sensorId").value("12345e"))
-                .andExpect(jsonPath("$.sensorDataName").value("test_dataName"))
-                .andExpect(jsonPath("$.minThreshold").value(55.2))
-                .andExpect(jsonPath("$.maxThreshold").value(99.9))
+                .andExpect(jsonPath("$.sensorDataLocation").value("입구"))
+                .andExpect(jsonPath("$.sensorDataGateway").value("24e124fffef5ccc"))
+                .andExpect(jsonPath("$.sensorDataName").value("sdfsgh"))
+                .andExpect(jsonPath("$.minThreshold").value(59.9))
+                .andExpect(jsonPath("$.maxThreshold").value(89.9))
                 .andDo(print());
 
     }
 
     @Test
-    @DisplayName("센서 아이디로 센서 데이터 조회")
+    @DisplayName("센서 번호로 센서 데이터 리스트 조회")
     void getSensorDataBySensorId() throws Exception {
 
         sensorDataResponse = new SensorDataResponse
-                (sensor.getSensorId(),3L, sensorData.getSensorDataName(),
-                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCompanyDomain());
+                (
+                        sensor.getSensorNo(), sensor.getCompanyDomain(),
+                        sensorData.getSensorDataNo(), sensorData.getSensorDataName(),
+                        sensorData.getSensorDataLocation(), sensorData.getSensorDataGateway(),
+                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreated_at()
+                );
 
-        Mockito.when(sensorDataService.getSensorDataBySensorId(Mockito.anyString())).thenReturn(sensorDataResponse);
+        sensorDataResponses.add(sensorDataResponse);
+
+        Mockito.when(sensorDataService.getSensorDatasBySensorNo(Mockito.anyLong())).thenReturn(sensorDataResponses);
 
         mockMvc.perform(
-                get("/sensor-datas/by-id/12345e")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        )
+                        get("/sensor-datas/by-id/12345e")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sensorDataNo").value(3))
-                .andExpect(jsonPath("$.companyDomain").value("nhn_academy"))
+                .andExpect(jsonPath("$.companyDomain").value("test_domain"))
                 .andExpect(jsonPath("$.sensorId").value("12345e"))
-                .andExpect(jsonPath("$.sensorDataName").value("test_dataName"))
-                .andExpect(jsonPath("$.minThreshold").value(55.2))
-                .andExpect(jsonPath("$.maxThreshold").value(99.9))
+                .andExpect(jsonPath("$.sensorDataLocation").value("입구"))
+                .andExpect(jsonPath("$.sensorDataGateway").value("24e124fffef5ccc"))
+                .andExpect(jsonPath("$.sensorDataName").value("sdfsgh"))
+                .andExpect(jsonPath("$.minThreshold").value(59.9))
+                .andExpect(jsonPath("$.maxThreshold").value(89.9))
                 .andDo(print());
     }
 
 
     @Test
     @DisplayName("데이터 타입 수정")
-    void update() throws Exception{
+    void update() throws Exception {
 
 
-        sensorDataResponse = new SensorDataResponse(sensor.getSensorId(), 3L, "real_dataName", 33.3, 56.2, "nhn_academy" );
+        sensorDataResponse = new SensorDataResponse
+                (sensor.getSensorNo(), "test_domain2",
+                        8, "jknl",
+                        "출구", "24e1340jnnnnn",
+                        56.3, 88.3,
+                        sensor.getCreated_at());
 
         Mockito.when(sensorDataService.update(Mockito.anyLong(), Mockito.any(SensorDataUpdateRequest.class))).thenReturn(sensorDataResponse);
 
         mockMvc.perform(
-                put("/sensor-datas/3")
-                        .content("""
-                                {
-                                "dataTypeName":"real_dataName",
-                                "minThreshold":33.3,
-                                "maxThreshold":56.2
-                                }
-                                """)
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        )
+                        put("/sensor-datas/3")
+                                .content("""
+                                        {
+                                        "sensorDataLocation":"출구",
+                                        "sensorDataGateway":"24e1340jnnnnn",
+                                        "sensorDataName":"jknl",
+                                        "minThreshold":56.3,
+                                        "maxThreshold":88.3
+                                        }
+                                        """)
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sensorDataNo").value(3))
-                .andExpect(jsonPath("$.companyDomain").value("nhn_academy"))
-                .andExpect(jsonPath("$.sensorDataName").value("real_dataName"))
-                .andExpect(jsonPath("$.minThreshold").value(33.3))
-                .andExpect(jsonPath("$.maxThreshold").value(56.2))
+                .andExpect(jsonPath("$.companyDomain").value("test_domain"))
+                .andExpect(jsonPath("$.sensorDataLocation").value("출구"))
+                .andExpect(jsonPath("$.sensorDataGateway").value("24e1340jnnnnn"))
+                .andExpect(jsonPath("$.sensorDataName").value("jknl"))
+                .andExpect(jsonPath("$.minThreshold").value(56.3))
+                .andExpect(jsonPath("$.maxThreshold").value(88.3))
                 .andDo(print());
     }
 
@@ -188,19 +224,16 @@ public class SensorDataControllerTest {
         Mockito.doNothing().when(sensorDataService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/sensor-datas/3")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-        )
+                        MockMvcRequestBuilders.delete("/sensor-datas/3")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
 
     }
-
-
-
 
 
 }

@@ -49,13 +49,14 @@ public class SensorDataRepositoryTest {
 
             //짝수 센서에만 dataType 등록해 놓았음.
             if (i % 2 == 0) {
-                String sensorDataName = (evenIndex % 2 == 0) ? "temperature" : "humidity";
+                String sensorDataName = (evenIndex % 2 == 0) ? "lora1" : "lora2";
                 SensorData sensorData = new SensorData(
-                        sensor.getSensorId(),
+                        sensor,
+                        "24e124fffef5dccc",
+                        "입구",
                         sensorDataName,
-                        44.4,
                         99.9,
-                        "nhn_academy"
+                        89.2
                 );
 
                 evenIndex++;
@@ -70,17 +71,18 @@ public class SensorDataRepositoryTest {
     @DisplayName("데이터 타입 등록")
     void register() {
         //첫번째 센서에 데이터 타입 추가.
-        Optional<Sensor> optionalSensor = sensorRepository.getSensorBySensorNo(sensors.get(0).getSensorNo());
+        Optional<Sensor> optionalSensor = sensorRepository.getBySensorNo(sensors.get(0).getSensorNo());
         Assertions.assertTrue(optionalSensor.isPresent());
         Sensor foundSensor = optionalSensor.get();
 
 
         SensorData sensorData = new SensorData(
-                foundSensor.getSensorId(),
-                "humidity",
-                33.0,
+                foundSensor,
+                "24e124fffef79384",
+                "입구",
+                "lora2",
                 73.7,
-                "nhn_academy"
+                99.0
         );
 
         sensorDataRepository.save(sensorData);
@@ -94,7 +96,8 @@ public class SensorDataRepositoryTest {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(sensorData.getSensorDataNo(), sensorData1.getSensorDataNo()),
-                () -> Assertions.assertEquals(foundSensor.getSensorId(), sensorData1.getSensorId()),
+                () -> Assertions.assertEquals("24e124fffef79384", sensorData1.getSensorDataGateway()),
+                () -> Assertions.assertEquals("입구", sensorData1.getSensorDataLocation()),
                 () -> Assertions.assertEquals("humidity", sensorData1.getSensorDataName()),
                 () -> Assertions.assertEquals(33.0, sensorData1.getMinThreshold()),
                 () -> Assertions.assertEquals(73.7, sensorData1.getMaxThreshold())
@@ -117,11 +120,12 @@ public class SensorDataRepositoryTest {
 
         SensorData sensorData = optional.get();
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(sensorDatas.get(1).getSensorId() ,sensorData.getSensorId()),
-                ()-> Assertions.assertEquals(sensorDatas.get(1).getSensorDataName(), sensorData.getSensorDataName()),
-                ()-> Assertions.assertEquals(sensorDatas.get(1).getMinThreshold(), sensorData.getMinThreshold()),
-                ()-> Assertions.assertEquals(sensorDatas.get(1).getMaxThreshold(), sensorData.getMaxThreshold()),
-                ()-> Assertions.assertEquals(sensorDatas.get(1).getSensorDataNo(), sensorData.getSensorDataNo())
+                () -> Assertions.assertEquals(sensorDatas.get(1).getSensorDataNo() ,sensorData.getSensorDataNo()),
+                () -> Assertions.assertEquals(sensorDatas.get(1).getSensorDataLocation(), sensorData.getSensorDataLocation()),
+                () -> Assertions.assertEquals(sensorDatas.get(1).getSensorDataGateway(), sensorData.getSensorDataGateway()),
+                () -> Assertions.assertEquals(sensorDatas.get(1).getSensorDataName(), sensorData.getSensorDataName()),
+                () -> Assertions.assertEquals(sensorDatas.get(1).getMinThreshold(), sensorData.getMinThreshold()),
+                () -> Assertions.assertEquals(sensorDatas.get(1).getMaxThreshold(), sensorData.getMaxThreshold())
         );
     }
 
@@ -132,13 +136,17 @@ public class SensorDataRepositoryTest {
         Assertions.assertTrue(optionalSensorData.isPresent());
 
         SensorData targetSensorData = optionalSensorData.get();
-        targetSensorData.update("humidity",
-                0.2,
-                9.4
+        targetSensorData.update(
+                "humidity",
+                "출구",
+                "lora999",
+                89.2,
+                3.3
+
         );
 
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(targetSensorData.getSensorId(), sensors.get(3).getSensorId()),
+                ()-> Assertions.assertEquals(targetSensorData.getSensor().getSensorNo(), sensors.get(3).getSensorNo()),
                 ()-> Assertions.assertEquals(targetSensorData.getSensorDataName(), "humidity"),
                 ()-> Assertions.assertEquals(targetSensorData.getMinThreshold(), 0.2),
                 ()-> Assertions.assertEquals(targetSensorData.getMaxThreshold(), 9.4)

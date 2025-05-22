@@ -1,5 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.service;
 
+import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.AlreadySensorDataExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.SensorDataNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
@@ -31,6 +32,8 @@ public class SensorDataServiceImplTest {
 
     @Mock
     SensorDataRepository sensorDataRepository;
+    @Mock
+    SensorRepository sensorRepository;
 
 
     @InjectMocks
@@ -43,7 +46,7 @@ public class SensorDataServiceImplTest {
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         sensorRegisterRequest = new SensorRegisterRequest("nhn_company", "123456789");
 
         sensor = new Sensor(sensorRegisterRequest.getCompanyDomain(), sensorRegisterRequest.getSensorId());
@@ -51,15 +54,20 @@ public class SensorDataServiceImplTest {
         ReflectionTestUtils.setField(sensor, "sensorNo", 1L);
 
         sensorDataRegisterRequest = new SensorDataRegisterRequest(
-                "123456789", "temperature",
-                33.2, 89.0, "nhn_academy");
+                "입구", "24e124fffef5ccc",
+                "lora", 33.2, 89.0);
+
+        Sensor foundSensor = sensorRepository.getBySensorNo(sensor.getSensorNo())
+                .orElseThrow(() -> new SensorDataNotExistException("존재하지 않는 센서 데이터 입니다."));
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(foundSensor));
 
         sensorData = new SensorData(
-                sensorDataRegisterRequest.getSensorId(),
+                foundSensor,
+                sensorDataRegisterRequest.getSensorDataGateway(),
+                sensorDataRegisterRequest.getSensorDataLocation(),
                 sensorDataRegisterRequest.getSensorDataName(),
                 sensorDataRegisterRequest.getMinThreshold(),
-                sensorDataRegisterRequest.getMaxThreshold(),
-                sensorDataRegisterRequest.getCompanyDomain()
+                sensorDataRegisterRequest.getMaxThreshold()
         );
 
         ReflectionTestUtils.setField(sensorData, "sensorDataNo", 1L);
@@ -74,27 +82,29 @@ public class SensorDataServiceImplTest {
         Mockito.when(sensorDataRepository.save(Mockito.any(SensorData.class))).thenReturn(sensorData);
 
 
-        SensorDataResponse sensorDataResponse = sensorDataServiceImpl.register(sensor.getSensorId(),sensorDataRegisterRequest);
+        SensorDataResponse sensorDataResponse = sensorDataServiceImpl.register(sensor.getSensorNo(), sensorDataRegisterRequest);
         log.debug("dataTypeResponse:{}", sensorDataResponse);
 
         Mockito.verify(sensorDataRepository, Mockito.times(1)).save(Mockito.any(SensorData.class));
         Mockito.verify(sensorDataRepository, Mockito.times(1)).existsDataTypeBySensorDataName((Mockito.anyString()));
 
         Assertions.assertAll(
-                ()-> Assertions.assertNotNull(sensorDataResponse.getSensorDataNo()),
-                ()-> Assertions.assertEquals("temperature", sensorDataResponse.getSensorDataName()),
-                ()-> Assertions.assertEquals(33.2, sensorDataResponse.getMinThreshold()),
-                ()-> Assertions.assertEquals(89.0, sensorDataResponse.getMaxThreshold())
+                () -> Assertions.assertNotNull(sensorDataResponse.getSensorDataNo()),
+                () -> Assertions.assertEquals("입구", sensorDataResponse.getSensorDataLocation()),
+                () -> Assertions.assertEquals("24e124fffef5ccc", sensorDataResponse.getSensorDataGateway()),
+                () -> Assertions.assertEquals("lora", sensorDataResponse.getSensorDataName()),
+                () -> Assertions.assertEquals(33.2, sensorDataResponse.getMinThreshold()),
+                () -> Assertions.assertEquals(89.0, sensorDataResponse.getMaxThreshold())
         );
     }
 
     @Test
     @DisplayName("데이터 타입 등록 - 데이터 타입 이름 중복 체크")
-    void register_exception_case1(){
+    void register_exception_case1() {
         Mockito.when(sensorDataRepository.existsDataTypeBySensorDataName(Mockito.anyString())).thenReturn(true);
 
-        Assertions.assertThrows(AlreadySensorDataExistException.class, ()-> {
-            sensorDataServiceImpl.register(sensor.getSensorId(), sensorDataRegisterRequest);
+        Assertions.assertThrows(AlreadySensorDataExistException.class, () -> {
+            sensorDataServiceImpl.register(sensor.getSensorNo(), sensorDataRegisterRequest);
         });
 
         Mockito.verify(sensorDataRepository, Mockito.times(1)).existsDataTypeBySensorDataName(Mockito.anyString());
@@ -114,19 +124,19 @@ public class SensorDataServiceImplTest {
         Mockito.verify(sensorDataRepository, Mockito.times(1)).getSensorDataBySensorDataNo(Mockito.anyLong());
 
         Assertions.assertAll(
-                ()-> Assertions.assertNotNull(sensorDataResponse),
-                ()-> Assertions.assertEquals(sensor.getSensorId(), sensorDataResponse.getSensorId()),
-                ()-> Assertions.assertEquals(1, sensorDataResponse.getSensorDataNo()),
-                ()-> Assertions.assertEquals("temperature", sensorDataResponse.getSensorDataName()),
-                ()-> Assertions.assertEquals(33.2, sensorDataResponse.getMinThreshold()),
-                ()-> Assertions.assertEquals(89.0, sensorDataResponse.getMaxThreshold())
+                () -> Assertions.assertNotNull(sensorDataResponse),
+                () -> Assertions.assertEquals(sensor.getSensorNo(), sensorDataResponse.getSensorNo()),
+                () -> Assertions.assertEquals(1, sensorDataResponse.getSensorDataNo()),
+                () -> Assertions.assertEquals("temperature", sensorDataResponse.getSensorDataName()),
+                () -> Assertions.assertEquals(33.2, sensorDataResponse.getMinThreshold()),
+                () -> Assertions.assertEquals(89.0, sensorDataResponse.getMaxThreshold())
         );
 
     }
 
     @Test
     @DisplayName("데이터 타입 조회 - 데이터 타입 번호 중복 체크")
-    void getSensorData_exception_case1(){
+    void getSensorData_exception_case1() {
 
         ReflectionTestUtils.setField(sensorData, "sensorDataNo", 1L);
         Mockito.when(sensorDataRepository.getSensorDataBySensorDataNo(Mockito.anyLong())).thenReturn(Optional.empty());
@@ -141,12 +151,15 @@ public class SensorDataServiceImplTest {
 
     @Test
     @DisplayName("데이터 타입 수정")
-    void update(){
+    void update() {
 
         Mockito.when(sensorDataRepository.getSensorDataBySensorDataNo(Mockito.anyLong())).thenReturn(Optional.of(sensorData));
         Mockito.when(sensorDataRepository.save(Mockito.any(SensorData.class))).thenReturn(sensorData);
 
-        SensorDataUpdateRequest sensorDataUpdateRequest = new SensorDataUpdateRequest("humidity", 33.2, 90.4);
+        SensorDataUpdateRequest sensorDataUpdateRequest = new SensorDataUpdateRequest (
+                "입구", null, "battery",
+                                45.2, 77.0
+        );
 
         SensorDataResponse sensorDataResponse = sensorDataServiceImpl.update(1, sensorDataUpdateRequest);
         log.debug("dataTypeResponse:{}", sensorDataResponse);
@@ -154,12 +167,12 @@ public class SensorDataServiceImplTest {
         Mockito.verify(sensorDataRepository, Mockito.times(1)).getSensorDataBySensorDataNo(Mockito.anyLong());
 
         Assertions.assertAll(
-                ()-> Assertions.assertNotNull(sensorDataResponse.getSensorDataNo()),
-                ()-> Assertions.assertEquals(sensor.getSensorId(), sensorDataResponse.getSensorId()),
-                ()-> Assertions.assertEquals(1, sensorDataResponse.getSensorDataNo()),
-                ()-> Assertions.assertEquals("humidity", sensorDataResponse.getSensorDataName()),
-                ()-> Assertions.assertEquals(33.2, sensorDataResponse.getMinThreshold()),
-                ()-> Assertions.assertEquals(90.4, sensorDataResponse.getMaxThreshold())
+                () -> Assertions.assertNotNull(sensorDataResponse.getSensorDataNo()),
+                () -> Assertions.assertEquals(sensor.getSensorNo(), sensorDataResponse.getSensorNo()),
+                () -> Assertions.assertEquals(1, sensorDataResponse.getSensorDataNo()),
+                () -> Assertions.assertEquals("humidity", sensorDataResponse.getSensorDataName()),
+                () -> Assertions.assertEquals(33.2, sensorDataResponse.getMinThreshold()),
+                () -> Assertions.assertEquals(90.4, sensorDataResponse.getMaxThreshold())
         );
     }
 

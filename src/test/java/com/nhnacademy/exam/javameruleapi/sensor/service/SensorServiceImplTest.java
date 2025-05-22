@@ -87,11 +87,11 @@ public class SensorServiceImplTest {
     @Test
     @DisplayName("센서 번호로 센서 조회")
     void getSensor(){
-        Mockito.when(sensorRepository.getSensorBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
 
         SensorResponse sensorResponse = sensorServiceImpl.getSensor(sensor.getSensorNo());
 
-        Mockito.verify(sensorRepository, Mockito.times(1)).getSensorBySensorNo(Mockito.anyLong());
+        Mockito.verify(sensorRepository, Mockito.times(1)).getBySensorNo(Mockito.anyLong());
 
         Assertions.assertNotNull(sensorResponse.getSensorNo());
         Assertions.assertAll(
@@ -104,13 +104,13 @@ public class SensorServiceImplTest {
     @Test
     @DisplayName("센서 번호로 센서 조회 - 센서 번호 중복 체크")
     void getSensor_exception_case1(){
-        Mockito.when(sensorRepository.getSensorBySensorNo(Mockito.anyLong())).thenReturn(Optional.empty());
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.empty());
 
        Assertions.assertThrows(SensorNotExistException.class, ()->{
            sensorServiceImpl.getSensor(sensor.getSensorNo());
        });
 
-        Mockito.verify(sensorRepository, Mockito.times(1)).getSensorBySensorNo(Mockito.anyLong());
+        Mockito.verify(sensorRepository, Mockito.times(1)).getBySensorNo(Mockito.anyLong());
     }
 
 
@@ -153,12 +153,12 @@ public class SensorServiceImplTest {
     @Test
     @DisplayName("센서 삭제")
     void delete(){
-        Mockito.when(sensorRepository.getSensorBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
         Mockito.doNothing().when(sensorRepository).delete(Mockito.any(Sensor.class));
 
         Void sensorResponse = sensorServiceImpl.delete(sensor.getSensorNo());
 
-        Mockito.verify(sensorRepository, Mockito.times(1)).getSensorBySensorNo(Mockito.anyLong());
+        Mockito.verify(sensorRepository, Mockito.times(1)).getBySensorNo(Mockito.anyLong());
         Mockito.verify(sensorRepository, Mockito.times(1)).delete(Mockito.any(Sensor.class));
 
         Assertions.assertNull(sensorResponse);

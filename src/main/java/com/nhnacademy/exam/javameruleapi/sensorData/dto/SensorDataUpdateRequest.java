@@ -12,22 +12,22 @@ import lombok.Getter;
 @Getter
 public class SensorDataUpdateRequest {
 
-    /**
-     * 센서 데이터 이름.
-     * 예: data, test 등
-     */
-    private final String sensorDataName;
-
 
     /**
-     * 센서 데이터 location (예 : power_meter, server_resources_data)
+     * 센서 데이터 location (예 : 입구)
      */
     private String sensorDataLocation;
 
     /**
-     * 센서 데이터 게이트웨이 (예 : cpu, disk 등등)
+     * 센서 데이터 게이트웨이 (예 : 24e124fffef79114)
      */
     private String sensorDataGateway;
+
+    /**
+     * 센서 데이터 이름.
+     * 예: lora 등
+     */
+    private final String sensorDataName;
 
 
     /**

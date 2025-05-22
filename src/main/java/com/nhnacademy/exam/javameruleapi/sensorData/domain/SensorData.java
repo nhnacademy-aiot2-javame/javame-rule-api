@@ -116,17 +116,17 @@ public class SensorData {
      * SensorData 생성자.
      *
      * @param sensor             센서
-     * @param sensorDataName     센서데이터 이름
      * @param sensorDataGateway  센서데이터 게이트웨이
      * @param sensorDataLocation 센서데이터 위치
+     * @param sensorDataName     센서데이터 이름
      * @param minThreshold       최소 임계값
      * @param maxThreshold       최대 임계값
      */
-    public SensorData(Sensor sensor, String sensorDataName, String sensorDataGateway, String sensorDataLocation, Double minThreshold, Double maxThreshold) {
+    public SensorData(Sensor sensor, String sensorDataGateway, String sensorDataLocation, String sensorDataName, Double minThreshold, Double maxThreshold) {
         this.sensor = sensor;
-        this.sensorDataName = sensorDataName;
         this.sensorDataGateway = sensorDataGateway;
         this.sensorDataLocation = sensorDataLocation;
+        this.sensorDataName = sensorDataName;
         this.minThreshold = minThreshold;
         this.maxThreshold = maxThreshold;
 
@@ -135,17 +135,16 @@ public class SensorData {
     /**
      * 센서 데이터의 이름 및 임계값 수정 메서드.
      *
-     * @param sensorDataName     새로운 데이터 이름
-     * @param sensorDataGateway  센서 데이터 게이트웨이
      * @param sensorDataLocation 센서 데이터 위치
+     * @param sensorDataGateway  센서 데이터 게이트웨이
+     * @param sensorDataName     새로운 데이터 이름
      * @param minThreshold       새로운 최소 임계값
      * @param maxThreshold       새로운 최대 임계값
      */
-    public void update(String sensorDataName, String sensorDataGateway, String sensorDataLocation, Double minThreshold, Double maxThreshold) {
-
-        this.sensorDataName = sensorDataName;
-        this.sensorDataGateway = sensorDataGateway;
+    public void update(String sensorDataLocation, String sensorDataGateway, String  sensorDataName, Double minThreshold, Double maxThreshold) {
         this.sensorDataLocation = sensorDataLocation;
+        this.sensorDataGateway = sensorDataGateway;
+        this.sensorDataName = sensorDataName;
         this.minThreshold = minThreshold;
         this.maxThreshold = maxThreshold;
     }

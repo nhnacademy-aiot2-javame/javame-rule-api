@@ -86,13 +86,13 @@ public class SensorRepositoryTest {
         Sensor savedSensor = sensorRepository.save(sensor);
         long num = savedSensor.getSensorNo();
 
-        Optional<Sensor> optional = sensorRepository.getSensorBySensorNo(num);
+        Optional<Sensor> optional = sensorRepository.getBySensorNo(num);
         log.error(optional.get().toString());
         Sensor deleteTarget = optional.get();
 
         sensorRepository.delete(deleteTarget);
 
-        Optional<Sensor> optional2 = sensorRepository.getSensorBySensorNo(num);
+        Optional<Sensor> optional2 = sensorRepository.getBySensorNo(num);
         Assertions.assertTrue(optional2.isEmpty());
 
     }
