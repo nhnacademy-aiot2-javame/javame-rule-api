@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class SensorRegisterRequest {
 
     /**
-     *  센서가 속한 회사의 도메인.
+     * 센서가 속한 회사의 도메인.
      */
     private String companyDomain;
 

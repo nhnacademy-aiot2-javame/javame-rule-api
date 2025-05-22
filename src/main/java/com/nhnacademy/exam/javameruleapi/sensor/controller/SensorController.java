@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- *  센서에 대한 HTTP 요청을 처리하는 컨트롤러입니다.
- *  이 클래스는 센서의 등록, 조회, 삭제와 관련된 API 엔드포인트를 제공합니다.
+ * 센서에 대한 HTTP 요청을 처리하는 컨트롤러입니다.
+ * 이 클래스는 센서의 등록, 조회, 삭제와 관련된 API 엔드포인트를 제공합니다.
  */
 @RestController
 @RequestMapping("/sensors")
@@ -42,7 +42,7 @@ public class SensorController {
     }
 
     /**
-     *  새로운 센서를 등록합니다.
+     * 새로운 센서를 등록합니다.
      *
      * @param sensorRegisterRequest 센서 등록 요청 객체
      * @return 셍성된 센서 정보와 함께 HTTP 201(CREATED) 상태 반환
@@ -57,7 +57,7 @@ public class SensorController {
     }
 
     /**
-     *  특정 센서 정보를 조회.
+     * 특정 센서 정보를 조회.
      *
      * @param sensorNo 센서 번호
      * @return 센서 응답 객체와 함께 HTTP 200(OK) 반환
@@ -70,7 +70,7 @@ public class SensorController {
     }
 
     /**
-     *  특정 회사 도메인에 등록된 모든 센서 목록을 조회.
+     * 특정 회사 도메인에 등록된 모든 센서 목록을 조회.
      *
      * @param companyDomain 회사 도메인
      * @return 센서 응답 객체 리스트와 함께 HTTP 200(OK) 반환
@@ -97,7 +97,6 @@ public class SensorController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
-
 
 
 }

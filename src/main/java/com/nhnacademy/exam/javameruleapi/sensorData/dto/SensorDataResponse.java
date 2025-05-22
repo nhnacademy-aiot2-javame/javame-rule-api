@@ -3,6 +3,8 @@ package com.nhnacademy.exam.javameruleapi.sensorData.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 /**
  * 센서 데이터 응답.
  */
@@ -11,9 +13,15 @@ import lombok.Getter;
 public class SensorDataResponse {
 
     /**
-     * 센서 고유 ID.
+     * 센서 번호
      */
-    private String sensorId;
+    private Long sensorNo;
+
+    /**
+     * 회사 도메인.
+     * 센서가 등록된 회사의 도메인.
+     */
+    private String companyDomain;
 
     /**
      * 센서 데이터 고유 번호.
@@ -22,9 +30,19 @@ public class SensorDataResponse {
 
     /**
      * 센서 데이터 이름.
-     * ex) "temperature", "humidity"등 데이터의 종류를 나타냄.
+     * 예: data, test 등
      */
     private String sensorDataName;
+
+    /**
+     * 센서 데이터 location (예 : power_meter, server_resources_data)
+     */
+    private String sensorDataLocation;
+
+    /**
+     * 센서 데이터 게이트웨이 (예 : cpu, disk 등등)
+     */
+    private String sensorDataGateway;
 
     /**
      * 최소 임계값.
@@ -38,10 +56,11 @@ public class SensorDataResponse {
      */
     private Double maxThreshold;
 
+
     /**
-     * 회사 도메인.
-     * 센서가 등록된 회사의 도메인.
+     * 생성일자
+     * 센서가 생성된 생성일자.
      */
-    private String companyDomain;
+    private LocalDateTime created_at;
 
 }

@@ -3,6 +3,7 @@ package com.nhnacademy.exam.javameruleapi.sensorData.repository;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,12 +36,12 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
     Optional<SensorData> getSensorDataBySensorDataNo(long sensorDataNo);
 
     /**
-     * 센서 ID를 통해 센서 데이터를 조회합니다.
+     * 센서 번호를 통해 센서 데이터 리스트를 조회합니다.
      *
-     * @param sensorId 센서 ID
+     * @param sensorNo 센서 번호
      * @return 조회된 SensorData (Optional)
      */
-    Optional<SensorData> getSensorDataBySensorId(String sensorId);
+    List<SensorData> getSensorDatasBySensorNo(long sensorNo);
 
     /**
      * 센서 데이터를 삭제합니다.
@@ -49,4 +50,11 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
      */
     void delete(SensorData sensorData);
 
+    /**
+     * 주어진 센서 번호로 센서 데이터가 존재하는지 확인.
+     *
+     * @param sensorNo 센서 번호
+     * @return 센서 데이터가 존재하면 true, 존재하지 않으면 false
+     */
+    Boolean existsSensorDataBySensorNo(Long sensorNo);
 }

@@ -9,8 +9,7 @@ import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

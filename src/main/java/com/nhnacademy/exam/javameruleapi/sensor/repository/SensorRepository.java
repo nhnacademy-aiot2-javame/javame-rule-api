@@ -38,7 +38,7 @@ public interface SensorRepository extends JpaRepository<Sensor, Long> {
     /**
      * 주어진 sensorId와 companyDomain 조합으로 센서가 존재하는지 확인합니다.
      *
-     * @param sensorId 센서의 고유 ID
+     * @param sensorId      센서의 고유 ID
      * @param companyDomain 회사의 도메인
      * @return 센서가 존재하면 true, 그렇지 않으면 false
      */
