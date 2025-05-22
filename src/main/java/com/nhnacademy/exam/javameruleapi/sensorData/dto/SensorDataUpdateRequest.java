@@ -30,7 +30,6 @@ public class SensorDataUpdateRequest {
     private String sensorDataGateway;
 
 
-
     /**
      * 최소 임계값.
      * 센서 데이터의 새로운 최소 임계값.

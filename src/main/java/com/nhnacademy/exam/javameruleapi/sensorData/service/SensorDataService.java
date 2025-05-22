@@ -1,6 +1,5 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.service;
 
-import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
@@ -15,11 +14,11 @@ public interface SensorDataService {
     /**
      * 센서 데이터를 등록합니다.
      *
-     * @param sensor                    센서
+     * @param sensorNo                  센서
      * @param sensorDataRegisterRequest 등록할 센서 데이터 요청
      * @return 등록된 센서 데이터 응답.
      */
-    SensorDataResponse register(Sensor sensor, SensorDataRegisterRequest sensorDataRegisterRequest);
+    SensorDataResponse register(long sensorNo, SensorDataRegisterRequest sensorDataRegisterRequest);
 
 
     /**
@@ -29,7 +28,6 @@ public interface SensorDataService {
      * @return 센서 데이터 응답
      */
     SensorDataResponse getSensorDataBySensorDataNo(long sensorDataNo);
-
 
 
     /**

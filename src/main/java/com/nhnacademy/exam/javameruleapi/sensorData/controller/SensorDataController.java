@@ -6,7 +6,6 @@ import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 센서 데이터 등록, 조회, 수정, 삭제를 위한 REST 컨트롤러.
@@ -31,27 +32,39 @@ public class SensorDataController {
      * 센서 데이터 관련 비즈니스 로직을 처리하는 서비스.
      * <p>
      * 이 서비스는 센서 데이터의 등록, 조회, 수정, 삭제 기능을 제공.
-     *
      */
     private SensorDataService sensorDataService;
 
     /**
+     * @param sensorNo 센서 번호
+     * @return 생성된 센서 데이터 응답 리스트. 코드는 200(OK)
+     */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
+    @PostMapping
+    ResponseEntity<List<SensorDataResponse>> getSensorDatasBySensorNo(@PathVariable("sensor-no") long sensorNo) {
+        List<SensorDataResponse> sensorDataResponses = sensorDataService.getSensorDatasBySensorNo(sensorNo);
+        return ResponseEntity
+                .ok(sensorDataResponses);
+    }
+
+    /**
      * 센서 데이터 등록.
      *
-     * @param sensorId                  센서ID
+     * @param sensorNo                  센서번호
      * @param sensorDataRegisterRequest 센서 데이터 등록 요청
      * @return 생성된 센서 데이터 응답.HTTP 코드는 201(CREATED)
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
-    @PostMapping("/{sensor-id}")
+    @PostMapping("/{sensor-no}")
     ResponseEntity<SensorDataResponse> registerSensorData(
-            @PathVariable("sensor-id") String sensorId,
+            @PathVariable("sensor-no") long sensorNo,
             @Validated @RequestBody SensorDataRegisterRequest sensorDataRegisterRequest) {
-        SensorDataResponse sensorDataResponse = sensorDataService.register(sensorId, sensorDataRegisterRequest);
+        SensorDataResponse sensorDataResponse = sensorDataService.register(sensorNo, sensorDataRegisterRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(sensorDataResponse);
     }
+
 
     /**
      * 센서 데이터 번호로 조회.
@@ -67,19 +80,6 @@ public class SensorDataController {
                 .ok(sensorDataResponse);
     }
 
-    /**
-     * 센서 ID로 조회.
-     *
-     * @param sensorId 센서 ID.
-     * @return 센서 데이터 응답. HTTP 코드는 200(OK)
-     */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/by-id/{sensor-id}")
-    ResponseEntity<SensorDataResponse> getSensorDataBySensorId(@PathVariable("sensor-id") String sensorId) {
-        SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorId(sensorId);
-        return ResponseEntity
-                .ok(sensorDataResponse);
-    }
 
     /**
      * 센서 데이터 수정.

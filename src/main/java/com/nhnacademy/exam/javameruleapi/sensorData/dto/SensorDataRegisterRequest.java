@@ -1,17 +1,11 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.dto;
 
-import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
 public class SensorDataRegisterRequest {
-
-    /**
-     * 센서.
-     */
-    private Sensor sensor;
 
     /**
      * 데이터 타입 이름 ex) "temperature", "humidity".

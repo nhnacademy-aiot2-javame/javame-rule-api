@@ -1,6 +1,8 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.service.Impl;
 
+import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.SensorNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
+import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.AlreadySensorDataExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.SensorDataNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
@@ -32,6 +34,7 @@ public class SensorDataServiceImpl implements SensorDataService {
      * 센서 데이터의 CRUD 작업을 처리합니다.
      */
     private final SensorDataRepository sensorDataRepository;
+    private final SensorRepository sensorRepository;
 
     /**
      * SensorData 엔티티를 SensorDataResponse로 변환합니다.
@@ -40,7 +43,7 @@ public class SensorDataServiceImpl implements SensorDataService {
      * @return 변환된 응답 DTO
      */
     SensorDataResponse responseMapper(SensorData sensorData) {
-        return new SensorDataResponse (
+        return new SensorDataResponse(
                 sensorData.getSensor().getSensorNo(),
                 sensorData.getSensor().getCompanyDomain(),
                 sensorData.getSensorDataNo(),
@@ -51,24 +54,28 @@ public class SensorDataServiceImpl implements SensorDataService {
                 sensorData.getMaxThreshold(),
                 sensorData.getCreated_at()
         );
-    };
+    }
+
+    ;
 
     /**
      * 센서 데이터를 등록합니다.
      *
-     * @param sensor                    센서
+     * @param sensorNo                  센서번호
      * @param sensorDataRegisterRequest 등록할 센서 데이터 요청
      * @return 등록된 센서 데이터 응답.
      * @throws AlreadySensorDataExistException 이미 존재하는 센서 데이터일 경우 예외 발생
      */
     @Override
-    public SensorDataResponse register(Sensor sensor, SensorDataRegisterRequest sensorDataRegisterRequest) {
+    public SensorDataResponse register(long sensorNo, SensorDataRegisterRequest sensorDataRegisterRequest) {
         Boolean isExist = sensorDataRepository.existsDataTypeBySensorDataName(sensorDataRegisterRequest.getSensorDataName());
         if (isExist) {
             throw new AlreadySensorDataExistException("이미 존재하는 센서 데이터 입니다.");
         }
+        Sensor foundSensor = sensorRepository.getSensorBySensorNo(sensorNo).
+                orElseThrow(() -> new SensorNotExistException("해당 번호의 센서는 존재하지 않습니다."));
         SensorData sensorData = new SensorData(
-                sensor,
+                foundSensor,
                 sensorDataRegisterRequest.getSensorDataName(),
                 sensorDataRegisterRequest.getSensorDataGateway(),
                 sensorDataRegisterRequest.getSensorDataLocation(),
@@ -102,22 +109,21 @@ public class SensorDataServiceImpl implements SensorDataService {
      *
      * @param sensorNo 센서 번호
      * @return 조회된 센서 데이터 응답.
-     *
      * @throws SensorDataNotExistException 센서 데이터가 존재하지 않는 경우 예외 발생
      */
     @Override
     public List<SensorDataResponse> getSensorDatasBySensorNo(Long sensorNo) {
         Boolean exists = sensorDataRepository.existsSensorDataBySensorNo(sensorNo);
-        if(!exists){
+        if (!exists) {
             throw new SensorDataNotExistException("해당 센서번호에 대한 센서 데이터가 존재하지 않습니다.");
         }
         List<SensorData> sensorDataList = sensorDataRepository.getSensorDatasBySensorNo(sensorNo);
         List<SensorDataResponse> sensorDataResponses = new ArrayList<>();
-        for (SensorData sensorData : sensorDataList){
+        for (SensorData sensorData : sensorDataList) {
             SensorDataResponse resp = responseMapper(sensorData);
             sensorDataResponses.add(resp);
         }
-        return  sensorDataResponses;
+        return sensorDataResponses;
     }
 
     /**
