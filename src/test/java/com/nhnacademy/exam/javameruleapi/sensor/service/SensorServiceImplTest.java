@@ -41,7 +41,7 @@ public class SensorServiceImplTest {
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         sensorRegisterRequest = new SensorRegisterRequest("nhn_company", "234567e");
         sensor = new Sensor(sensorRegisterRequest.getCompanyDomain(), sensorRegisterRequest.getSensorId());
         ReflectionTestUtils.setField(sensor, "sensorNo", 1L);
@@ -56,67 +56,66 @@ public class SensorServiceImplTest {
         Mockito.when(sensorRepository.save(Mockito.any(Sensor.class))).thenReturn(sensor);
 
         SensorResponse sensorResponse = sensorServiceImpl.register(sensorRegisterRequest);
-        log.debug("sensorResponse:{}",sensorResponse);
+        log.debug("sensorResponse:{}", sensorResponse);
 
         Mockito.verify(sensorRepository, Mockito.times(1)).existsSensorBySensorIdAndCompanyDomain(Mockito.anyString(), Mockito.anyString());
 
         Assertions.assertNotNull(sensorResponse.getSensorNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1, sensorResponse.getSensorNo()),
-                ()-> Assertions.assertEquals("nhn_company", sensorResponse.getCompanyDomain()),
-                ()-> Assertions.assertEquals("234567e", sensorResponse.getSensorId())
+                () -> Assertions.assertEquals(1, sensorResponse.getSensorNo()),
+                () -> Assertions.assertEquals("nhn_company", sensorResponse.getCompanyDomain()),
+                () -> Assertions.assertEquals("234567e", sensorResponse.getSensorId())
         );
     }
 
     @Test
     @DisplayName("센서 등록 - 센서아이디+회사도메인 중복체크")
-    void register_exception_case1(){
+    void register_exception_case1() {
 
-        Mockito.when(sensorRepository.existsSensorBySensorIdAndCompanyDomain(Mockito.anyString(),Mockito.anyString())).thenReturn(true);
+        Mockito.when(sensorRepository.existsSensorBySensorIdAndCompanyDomain(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
 
-            Assertions.assertThrows(AlreadySensorExistException.class, ()-> {
-                sensorServiceImpl.register(sensorRegisterRequest);
-            });
+        Assertions.assertThrows(AlreadySensorExistException.class, () -> {
+            sensorServiceImpl.register(sensorRegisterRequest);
+        });
 
-            Mockito.verify(sensorRepository, Mockito.times(1))
-                    .existsSensorBySensorIdAndCompanyDomain(Mockito.anyString(),Mockito.anyString());
-        }
-
+        Mockito.verify(sensorRepository, Mockito.times(1))
+                .existsSensorBySensorIdAndCompanyDomain(Mockito.anyString(), Mockito.anyString());
+    }
 
 
     @Test
     @DisplayName("센서 번호로 센서 조회")
-    void getSensor(){
-        Mockito.when(sensorRepository.getSensorBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
+    void getSensor() {
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
 
         SensorResponse sensorResponse = sensorServiceImpl.getSensor(sensor.getSensorNo());
 
-        Mockito.verify(sensorRepository, Mockito.times(1)).getSensorBySensorNo(Mockito.anyLong());
+        Mockito.verify(sensorRepository, Mockito.times(1)).getBySensorNo(Mockito.anyLong());
 
         Assertions.assertNotNull(sensorResponse.getSensorNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1, sensorResponse.getSensorNo()),
-                ()-> Assertions.assertEquals("nhn_company", sensorResponse.getCompanyDomain()),
-                ()-> Assertions.assertEquals("234567e", sensorResponse.getSensorId())
+                () -> Assertions.assertEquals(1, sensorResponse.getSensorNo()),
+                () -> Assertions.assertEquals("nhn_company", sensorResponse.getCompanyDomain()),
+                () -> Assertions.assertEquals("234567e", sensorResponse.getSensorId())
         );
     }
 
     @Test
     @DisplayName("센서 번호로 센서 조회 - 센서 번호 중복 체크")
-    void getSensor_exception_case1(){
-        Mockito.when(sensorRepository.getSensorBySensorNo(Mockito.anyLong())).thenReturn(Optional.empty());
+    void getSensor_exception_case1() {
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.empty());
 
-       Assertions.assertThrows(SensorNotExistException.class, ()->{
-           sensorServiceImpl.getSensor(sensor.getSensorNo());
-       });
+        Assertions.assertThrows(SensorNotExistException.class, () -> {
+            sensorServiceImpl.getSensor(sensor.getSensorNo());
+        });
 
-        Mockito.verify(sensorRepository, Mockito.times(1)).getSensorBySensorNo(Mockito.anyLong());
+        Mockito.verify(sensorRepository, Mockito.times(1)).getBySensorNo(Mockito.anyLong());
     }
 
 
     @Test
     @DisplayName("회사 도메인으로 센서 리스트 조회")
-    void getSensors(){
+    void getSensors() {
         sensors = new ArrayList<>();
         sensors.add(sensor);
 
@@ -141,30 +140,28 @@ public class SensorServiceImplTest {
 
     @Test
     @DisplayName("회사 도메인으로 센서 리스트 조회 - 회사 도메인 중복 체크")
-    void getSensors_exception_case1(){
+    void getSensors_exception_case1() {
 
         Mockito.when(sensorRepository.getSensorsByCompanyDomain(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(SensorNotExistException.class, ()-> sensorServiceImpl.getSensors(sensor.getCompanyDomain()));
+        Assertions.assertThrows(SensorNotExistException.class, () -> sensorServiceImpl.getSensors(sensor.getCompanyDomain()));
 
         Mockito.verify(sensorRepository, Mockito.times(1)).getSensorsByCompanyDomain(Mockito.anyString());
     }
 
     @Test
     @DisplayName("센서 삭제")
-    void delete(){
-        Mockito.when(sensorRepository.getSensorBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
+    void delete() {
+        Mockito.when(sensorRepository.getBySensorNo(Mockito.anyLong())).thenReturn(Optional.of(sensor));
         Mockito.doNothing().when(sensorRepository).delete(Mockito.any(Sensor.class));
 
         Void sensorResponse = sensorServiceImpl.delete(sensor.getSensorNo());
 
-        Mockito.verify(sensorRepository, Mockito.times(1)).getSensorBySensorNo(Mockito.anyLong());
+        Mockito.verify(sensorRepository, Mockito.times(1)).getBySensorNo(Mockito.anyLong());
         Mockito.verify(sensorRepository, Mockito.times(1)).delete(Mockito.any(Sensor.class));
 
         Assertions.assertNull(sensorResponse);
     }
-
-
 
 
 }

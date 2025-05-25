@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * SensorService의 구현 클래스입니다.
- *
+ * <p>
  * 이 클래스는 센서 등록, 조회, 삭제와 관련된 비즈니스 로직을 처리합니다.
  */
 @Slf4j
@@ -48,13 +48,14 @@ public class SensorServiceImpl implements SensorService {
         return new SensorResponse(
                 sensor.getSensorNo(),
                 sensor.getCompanyDomain(),
-                sensor.getSensorId()
+                sensor.getSensorId(),
+                sensor.getCreated_at()
         );
     }
 
     /**
      * 새로운 센서를 등록합니다.
-     *
+     * <p>
      * 센서 ID와 회사 도메인이 이미 존재하는 경우 AlreadySensorExistException을 발생시킵니다.
      *
      * @param sensorRegisterRequest 센서 등록에 필요한 정보가 담긴 요청 객체
@@ -82,7 +83,7 @@ public class SensorServiceImpl implements SensorService {
 
     /**
      * 주어진 센서 번호에 해당하는 센서를 조회합니다.
-     *
+     * <p>
      * 센서가 존재하지 않으면 SensorNotExistException을 발생시킵니다.
      *
      * @param sensorNo 조회할 센서의 고유 번호
@@ -91,13 +92,13 @@ public class SensorServiceImpl implements SensorService {
      */
     @Override
     public SensorResponse getSensor(long sensorNo) {
-        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서 입니다."));
+        Sensor sensor = sensorRepository.getBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서 입니다."));
         return responseMapper(sensor);
     }
 
     /**
      * 주어진 회사 도메인에 해당하는 모든 센서를 조회합니다.
-     *
+     * <p>
      * 센서가 존재하지 않으면 SensorNotExistException을 발생시킵니다.
      *
      * @param companyDomain 센서가 속한 회사 도메인
@@ -116,7 +117,7 @@ public class SensorServiceImpl implements SensorService {
 
     /**
      * 주어진 센서 번호에 해당하는 센서를 삭제합니다.
-     *
+     * <p>
      * 센서가 존재하지 않으면 SensorNotExistException을 발생시킵니다.
      *
      * @param sensorNo 삭제할 센서의 고유 번호
@@ -125,7 +126,7 @@ public class SensorServiceImpl implements SensorService {
      */
     @Override
     public Void delete(long sensorNo) {
-        Sensor sensor = sensorRepository.getSensorBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서입니다."));
+        Sensor sensor = sensorRepository.getBySensorNo(sensorNo).orElseThrow(() -> new SensorNotExistException("존재하지 않는 센서입니다."));
         sensorRepository.delete(sensor);
         return null;
     }

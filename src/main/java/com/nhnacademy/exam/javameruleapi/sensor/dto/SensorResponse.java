@@ -5,10 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 /**
  * 센서 응답 정보를 담습니다.
- *
  */
 @AllArgsConstructor
 @Getter
@@ -29,6 +30,11 @@ public class SensorResponse {
      * 센서의 고유 ID.
      */
     private String sensorId;
+
+    /**
+     * 센서의 생성일자.
+     */
+    private LocalDateTime created_at;
 
 
 }

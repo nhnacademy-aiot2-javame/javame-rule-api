@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,9 @@ public class SensorControllerTest {
     void register() throws Exception {
 
 
-        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
+        SensorResponse sensorResponse = new SensorResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensor.getSensorId(), sensor.getCreated_at());
         Mockito.when(sensorService.register(Mockito.any(SensorRegisterRequest.class))).thenReturn(sensorResponse);
 
         mockMvc.perform(
@@ -64,13 +67,13 @@ public class SensorControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content("""
-
-                                        {
-                                "companyDomain":"nhn_domain",
-                                "sensorId":"mock_sensor_id"
-                                }
-                                """)
-                        )
+                                        
+                                                {
+                                        "companyDomain":"nhn_domain",
+                                        "sensorId":"mock_sensor_id"
+                                        }
+                                        """)
+                )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.sensorNo").value(1))
                 .andExpect(jsonPath("$.companyDomain").value("nhn_domain"))
@@ -80,18 +83,21 @@ public class SensorControllerTest {
 
     @Test
     @DisplayName("센서번호로 센서  조회")
-    void getSensor() throws Exception{
+    void getSensor() throws Exception {
 
-        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
+        SensorResponse sensorResponse = new SensorResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensor.getSensorId(), sensor.getCreated_at()
+        );
 
         Mockito.when(sensorService.getSensor(Mockito.anyLong())).thenReturn(sensorResponse);
 
         mockMvc.perform(
-                get("/sensors/1")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk())
+                        get("/sensors/1")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.sensorNo").value(1))
                 .andExpect(jsonPath("$.companyDomain").value("nhn_domain"))
                 .andExpect(jsonPath("$.sensorId").value("mock_sensor_id"))
@@ -104,8 +110,13 @@ public class SensorControllerTest {
     void getSensors() throws Exception {
 
         List<SensorResponse> sensorResponses = new ArrayList<>();
-        SensorResponse sensorResponse = new SensorResponse(sensor.getSensorNo(), sensor.getCompanyDomain(), sensor.getSensorId());
-        SensorResponse sensorResponse2 = new SensorResponse(2L, "nhn_domain", "mock_sensor_id2");
+        SensorResponse sensorResponse = new SensorResponse(
+                sensor.getSensorNo(), sensor.getCompanyDomain(),
+                sensor.getSensorId(), sensor.getCreated_at()
+        );
+        SensorResponse sensorResponse2 = new SensorResponse(
+                2L, "nhn_domain",
+                "mock_sensor_id2", LocalDateTime.of(2025, 5, 22, 14, 30));
         sensorResponses.add(sensorResponse);
         sensorResponses.add(sensorResponse2);
 
@@ -113,11 +124,11 @@ public class SensorControllerTest {
 
 
         mockMvc.perform(
-                get("/sensors?companyDomain=nhn_domain")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk())
+                        get("/sensors?companyDomain=nhn_domain")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].sensorNo").value(1))
                 .andExpect(jsonPath("$[0].companyDomain").value("nhn_domain"))
                 .andExpect(jsonPath("$[0].sensorId").value("mock_sensor_id"))
@@ -126,26 +137,23 @@ public class SensorControllerTest {
                 .andExpect(jsonPath("$[1].sensorId").value("mock_sensor_id2"))
                 .andDo(print());
 
-}
+    }
 
     @Test
     @DisplayName("센서 삭제")
-    void delete() throws Exception{
+    void delete() throws Exception {
 
         Mockito.doNothing().when(sensorService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/sensors/1")
-                        .header("X-USER-ROLE", "ROLE_ADMIN")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-        )
+                        MockMvcRequestBuilders.delete("/sensors/1")
+                                .header("X-USER-ROLE", "ROLE_ADMIN")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
-
-
-
 
 
 }

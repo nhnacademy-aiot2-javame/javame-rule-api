@@ -1,5 +1,8 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.service.Impl;
 
+import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.SensorNotExistException;
+import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
+import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.AlreadySensorDataExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.SensorDataNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
@@ -12,6 +15,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SensorDataService 구현체.
@@ -28,6 +34,7 @@ public class SensorDataServiceImpl implements SensorDataService {
      * 센서 데이터의 CRUD 작업을 처리합니다.
      */
     private final SensorDataRepository sensorDataRepository;
+    private final SensorRepository sensorRepository;
 
     /**
      * SensorData 엔티티를 SensorDataResponse로 변환합니다.
@@ -37,41 +44,48 @@ public class SensorDataServiceImpl implements SensorDataService {
      */
     SensorDataResponse responseMapper(SensorData sensorData) {
         return new SensorDataResponse(
-                sensorData.getSensorId(),
+                sensorData.getSensor().getSensorNo(),
+                sensorData.getSensor().getCompanyDomain(),
                 sensorData.getSensorDataNo(),
+                sensorData.getSensorDataLocation(),
+                sensorData.getSensorDataGateway(),
                 sensorData.getSensorDataName(),
                 sensorData.getMinThreshold(),
                 sensorData.getMaxThreshold(),
-                sensorData.getCompanyDomain()
+                sensorData.getCreated_at()
         );
     }
 
     /**
      * 센서 데이터를 등록합니다.
      *
-     * @param sensorId                  센서 ID
+     * @param sensorNo                  센서번호
      * @param sensorDataRegisterRequest 등록할 센서 데이터 요청
      * @return 등록된 센서 데이터 응답.
      * @throws AlreadySensorDataExistException 이미 존재하는 센서 데이터일 경우 예외 발생
      */
     @Override
-    public SensorDataResponse register(String sensorId, SensorDataRegisterRequest sensorDataRegisterRequest) {
-        Boolean isExist = sensorDataRepository.existsDataTypeBySensorDataName(sensorDataRegisterRequest.getSensorDataName());
+    public SensorDataResponse register(long sensorNo, SensorDataRegisterRequest sensorDataRegisterRequest) {
+        Boolean isExist = sensorDataRepository.existsBySensor_SensorNoAndSensorDataName(sensorNo, sensorDataRegisterRequest.getSensorDataName());
         if (isExist) {
             throw new AlreadySensorDataExistException("이미 존재하는 센서 데이터 입니다.");
         }
+        Sensor foundSensor = sensorRepository.getBySensorNo(sensorNo).
+                orElseThrow(() -> new SensorNotExistException("해당 번호의 센서는 존재하지 않습니다."));
         SensorData sensorData = new SensorData(
-                sensorId,
+                foundSensor,
+                sensorDataRegisterRequest.getSensorDataGateway(),
+                sensorDataRegisterRequest.getSensorDataLocation(),
                 sensorDataRegisterRequest.getSensorDataName(),
                 sensorDataRegisterRequest.getMinThreshold(),
-                sensorDataRegisterRequest.getMaxThreshold(),
-                sensorDataRegisterRequest.getCompanyDomain()
+                sensorDataRegisterRequest.getMaxThreshold()
         );
 
         sensorDataRepository.save(sensorData);
 
         return responseMapper(sensorData);
     }
+
 
     /**
      * 센서 데이터 번호로 센서 데이터를 조회합니다.
@@ -89,23 +103,31 @@ public class SensorDataServiceImpl implements SensorDataService {
     }
 
     /**
-     * 센서 ID로 센서 데이터를 조회합니다.
+     * 센서 번호로 센서 데이터 리스트를 조회합니다.
      *
-     * @param sensorId 센서 ID
+     * @param sensorNo 센서 번호
      * @return 조회된 센서 데이터 응답.
      * @throws SensorDataNotExistException 센서 데이터가 존재하지 않는 경우 예외 발생
      */
     @Override
-    public SensorDataResponse getSensorDataBySensorId(String sensorId) {
-        SensorData sensorData = sensorDataRepository.getSensorDataBySensorId(sensorId)
-                .orElseThrow(() -> new SensorDataNotExistException("존재하지 않는 센서 데이터 입니다!"));
-        return responseMapper(sensorData);
+    public List<SensorDataResponse> getSensorDatasBySensorNo(Long sensorNo) {
+        Boolean exists = sensorDataRepository.existsBySensor_SensorNo(sensorNo);
+        if (!exists) {
+            throw new SensorDataNotExistException("해당 센서번호에 대한 센서 데이터가 존재하지 않습니다.");
+        }
+        List<SensorData> sensorDataList = sensorDataRepository.getSensorDataBySensor_SensorNo(sensorNo);
+        List<SensorDataResponse> sensorDataResponses = new ArrayList<>();
+        for (SensorData sensorData : sensorDataList) {
+            SensorDataResponse resp = responseMapper(sensorData);
+            sensorDataResponses.add(resp);
+        }
+        return sensorDataResponses;
     }
 
     /**
      * 센서 데이터를 수정합니다.
      *
-     * @param sensorDataNo 수정할 센서 데이터 번호
+     * @param sensorDataNo            수정할 센서 데이터 번호
      * @param sensorDataUpdateRequest 수정 요청 DTO
      * @return 수정된 센서 데이터 응답
      * @throws SensorDataNotExistException 센서 데이터가 존재하지 않는 경우 예외 발생
@@ -114,7 +136,12 @@ public class SensorDataServiceImpl implements SensorDataService {
     public SensorDataResponse update(long sensorDataNo, SensorDataUpdateRequest sensorDataUpdateRequest) {
         SensorData foundSensorData = sensorDataRepository.getSensorDataBySensorDataNo(sensorDataNo)
                 .orElseThrow(() -> new SensorDataNotExistException("존재하지 않는 데이터 타입! "));
-        foundSensorData.update(sensorDataUpdateRequest.getSensorDataName(), sensorDataUpdateRequest.getMinThreshold(), sensorDataUpdateRequest.getMaxThreshold());
+        foundSensorData.update(
+                sensorDataUpdateRequest.getSensorDataLocation(),
+                sensorDataUpdateRequest.getSensorDataGateway(),
+                sensorDataUpdateRequest.getSensorDataName(),
+                sensorDataUpdateRequest.getMinThreshold(),
+                sensorDataUpdateRequest.getMaxThreshold());
         SensorData updatedSensorData = sensorDataRepository.save(foundSensorData); // 수정된 엔티티 저장.
         return responseMapper(updatedSensorData);
 

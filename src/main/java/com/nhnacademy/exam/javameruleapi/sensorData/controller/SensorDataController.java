@@ -6,7 +6,6 @@ import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 센서 데이터 등록, 조회, 수정, 삭제를 위한 REST 컨트롤러.
  */
@@ -29,30 +30,46 @@ public class SensorDataController {
 
     /**
      * 센서 데이터 관련 비즈니스 로직을 처리하는 서비스.
-     *
+     * <p>
      * 이 서비스는 센서 데이터의 등록, 조회, 수정, 삭제 기능을 제공.
-     * Spring의 의존성 주입(@Autowired)을 통해 자동으로 주입됨.
      */
-    @Autowired
-    private SensorDataService sensorDataService;
+    private final SensorDataService sensorDataService;
+
+
+
+
+    /**
+     * 센서 번호로 센서 데이터 리스트를 조회 합니다.
+     *
+     * @param sensorNo 센서 번호
+     * @return 생성된 센서 데이터 응답 리스트. 코드는 200(OK)
+     */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
+    @GetMapping("/by-sensor-no/{sensor-no}")
+    ResponseEntity<List<SensorDataResponse>> getSensorDatasBySensorNo(@PathVariable("sensor-no") long sensorNo) {
+        List<SensorDataResponse> sensorDataResponses = sensorDataService.getSensorDatasBySensorNo(sensorNo);
+        return ResponseEntity
+                .ok(sensorDataResponses);
+    }
 
     /**
      * 센서 데이터 등록.
      *
-     * @param sensorId 센서ID
+     * @param sensorNo                  센서번호
      * @param sensorDataRegisterRequest 센서 데이터 등록 요청
      * @return 생성된 센서 데이터 응답.HTTP 코드는 201(CREATED)
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
-    @PostMapping("/{sensor-id}")
+    @PostMapping("/{sensor-no}")
     ResponseEntity<SensorDataResponse> registerSensorData(
-            @PathVariable("sensor-id") String sensorId,
+            @PathVariable("sensor-no") long sensorNo,
             @Validated @RequestBody SensorDataRegisterRequest sensorDataRegisterRequest) {
-        SensorDataResponse sensorDataResponse = sensorDataService.register(sensorId, sensorDataRegisterRequest);
+        SensorDataResponse sensorDataResponse = sensorDataService.register(sensorNo, sensorDataRegisterRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(sensorDataResponse);
     }
+
 
     /**
      * 센서 데이터 번호로 조회.
@@ -60,32 +77,20 @@ public class SensorDataController {
      * @param sensorDataNo 센서 데이터 고유 번호.
      * @return 센서 데이터 응답. HTTP 코드는 200(OK)
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER","ROLE_USER"})
-    @GetMapping("/by-no/{sensor-data-no}")
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
+    @GetMapping("/by-dt-no/{sensor-data-no}")
     ResponseEntity<SensorDataResponse> getSensorDataBySensorDataNo(@PathVariable("sensor-data-no") long sensorDataNo) {
         SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorDataNo(sensorDataNo);
         return ResponseEntity
                 .ok(sensorDataResponse);
     }
 
-    /**
-     * 센서 ID로 조회.
-     *
-     * @param sensorId 센서 ID.
-     * @return 센서 데이터 응답. HTTP 코드는 200(OK)
-     */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/by-id/{sensor-id}")
-    ResponseEntity<SensorDataResponse> getSensorDataBySensorId(@PathVariable("sensor-id") String sensorId) {
-        SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorId(sensorId);
-        return ResponseEntity
-                .ok(sensorDataResponse);
-    }
+
 
     /**
      * 센서 데이터 수정.
      *
-     * @param sensorDataNo 수정할 센서 데이터 번호
+     * @param sensorDataNo            수정할 센서 데이터 번호
      * @param sensorDataUpdateRequest 수정 요청 데이터
      * @return 수정된 센서 데이터 응답. HTTP 코드는 200(OK)
      */

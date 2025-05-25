@@ -5,18 +5,30 @@ import lombok.Getter;
 
 /**
  * 센서 데이터 수정 요청을 위한 DTO
- *
- *  기존 센서 데이터의 이름 및 임계값 범위를 수정할 때 사용됩니다.
+ * <p>
+ * 기존 센서 데이터의 이름 및 임계값 범위를 수정할 때 사용됩니다.
  */
 @AllArgsConstructor
 @Getter
 public class SensorDataUpdateRequest {
 
+
+    /**
+     * 센서 데이터 location (예 : 입구)
+     */
+    private String sensorDataLocation;
+
+    /**
+     * 센서 데이터 게이트웨이 (예 : 24e124fffef79114)
+     */
+    private String sensorDataGateway;
+
     /**
      * 센서 데이터 이름.
-     * "temperature", "humidity"등 수정할 데이터의 종류를 지정.
+     * 예: lora 등
      */
     private final String sensorDataName;
+
 
     /**
      * 최소 임계값.
