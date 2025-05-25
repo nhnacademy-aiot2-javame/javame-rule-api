@@ -74,7 +74,7 @@ public class Sensor {
      * 센서의 생성 일자를 저장합니다.
      */
     @Column(name = "created_at")
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     /**
      * 엔티티가 영속 상태가 되기 직전에 호출되는 롤백 메서드입니다.
@@ -85,7 +85,7 @@ public class Sensor {
      */
     @PrePersist
     protected void prePersist() {
-        this.created_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     /**

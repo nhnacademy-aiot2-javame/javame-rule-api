@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### SonarQube ###
+#-Dsonar.host.url=
+#-Dsonar.projectName=javame-rule-api
+#-Dsonar.token=sqp_0198a8b20334285220c19104a6d1e8fb43d3158a
