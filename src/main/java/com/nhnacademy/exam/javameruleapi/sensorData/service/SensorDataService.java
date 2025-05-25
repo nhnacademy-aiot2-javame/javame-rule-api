@@ -4,19 +4,22 @@ import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterReques
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
 import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
 
+import java.util.List;
+
 /**
- *  센서 데이터에 대한 비즈니스 로직을 처리하는 서비스 인터페이스입니다.
+ * 센서 데이터에 대한 비즈니스 로직을 처리하는 서비스 인터페이스입니다.
  */
 public interface SensorDataService {
 
     /**
      * 센서 데이터를 등록합니다.
      *
-     * @param sensorId 센서 ID
+     * @param sensorNo                  센서
      * @param sensorDataRegisterRequest 등록할 센서 데이터 요청
-     * @return 등록된 센서 데이터 응답
+     * @return 등록된 센서 데이터 응답.
      */
-    SensorDataResponse register(String sensorId, SensorDataRegisterRequest sensorDataRegisterRequest);
+    SensorDataResponse register(long sensorNo, SensorDataRegisterRequest sensorDataRegisterRequest);
+
 
     /**
      * 센서 데이터 번호를 이용해 센서 데이터를 조회합니다.
@@ -26,18 +29,19 @@ public interface SensorDataService {
      */
     SensorDataResponse getSensorDataBySensorDataNo(long sensorDataNo);
 
+
     /**
-     * 센서 ID를 이용해 센서 데이터를 조회합니다.
+     * 센서 번호를 이용해 센서 데이터 리스트를 조회합니다.
      *
-     * @param sensorId 센서 ID
-     * @return 센서 데이터 응답
+     * @param sensorNo 센서 번호
+     * @return 센서 데이터 응답 리스트
      */
-    SensorDataResponse getSensorDataBySensorId(String sensorId);
+    List<SensorDataResponse> getSensorDatasBySensorNo(Long sensorNo);
 
     /**
      * 센서 데이터를 수정합니다.
      *
-     * @param dataTypeNo 수정할 센서 데이터 번호
+     * @param dataTypeNo              수정할 센서 데이터 번호
      * @param sensorDataUpdateRequest 수정 요청 DTO
      * @return 수정된 센서 데이터 응답
      */

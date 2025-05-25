@@ -3,6 +3,7 @@ package com.nhnacademy.exam.javameruleapi.sensorData.repository;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,14 +20,6 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
     Boolean existsDataTypeBySensorDataName(String sensorDataName);
 
     /**
-     * 센서 데이터를 저장하거나 업데이트합니다.
-     *
-     * @param sensorData 저장할 sensorData 객체.
-     * @return 저장된 SensorData 객체
-     */
-    SensorData save(SensorData sensorData);
-
-    /**
      * 센서 데이터 번호를 통해서 센서 데이터를 조회합니다.
      *
      * @param sensorDataNo 센서 데이터 번호
@@ -34,13 +27,25 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
      */
     Optional<SensorData> getSensorDataBySensorDataNo(long sensorDataNo);
 
+
     /**
-     * 센서 ID를 통해 센서 데이터를 조회합니다.
-     *
-     * @param sensorId 센서 ID
-     * @return 조회된 SensorData (Optional)
+     * 센서 번호를 통해서 센서 데이터들을 조회합니다.
+     * @param sensorNo 센서 번호
+     * @return 조회된 SensorData 리스트.
      */
-    Optional<SensorData> getSensorDataBySensorId(String sensorId);
+    List<SensorData> getSensorDataBySensor_SensorNo(long sensorNo);
+
+
+
+    /**
+     * 센서 데이터를 저장하거나 업데이트합니다.
+     *
+     * @param sensorData 저장할 sensorData 객체.
+     * @return 저장된 SensorData 객체
+     */
+    SensorData save(SensorData sensorData);
+
+
 
     /**
      * 센서 데이터를 삭제합니다.
@@ -49,4 +54,20 @@ public interface SensorDataRepository extends JpaRepository<SensorData, Long> {
      */
     void delete(SensorData sensorData);
 
+    /**
+     * 주어진 센서 번호로 센서 데이터가 존재하는지 확인.
+     *
+     * @param sensorNo 센서 번호
+     * @return 센서 데이터가 존재하면 true, 존재하지 않으면 false
+     */
+    Boolean existsBySensor_SensorNo(long sensorNo);
+
+    /**
+     * 센서 번호와 센서 데이터 이름을 사용하여 해당 센서 안에서 센서 데이터가 존재하는지 확인.
+     *
+     * @param sensorNo 센서 번호
+     * @param sensorDataName 센서 데이터 이름
+     * @return 센서 번호와 센서 데이터 이름이 모두 존재하면 true, 다른 경우는 false
+     */
+    Boolean existsBySensor_SensorNoAndSensorDataName(long sensorNo, String sensorDataName);
 }
