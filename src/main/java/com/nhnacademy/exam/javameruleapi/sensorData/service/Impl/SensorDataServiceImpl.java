@@ -47,16 +47,14 @@ public class SensorDataServiceImpl implements SensorDataService {
                 sensorData.getSensor().getSensorNo(),
                 sensorData.getSensor().getCompanyDomain(),
                 sensorData.getSensorDataNo(),
-                sensorData.getSensorDataName(),
                 sensorData.getSensorDataLocation(),
                 sensorData.getSensorDataGateway(),
+                sensorData.getSensorDataName(),
                 sensorData.getMinThreshold(),
                 sensorData.getMaxThreshold(),
                 sensorData.getCreated_at()
         );
     }
-
-    ;
 
     /**
      * 센서 데이터를 등록합니다.
@@ -68,7 +66,7 @@ public class SensorDataServiceImpl implements SensorDataService {
      */
     @Override
     public SensorDataResponse register(long sensorNo, SensorDataRegisterRequest sensorDataRegisterRequest) {
-        Boolean isExist = sensorDataRepository.existsDataTypeBySensorDataName(sensorDataRegisterRequest.getSensorDataName());
+        Boolean isExist = sensorDataRepository.existsBySensor_SensorNoAndSensorDataName(sensorNo, sensorDataRegisterRequest.getSensorDataName());
         if (isExist) {
             throw new AlreadySensorDataExistException("이미 존재하는 센서 데이터 입니다.");
         }
@@ -76,9 +74,9 @@ public class SensorDataServiceImpl implements SensorDataService {
                 orElseThrow(() -> new SensorNotExistException("해당 번호의 센서는 존재하지 않습니다."));
         SensorData sensorData = new SensorData(
                 foundSensor,
-                sensorDataRegisterRequest.getSensorDataName(),
                 sensorDataRegisterRequest.getSensorDataGateway(),
                 sensorDataRegisterRequest.getSensorDataLocation(),
+                sensorDataRegisterRequest.getSensorDataName(),
                 sensorDataRegisterRequest.getMinThreshold(),
                 sensorDataRegisterRequest.getMaxThreshold()
         );
@@ -139,9 +137,9 @@ public class SensorDataServiceImpl implements SensorDataService {
         SensorData foundSensorData = sensorDataRepository.getSensorDataBySensorDataNo(sensorDataNo)
                 .orElseThrow(() -> new SensorDataNotExistException("존재하지 않는 데이터 타입! "));
         foundSensorData.update(
-                sensorDataUpdateRequest.getSensorDataName(),
                 sensorDataUpdateRequest.getSensorDataLocation(),
                 sensorDataUpdateRequest.getSensorDataGateway(),
+                sensorDataUpdateRequest.getSensorDataName(),
                 sensorDataUpdateRequest.getMinThreshold(),
                 sensorDataUpdateRequest.getMaxThreshold());
         SensorData updatedSensorData = sensorDataRepository.save(foundSensorData); // 수정된 엔티티 저장.

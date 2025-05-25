@@ -28,11 +28,7 @@ public class SensorDataResponse {
      */
     private long sensorDataNo;
 
-    /**
-     * 센서 데이터 이름.
-     * 예: data, test 등
-     */
-    private String sensorDataName;
+
 
     /**
      * 센서 데이터 location (예 : power_meter, server_resources_data)
@@ -43,6 +39,13 @@ public class SensorDataResponse {
      * 센서 데이터 게이트웨이 (예 : cpu, disk 등등)
      */
     private String sensorDataGateway;
+
+    /**
+     * 센서 데이터 이름.
+     * 예: data, test 등
+     */
+    private String sensorDataName;
+
 
     /**
      * 최소 임계값.

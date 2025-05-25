@@ -33,14 +33,19 @@ public class SensorDataController {
      * <p>
      * 이 서비스는 센서 데이터의 등록, 조회, 수정, 삭제 기능을 제공.
      */
-    private SensorDataService sensorDataService;
+    private final SensorDataService sensorDataService;
+
+
+
 
     /**
+     * 센서 번호로 센서 데이터 리스트를 조회 합니다.
+     *
      * @param sensorNo 센서 번호
      * @return 생성된 센서 데이터 응답 리스트. 코드는 200(OK)
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
-    @PostMapping
+    @GetMapping("/by-sensor-no/{sensor-no}")
     ResponseEntity<List<SensorDataResponse>> getSensorDatasBySensorNo(@PathVariable("sensor-no") long sensorNo) {
         List<SensorDataResponse> sensorDataResponses = sensorDataService.getSensorDatasBySensorNo(sensorNo);
         return ResponseEntity
@@ -73,12 +78,13 @@ public class SensorDataController {
      * @return 센서 데이터 응답. HTTP 코드는 200(OK)
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/by-no/{sensor-data-no}")
+    @GetMapping("/by-dt-no/{sensor-data-no}")
     ResponseEntity<SensorDataResponse> getSensorDataBySensorDataNo(@PathVariable("sensor-data-no") long sensorDataNo) {
         SensorDataResponse sensorDataResponse = sensorDataService.getSensorDataBySensorDataNo(sensorDataNo);
         return ResponseEntity
                 .ok(sensorDataResponse);
     }
+
 
 
     /**

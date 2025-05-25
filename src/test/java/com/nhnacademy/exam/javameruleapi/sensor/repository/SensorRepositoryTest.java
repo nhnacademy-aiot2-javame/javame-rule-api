@@ -40,7 +40,7 @@ public class SensorRepositoryTest {
     @Test
     @DisplayName("센서 등록")
     @Order(1)
-    void registerSensor(){
+    void registerSensor() {
         Sensor sensor = new Sensor(
                 "javaMe_domain",
                 "humidity_sensor"
@@ -53,8 +53,8 @@ public class SensorRepositoryTest {
         Sensor found = optional.get();
 
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(sensor.getCompanyDomain(), found.getCompanyDomain()),
-                ()-> Assertions.assertEquals(sensor.getSensorId(), found.getSensorId())
+                () -> Assertions.assertEquals(sensor.getCompanyDomain(), found.getCompanyDomain()),
+                () -> Assertions.assertEquals(sensor.getSensorId(), found.getSensorId())
         );
     }
 
@@ -62,26 +62,25 @@ public class SensorRepositoryTest {
     @Test
     @DisplayName("센서 조회")
     @Order(2)
-    void getSensor(){
+    void getSensor() {
         Optional<Sensor> optional = sensorRepository.getSensorBySensorId("temperature_sensor4");
         Assertions.assertTrue(optional.isPresent());
         Sensor found = optional.get();
 
         Assertions.assertAll(
-                ()-> Assertions.assertEquals("sample_domain4", found.getCompanyDomain()),
-                ()-> Assertions.assertEquals("temperature_sensor4", found.getSensorId())
+                () -> Assertions.assertEquals("sample_domain4", found.getCompanyDomain()),
+                () -> Assertions.assertEquals("temperature_sensor4", found.getSensorId())
         );
     }
-
 
 
     @Test
     @DisplayName("센서 삭제")
     @Order(3)
-    void delete(){
+    void delete() {
         Sensor sensor = new Sensor(
-            "sample_domain%d".formatted(10),
-            "temperature_sensor%d".formatted(10)
+                "sample_domain%d".formatted(10),
+                "temperature_sensor%d".formatted(10)
         );
         Sensor savedSensor = sensorRepository.save(sensor);
         long num = savedSensor.getSensorNo();
