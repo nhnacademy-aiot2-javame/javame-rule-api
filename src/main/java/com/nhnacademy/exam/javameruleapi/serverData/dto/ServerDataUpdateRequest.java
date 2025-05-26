@@ -11,26 +11,34 @@ import lombok.Getter;
 public class ServerDataUpdateRequest {
 
     /**
-     * 서버 데이터 카테고리 입니다.
-     * 예: "CPU", "Memory", "Disk", "Network"
+     * 서버 데이터의 location
+     * ex) power_meter, server_resource_data 등
      */
-    private String serverDataCategory;
+    private String serverDataLocation;
 
     /**
-     * 서버 데이터 주제입니다.
-     * 예: "CPU Usage", "Memory Available", "Disk IO"
+     * 서버 데이터의 gateway입니다.
+     * ex)  modbus
      */
-    private String serverDataTopic;
+    private String serverDataGateway;
 
     /**
-     * 최소 임계값.
-     *  이 값보다 작을 경우 경고나 알림이 발생할 수 있습니다.
+     * 서버 데이터의 이름입니다.
+     * ex) current_amps, power_watts
      */
-    private Double minThreshold;
+    private String serverDataName;
+
 
     /**
-     * 최대 임계값.
-     * 이 값을 초과할 경우 경고나 알림이 발생할 수 있습니다.
+     * 최소 임계값입니다.
+     * 이 값보다 낮을 경우 경고를 발생시킬 수 있습니다.
+     *
+     */
+    private Double minThreshold; //최소 임계값
+
+    /**
+     * 최대 임계값
+     * 이 값을 초과할 경우 경고를 발생시킬 수 있습니다.
      */
     private Double maxThreshold;
 

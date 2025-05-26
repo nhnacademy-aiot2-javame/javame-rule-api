@@ -182,7 +182,7 @@ public class SensorDataControllerTest {
                         8, "출구",
                         "24e1340jnnnnn", "jknl",
                         56.3, 88.3,
-                        sensor.getCreated_at());
+                        sensor.getCreatedAt());
 
         Mockito.when(sensorDataService.update(Mockito.anyLong(), Mockito.any(SensorDataUpdateRequest.class))).thenReturn(sensorDataResponse);
 

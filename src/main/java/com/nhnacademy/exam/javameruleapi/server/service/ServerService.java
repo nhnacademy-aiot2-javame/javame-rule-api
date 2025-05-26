@@ -20,6 +20,15 @@ public interface ServerService {
     ServerResponse register(ServerRegisterRequest serverRegisterRequest);
 
     /**
+     * 서버 번호를 기반으로 서버 정보를 조회.
+     *
+     * @param serverNo 조회할 서버의 고유 번호
+     * @return 서버 정보
+     */
+    ServerResponse getServer(long serverNo);
+
+
+    /**
      *  특정 회사 도메인에 속한 모든 서버를 조회합니다.
      *
      * @param companyDomain 조회할 회사 도메인
@@ -36,21 +45,6 @@ public interface ServerService {
      */
     ServerResponse update(long serverNo, ServerUpdateRequest serverUpdateRequest);
 
-    /**
-     * 서버 번호를 기반으로 서버 정보를 조회.
-     *
-     * @param serverNo 조회할 서버의 고유 번호
-     * @return 서버 정보
-     */
-    ServerResponse getServer(long serverNo);
-
-    /**
-     * IP 주소를 기반으로 서버 정보를 조회합니다.
-     *
-     * @param iphost 조회할 서버의 IP 주소
-     * @return 서버 정보
-     */
-    ServerResponse getServer(String iphost);
 
     /**
      * 서버를 삭제합니다.

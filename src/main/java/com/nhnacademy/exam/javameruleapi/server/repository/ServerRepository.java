@@ -37,7 +37,7 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
     void deleteServerByIphost(String iphost);
 
     /**
-     * iphost가 존재하는지 확인합니다.
+     * iphost로 서버가  존재하는지 확인합니다.
      *
      * @param iphost 확인할 IP
      * @return select count(*)>0 from servers where ip_host = :iphost
@@ -52,5 +52,20 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
      */
     Optional<Server> getServerByServerNo(long serverNo);
 
+    /**
+     * companyDomain과 iphost로 서버가 존재하는지 확인합니다.
+     *
+     * @param companyDomain
+     * @param iphost
+     * @return
+     */
+    Boolean existsByCompanyDomainAndIphost(String companyDomain, String iphost);
 
+    /**
+     *
+     *
+     * @param serverNo
+     * @return
+     */
+    Boolean existsServerByServerNo(long serverNo);
 }

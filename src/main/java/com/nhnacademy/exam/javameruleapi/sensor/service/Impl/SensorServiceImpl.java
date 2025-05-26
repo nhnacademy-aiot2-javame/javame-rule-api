@@ -49,7 +49,7 @@ public class SensorServiceImpl implements SensorService {
                 sensor.getSensorNo(),
                 sensor.getCompanyDomain(),
                 sensor.getSensorId(),
-                sensor.getCreated_at()
+                sensor.getCreatedAt()
         );
     }
 

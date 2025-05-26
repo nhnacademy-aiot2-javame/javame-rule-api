@@ -15,7 +15,7 @@ public class SensorDataResponse {
     /**
      * 센서 번호
      */
-    private Long sensorNo;
+    private long sensorNo;
 
     /**
      * 회사 도메인.
@@ -64,6 +64,6 @@ public class SensorDataResponse {
      * 생성일자
      * 센서가 생성된 생성일자.
      */
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
 }
