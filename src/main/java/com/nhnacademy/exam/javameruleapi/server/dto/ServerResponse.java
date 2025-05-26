@@ -4,6 +4,8 @@ import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 
 /**
  * 서버 정보를 응답할 때 사용.
@@ -28,6 +30,11 @@ public class ServerResponse {
      */
     private String iphost;
 
+    /**
+     * 서버 생성 시간
+     */
+    private LocalDateTime createdAt;
+
 
     /**
      * Server 엔티티로부터 데이터를 추출해 ServerResponse 객체로 변환하는 정적 팩토리 메서드.
@@ -40,6 +47,7 @@ public class ServerResponse {
                 .serverNo(server.getServerNo())
                 .companyDomain(server.getCompanyDomain())
                 .iphost(server.getIphost())
+                .createdAt(server.getCreatedAt())
                 .build();
     }
 
@@ -49,10 +57,12 @@ public class ServerResponse {
      * @param serverNo      서버 번호
      * @param companyDomain 회사 도메인
      * @param iphost        IP
+     * @param createdAt     서버 생성시간
      */
-    public ServerResponse(long serverNo, String companyDomain, String iphost) {
+    public ServerResponse(long serverNo, String companyDomain, String iphost, LocalDateTime createdAt) {
         this.serverNo = serverNo;
         this.companyDomain = companyDomain;
         this.iphost = iphost;
+        this.createdAt = createdAt;
     }
 }

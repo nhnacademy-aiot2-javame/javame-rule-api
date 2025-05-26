@@ -15,19 +15,26 @@ public class ServerDataRegisterRequest {
      *  서버의 IP 주소.
      */
     @NotNull
-    private String iphost;
+    private long serverNo;
 
     /**
-     * 서버 데이터의 카테고리 입니다.
-     * ex) "CPU", "Memory", "Disk", "Network"
+     * 서버 데이터의 location
+     * ex) power_meter, server_resource_data 등
      */
-    private String serverDataCategory;
+    private String serverDataLocation;
 
     /**
-     * 서버 데이터의 세부 주제입니다.
-     * ex)  "CPU Usage", "Available Memory", "Disk I/O", "Network Throughput"
+     * 서버 데이터의 gateway입니다.
+     * ex)  modbus
      */
-    private String serverDataTopic;
+    private String serverDataGateway;
+
+    /**
+     * 서버 데이터의 이름입니다.
+     * ex) current_amps, power_watts
+     */
+    private String serverDataName;
+
 
     /**
      * 최소 임계값입니다.
@@ -42,9 +49,6 @@ public class ServerDataRegisterRequest {
      */
     private Double maxThreshold;
 
-    /**
-     *  서버가 속한 회사 도메인입니다.
-     */
-    private String companyDomain;
+
 
 }

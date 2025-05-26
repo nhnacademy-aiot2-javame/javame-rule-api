@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -19,6 +18,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,11 +42,12 @@ public class ServerControllerTest {
     @DisplayName("서버등록")
     void registerServer() throws Exception {
 
-        ServerRegisterRequest serverRegisterRequest = new ServerRegisterRequest("192.168.0.1", "javaMe.com");
+        ServerRegisterRequest serverRegisterRequest = new ServerRegisterRequest(
+                "192.168.0.1", "javaMe.com");
 
         ServerResponse serverResponse = new ServerResponse(
                 1L, "javaMe.com",
-                "192.168.0.1"
+                "192.168.0.1", LocalDateTime.now()
         );
 
         Mockito.when(serverService.register(Mockito.any(ServerRegisterRequest.class))).thenReturn(serverResponse);
@@ -76,7 +77,7 @@ public class ServerControllerTest {
 
         ServerResponse serverResponse = new ServerResponse(
                 1L, "javaMe.com",
-                "192.168.0.1"
+                "192.168.0.1", LocalDateTime.now()
         );
 
         Mockito.when(serverService.getServer(Mockito.anyLong())).thenReturn(serverResponse);
@@ -104,11 +105,11 @@ public class ServerControllerTest {
         List<ServerResponse> serverResponses = new ArrayList<>();
         ServerResponse rsp1 = new ServerResponse(
                 1L, "javaMe.com",
-                "192.168.0.1"
+                "192.168.0.1", LocalDateTime.now()
         );
         ServerResponse rsp2 = new ServerResponse(
                 2L, "javaMe.com",
-                "210.33.4"
+                "210.33.4", LocalDateTime.now()
         );
         serverResponses.add(rsp1);
         serverResponses.add(rsp2);
@@ -141,8 +142,9 @@ public class ServerControllerTest {
 
 
 
-            ServerResponse serverResponse = new ServerResponse(1L, "javaMe.com",
-                    "200.31.2"
+            ServerResponse serverResponse = new ServerResponse(
+                    1L, "javaMe.com",
+                    "200.31.2", LocalDateTime.now()
             );
 
 

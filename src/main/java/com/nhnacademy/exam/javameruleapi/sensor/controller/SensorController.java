@@ -4,6 +4,7 @@ import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/sensors")
+@RequiredArgsConstructor
 public class SensorController {
 
     /**
@@ -31,15 +33,6 @@ public class SensorController {
      */
     private final SensorService sensorService;
 
-
-    /**
-     * SensorController의 생성자.
-     *
-     * @param sensorService 센서 서비스 객체
-     */
-    public SensorController(SensorService sensorService) {
-        this.sensorService = sensorService;
-    }
 
     /**
      * 새로운 센서를 등록합니다.

@@ -44,7 +44,7 @@ public class SensorDataController {
      * @param sensorNo 센서 번호
      * @return 생성된 센서 데이터 응답 리스트. 코드는 200(OK)
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/by-sensor-no/{sensor-no}")
     ResponseEntity<List<SensorDataResponse>> getSensorDatasBySensorNo(@PathVariable("sensor-no") long sensorNo) {
         List<SensorDataResponse> sensorDataResponses = sensorDataService.getSensorDatasBySensorNo(sensorNo);
