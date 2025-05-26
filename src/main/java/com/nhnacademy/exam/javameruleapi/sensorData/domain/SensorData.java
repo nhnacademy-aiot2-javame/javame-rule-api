@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "sensor_datas")
-@ToString
 @NoArgsConstructor
 @Getter
 public class SensorData {

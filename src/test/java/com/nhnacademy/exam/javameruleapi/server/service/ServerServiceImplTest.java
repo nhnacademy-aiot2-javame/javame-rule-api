@@ -1,4 +1,5 @@
 package com.nhnacademy.exam.javameruleapi.server.service;
+
 import com.nhnacademy.exam.javameruleapi.server.common.Exception.AlreadyServerExistException;
 import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
@@ -6,6 +7,7 @@ import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
+import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepositoryTest;
 import com.nhnacademy.exam.javameruleapi.server.service.Impl.ServerServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -39,11 +43,11 @@ public class ServerServiceImplTest {
 
     private ServerRegisterRequest serverRegisterRequest;
     private Server server;
-
+    private static final Logger log = LoggerFactory.getLogger(ServerRepositoryTest.class);
 
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
 
         // 가짜 request 데이터 생성
         serverRegisterRequest = new ServerRegisterRequest(
@@ -62,43 +66,43 @@ public class ServerServiceImplTest {
     @DisplayName("서버 등록")
     void registerServer() {
 
-        Mockito.when(serverRepository.existsServerByIphost(Mockito.anyString())).thenReturn(false); //중복은 iphost 로만 체크.
+        Mockito.when(serverRepository.existsByCompanyDomainAndIphost(
+                Mockito.anyString(), Mockito.anyString())).thenReturn(false);
         Mockito.when(serverRepository.save(Mockito.any(Server.class))).thenReturn(server);
 
         // 실제 서비스 메서드 호출
         ServerResponse serverResponse = serverServiceImpl.register(serverRegisterRequest); // 여기서야 비로소 실제 serverNo값이 바뀔거임.
-        log.debug("serverResponse:{}", serverResponse);
 
         // existsServerByIphost가 한 번만 호출되었는지 확인
-        Mockito.verify(serverRepository, Mockito.times(1)).existsServerByIphost(Mockito.anyString());
+        Mockito.verify(serverRepository, Mockito.times(1))
+                .existsByCompanyDomainAndIphost(Mockito.anyString(), Mockito.anyString());
 
         // 서버가 올바른 서버 넘버로 저장되었는지 확인
         Assertions.assertNotNull(serverResponse.getServerNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1L, serverResponse.getServerNo()),
-                ()-> Assertions.assertEquals("192.168.0.1", serverResponse.getIphost()),
-                ()-> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())
+                () -> Assertions.assertEquals(1L, serverResponse.getServerNo()),
+                () -> Assertions.assertEquals("192.168.0.1", serverResponse.getIphost()),
+                () -> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())
         );
     }
 
 
     @Test
-    @DisplayName("서버 등록 - ip 주소 중복 확인")
-    void registerServer_exception_case1(){
-        Mockito.when(serverRepository.existsServerByIphost(Mockito.anyString())).thenReturn(true);
+    @DisplayName("서버 등록 - 회사 도메인과 iphost로 중복 체크")
+    void registerServer_exception_case1() {
 
-        Assertions.assertThrows(AlreadyServerExistException.class, ()->{
-            serverServiceImpl.register(serverRegisterRequest);
-        });
+        Mockito.when(serverRepository.existsByCompanyDomainAndIphost(
+                Mockito.anyString(), Mockito.anyString())).thenReturn(true);
 
-        Mockito.verify(serverRepository, Mockito.times(1)).existsServerByIphost(Mockito.anyString());
-        Mockito.verify(serverRepository, Mockito.never()).save(Mockito.any(Server.class));
+        Assertions.assertThrows(AlreadyServerExistException.class, () -> serverServiceImpl.register(serverRegisterRequest));
+
+        Mockito.verify(serverRepository, Mockito.times(1)).existsByCompanyDomainAndIphost(Mockito.anyString(), Mockito.anyString());
     }
 
 
     @Test
     @DisplayName("서버 번호로 서버 조회")
-    void getServer(){
+    void getServer() {
 
         Mockito.when(serverRepository.getServerByServerNo(Mockito.anyLong())).thenReturn(Optional.of(server));
 
@@ -108,20 +112,20 @@ public class ServerServiceImplTest {
 
         Assertions.assertNotNull(serverResponse.getServerNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1L, serverResponse.getServerNo()),
-                ()-> Assertions.assertEquals("192.168.0.1",serverResponse.getIphost()),
-                ()-> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())
+                () -> Assertions.assertEquals(1L, serverResponse.getServerNo()),
+                () -> Assertions.assertEquals("192.168.0.1", serverResponse.getIphost()),
+                () -> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())
         );
 
     }
 
     @Test
     @DisplayName("서버 번호로 서버 조회 - 서버 번호 null 체크 ")
-    void getServer_exception_case1(){
+    void getServer_exception_case1() {
 
         Mockito.when(serverRepository.getServerByServerNo(Mockito.anyLong())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(ServerNotExistException.class, ()->{
+        Assertions.assertThrows(ServerNotExistException.class, () -> {
             serverServiceImpl.getServer(server.getServerNo());
         });
 
@@ -129,10 +133,9 @@ public class ServerServiceImplTest {
     }
 
 
-
     @Test
     @DisplayName("회사 도메인으로 등록된 서버목록 조회")
-    void getServers(){
+    void getServers() {
 
         List<Server> servers = new ArrayList<>();
         servers.add(server);
@@ -141,11 +144,10 @@ public class ServerServiceImplTest {
                 .thenReturn(Optional.of(servers));
 
         List<ServerResponse> serverResponses = serverServiceImpl.getServers(serverRegisterRequest.getCompanyDomain());
-        log.debug("serverResponses:{}", serverResponses);
 
         Mockito.verify(serverRepository, Mockito.times(1)).getServersByCompanyDomain(Mockito.anyString());
 
-        Assertions.assertEquals(serverResponses.size(),1, "해당 회사 도메인으로 조회된 서버가 1개 아닙니다.");
+        Assertions.assertEquals(serverResponses.size(), 1, "해당 회사 도메인으로 조회된 서버가 1개 아닙니다.");
 
         serverResponses.forEach(serverResponse -> {
             Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain(), "서버의 도메인이 javaMe.com 이 아닙니다.");
@@ -161,14 +163,14 @@ public class ServerServiceImplTest {
         ServerUpdateRequest serverUpdateRequest = new ServerUpdateRequest("333.2444.22");
 
         ServerResponse serverResponse = serverServiceImpl.update(server.getServerNo(), serverUpdateRequest);
-        log.debug("serverResponse:{}",serverResponse);
+
 
         Mockito.verify(serverRepository, Mockito.times(1)).getServerByServerNo(Mockito.anyLong());
 
         Assertions.assertNotNull(serverResponse.getServerNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals("333.2444.22", serverResponse.getIphost()),
-                ()-> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())
+                () -> Assertions.assertEquals("333.2444.22", serverResponse.getIphost()),
+                () -> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())
         );
     }
 
@@ -187,7 +189,7 @@ public class ServerServiceImplTest {
     }
 
 
-    }
+}
 
 
 

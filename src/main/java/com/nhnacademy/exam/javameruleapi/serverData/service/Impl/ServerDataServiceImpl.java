@@ -67,7 +67,8 @@ public class ServerDataServiceImpl implements ServerDataService {
             throw new AlreadyServerDataExistsException("이미 존재하는 서버 데이터 입니다.");
         }
 
-        Server server = serverRepository.getServerByServerNo(serverNo).orElseThrow(()-> new ServerNotExistException("존재하지 않는 서버입니다!"));
+        Server server = serverRepository.getServerByServerNo(serverNo)
+                .orElseThrow(()-> new ServerNotExistException("존재하지 않는 서버입니다!"));
         ServerData serverData = new ServerData(
                 server,
                 serverDataRegisterRequest.getServerDataLocation(),

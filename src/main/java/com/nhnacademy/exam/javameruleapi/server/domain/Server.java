@@ -22,7 +22,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "servers")
-@ToString
 @Getter
 public class Server {
 
