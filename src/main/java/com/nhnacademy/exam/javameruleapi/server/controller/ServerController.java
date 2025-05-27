@@ -5,6 +5,7 @@ import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/servers")
+@RequiredArgsConstructor
 public class ServerController {
 
     /**
@@ -33,14 +35,6 @@ public class ServerController {
      */
     private final ServerService serverService;
 
-    /**
-     * ServerController 생성자.
-     *
-     * @param serverService 서버 관련 서비스 객체
-     */
-    public ServerController(ServerService serverService) {
-        this.serverService = serverService;
-    }
 
     /**
      * 새로운 서버 정보를 등록합니다.
@@ -71,19 +65,7 @@ public class ServerController {
                 .ok(serverResponse);
     }
 
-    /**
-     * iphost로 서버 정보를 조회합니다.
-     *
-     * @param iphost iphost
-     * @return 조회된 서버 정보 응답. HTTP Status 200(OK).
-     */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/iphost")
-    public ResponseEntity<ServerResponse> getServer(@RequestParam("iphost") String iphost) {
-        ServerResponse serverResponse = serverService.getServer(iphost);
-        return ResponseEntity
-                .ok(serverResponse);
-    }
+
 
     /**
      * 회사 도메인으로 서버 정보 리스트를 조회합니다.

@@ -57,11 +57,6 @@ public class SensorDataRepositoryTest {
                 sensorDatas.add(sensorData);
             }
         }
-//        ReflectionTestUtils.setField(sensors.get(0), "sensorNo", 1L);
-//        ReflectionTestUtils.setField(sensors.get(1), "sensorNo", 2L);
-//        ReflectionTestUtils.setField(sensors.get(2), "sensorNo", 3L);
-//        ReflectionTestUtils.setField(sensors.get(3), "sensorNo", 4L);
-//        ReflectionTestUtils.setField(sensors.get(4), "sensorNo", 5L);
     }
 
     @Test
@@ -108,10 +103,15 @@ public class SensorDataRepositoryTest {
     @Test
     @DisplayName("센서 데이터 리스트 조회 - 센서 번호")
     void getSenssorDatasBySensorNo() {
-        List<SensorData> sensorDatas = sensorDataRepository.getSensorDataBySensor_SensorNo(sensors.get(1).getSensorNo());
-        Assertions.assertTrue(sensorDatas.size() == 1);
+        List<SensorData> sensorDatas1 = sensorDataRepository.getSensorDataBySensor_SensorNo(sensors.get(1).getSensorNo());
+        Assertions.assertEquals(1, sensorDatas1.size());
 
-        Assertions.assertAll(() -> Assertions.assertEquals(sensorDatas.get(0).getSensorDataName(), "lora1"), () -> Assertions.assertEquals(sensorDatas.get(0).getSensorDataLocation(), "입구"), () -> Assertions.assertEquals(sensorDatas.get(0).getSensorDataGateway(), "24e124fffef5dccc"), () -> Assertions.assertEquals(sensorDatas.get(0).getMinThreshold(), 89.2), () -> Assertions.assertEquals(sensorDatas.get(0).getMaxThreshold(), 99.9));
+        Assertions.assertAll(
+                () -> Assertions.assertEquals("lora1", sensorDatas.get(0).getSensorDataName()),
+                () -> Assertions.assertEquals("입구", sensorDatas.get(0).getSensorDataLocation()),
+                () -> Assertions.assertEquals("24e124fffef5dccc", sensorDatas.get(0).getSensorDataGateway()),
+                () -> Assertions.assertEquals(89.2, sensorDatas.get(0).getMinThreshold()),
+                () -> Assertions.assertEquals(99.9, sensorDatas.get(0).getMaxThreshold()));
     }
 
 
@@ -127,7 +127,12 @@ public class SensorDataRepositoryTest {
         );
 
 
-        Assertions.assertAll(() -> Assertions.assertEquals(targetSensorData.getSensor().getSensorNo(), sensors.get(3).getSensorNo()), () -> Assertions.assertEquals(targetSensorData.getSensorDataName(), "lora999"), () -> Assertions.assertEquals(targetSensorData.getMinThreshold(), 3.3), () -> Assertions.assertEquals(targetSensorData.getMaxThreshold(), 89.2));
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(targetSensorData.getSensor().getSensorNo(), sensors.get(3).getSensorNo()),
+                () -> Assertions.assertEquals("lora999", targetSensorData.getSensorDataName()),
+                () -> Assertions.assertEquals(3.3, targetSensorData.getMinThreshold()),
+                () -> Assertions.assertEquals(89.2, targetSensorData.getMaxThreshold())
+        );
     }
 
 

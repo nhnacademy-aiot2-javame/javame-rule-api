@@ -1,8 +1,8 @@
 package com.nhnacademy.exam.javameruleapi.server.service.Impl;
 
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.AlreadyServerExistException;
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.NoServerExistException;
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.AlreadyServerExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.NoServerExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
@@ -10,6 +10,7 @@ import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +20,16 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ServerServiceImpl implements ServerService {
 
     private final ServerRepository serverRepository;
 
-    public ServerServiceImpl(ServerRepository serverRepository) {
-        this.serverRepository = serverRepository;
-    }
-
 
     @Override
     public ServerResponse register(ServerRegisterRequest serverRegisterRequest) {
-        Boolean isExist = serverRepository.existsServerByIphost(serverRegisterRequest.getIphost());
+        Boolean isExist = serverRepository.existsByCompanyDomainAndIphost(
+                serverRegisterRequest.getCompanyDomain(),serverRegisterRequest.getIphost());
         if(isExist){
             throw new AlreadyServerExistException("이미 존재하는 서버입니다.");
         }
@@ -45,11 +44,6 @@ public class ServerServiceImpl implements ServerService {
         return ServerResponse.from(server);
     }
 
-    @Override
-    public ServerResponse getServer(String iphost) {
-        Server server = serverRepository.getServerByIphost(iphost).orElseThrow(()-> new ServerNotExistException("존재하지 않는 서버입니다."));
-        return ServerResponse.from(server);
-    }
 
     @Override
     public List<ServerResponse> getServers(String companyDomain) {

@@ -5,6 +5,7 @@ import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterReques
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.serverData.service.ServerDataService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 서버 데이터와 관련된 HTTP 요청을 처리하는 컨트롤러 클래스입니다.
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/server-datas")
+@RequiredArgsConstructor
 public class ServerDataController {
 
     /**
@@ -30,25 +35,20 @@ public class ServerDataController {
      */
     private final ServerDataService serverDataService;
 
-    /**
-     *
-     * @param serverDataService
-     */
-    public ServerDataController(ServerDataService serverDataService) {
-        this.serverDataService = serverDataService;
-    }
 
     /**
-     * 서버 데이터를 등록합니다.
      *
-     * @param serverDataRegisterRequest 등록할 서버 데이터 요청 DTO
-     * @return 생성된 서버 데이터 응답 DTO
-     * @response 201 CREATED - 서버 데이터가 성공적으로 생성됨
+     * @param serverNo 서버 번호
+     * @param serverDataRegisterRequest 서버 데이터 등록 요청
+     * @return
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping
-    public ResponseEntity<ServerDataResponse> registerServerData(@Validated @RequestBody ServerDataRegisterRequest serverDataRegisterRequest) {
-        ServerDataResponse serverDataResponse = serverDataService.registerServerData(serverDataRegisterRequest);
+    public ResponseEntity<ServerDataResponse> registerServerData(
+            @RequestParam long serverNo,
+            @Validated @RequestBody ServerDataRegisterRequest serverDataRegisterRequest
+            ) {
+        ServerDataResponse serverDataResponse = serverDataService.registerServerData(serverNo, serverDataRegisterRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(serverDataResponse);
@@ -62,12 +62,28 @@ public class ServerDataController {
      * @response 200 OK - 서버 데이터 조회 성공
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/{server-data-no}")
+    @GetMapping("/by-server-data-no/{server-data-no}")
     public ResponseEntity<ServerDataResponse> getServerData(@PathVariable("server-data-no") long serverDataNo) {
         ServerDataResponse serverDataResponse = serverDataService.getServerData(serverDataNo);
         return ResponseEntity
                 .ok(serverDataResponse);
     }
+
+    /**
+     *  서버 번호로 서버 데이터 리스트를 조회합니다.
+     *
+     * @param serverNo 서버 번호
+     * @return 조회된 서버 데이터 리스트
+     */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
+    @GetMapping("/by-server-no/{server-no}")
+    public ResponseEntity<List<ServerDataResponse>> getServerDataList(@PathVariable("server-no") long serverNo){
+        List<ServerDataResponse> serverDataResponses = serverDataService.getServerDataList(serverNo);
+        return ResponseEntity
+                .ok(serverDataResponses);
+    }
+
+
 
     /**
      * 서버 데이터를 수정합니다.
@@ -79,13 +95,15 @@ public class ServerDataController {
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/{server-data-no}")
-    public ResponseEntity<ServerDataResponse> updateServerData(@PathVariable("server-data-no") long serverDataNo, @Validated @RequestBody ServerDataUpdateRequest serverDataUpdateRequest) {
+    public ResponseEntity<ServerDataResponse> updateServerData(@PathVariable("server-data-no") long serverDataNo,
+                                                               @Validated @RequestBody ServerDataUpdateRequest serverDataUpdateRequest) {
         ServerDataResponse serverDataResponse = serverDataService.updateServerData(serverDataNo, serverDataUpdateRequest);
         return ResponseEntity
                 .ok(serverDataResponse);
     }
 
     /**
+     * 서버 데이터를 삭제합니다.
      *
      * @param serverDataNo 삭제할 서버 데이터 번호
      * @return 응답 상태 204 (No Content)
@@ -93,7 +111,7 @@ public class ServerDataController {
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @DeleteMapping("/{server-data-no}")
     public ResponseEntity<Void> deleteServerData(@PathVariable("server-data-no") long serverDataNo) {
-        Void serverDataResponse = serverDataService.delete(serverDataNo);
+        serverDataService.delete(serverDataNo);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

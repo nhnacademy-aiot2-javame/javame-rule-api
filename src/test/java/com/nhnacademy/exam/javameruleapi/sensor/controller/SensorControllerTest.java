@@ -58,7 +58,7 @@ public class SensorControllerTest {
 
         SensorResponse sensorResponse = new SensorResponse(
                 sensor.getSensorNo(), sensor.getCompanyDomain(),
-                sensor.getSensorId(), sensor.getCreated_at());
+                sensor.getSensorId(), sensor.getCreatedAt());
         Mockito.when(sensorService.register(Mockito.any(SensorRegisterRequest.class))).thenReturn(sensorResponse);
 
         mockMvc.perform(
@@ -87,7 +87,7 @@ public class SensorControllerTest {
 
         SensorResponse sensorResponse = new SensorResponse(
                 sensor.getSensorNo(), sensor.getCompanyDomain(),
-                sensor.getSensorId(), sensor.getCreated_at()
+                sensor.getSensorId(), sensor.getCreatedAt()
         );
 
         Mockito.when(sensorService.getSensor(Mockito.anyLong())).thenReturn(sensorResponse);
@@ -112,7 +112,7 @@ public class SensorControllerTest {
         List<SensorResponse> sensorResponses = new ArrayList<>();
         SensorResponse sensorResponse = new SensorResponse(
                 sensor.getSensorNo(), sensor.getCompanyDomain(),
-                sensor.getSensorId(), sensor.getCreated_at()
+                sensor.getSensorId(), sensor.getCreatedAt()
         );
         SensorResponse sensorResponse2 = new SensorResponse(
                 2L, "nhn_domain",

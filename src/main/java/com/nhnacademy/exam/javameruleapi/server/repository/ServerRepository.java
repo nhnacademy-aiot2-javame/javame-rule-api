@@ -11,13 +11,6 @@ import java.util.Optional;
  */
 public interface ServerRepository extends JpaRepository<Server, Long> {
 
-    /**
-     * iphost로 서버 정보를 조회합니다.
-     *
-     * @param iphost 조회할 서버의 IP
-     * @return select * from servers where ip_host= :iphost
-     */
-    Optional<Server> getServerByIphost(String iphost);
 
     /**
      * companyDomain으로 서버 리스트를 조회합니다.
@@ -36,13 +29,7 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
      */
     void deleteServerByIphost(String iphost);
 
-    /**
-     * iphost가 존재하는지 확인합니다.
-     *
-     * @param iphost 확인할 IP
-     * @return select count(*)>0 from servers where ip_host = :iphost
-     */
-    Boolean existsServerByIphost(String iphost);
+
 
     /**
      * serverNo로 서버를 조회합니다.
@@ -52,5 +39,28 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
      */
     Optional<Server> getServerByServerNo(long serverNo);
 
+    /**
+     * companyDomain과 iphost로 서버가 존재하는지 확인합니다.
+     * <p>
+     * server 등록 시 사용
+     *
+     * @param companyDomain
+     * @param iphost
+     * @return
+     */
+    Boolean existsByCompanyDomainAndIphost(String companyDomain, String iphost);
 
+    /**
+     * 서버 번호로 서버의 존재 여부 확인.
+     *
+     * @param serverNo
+     * @return
+     */
+    Boolean existsServerByServerNo(long serverNo);
+
+    /**
+     *
+     * @param serverNo
+     */
+    void deleteServerByServerNo(long serverNo);
 }

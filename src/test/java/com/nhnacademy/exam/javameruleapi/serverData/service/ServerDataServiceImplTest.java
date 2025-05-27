@@ -1,5 +1,7 @@
 package com.nhnacademy.exam.javameruleapi.serverData.service;
 
+import com.nhnacademy.exam.javameruleapi.server.domain.Server;
+import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.serverData.domain.ServerData;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
@@ -21,6 +23,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Optional;
+
 @Slf4j
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -30,55 +34,66 @@ public class ServerDataServiceImplTest {
     @Mock
     ServerDataRepository serverDataRepository;
 
+    @Mock
+    ServerRepository serverRepository;
+
     @InjectMocks
     ServerDataServiceImpl serverDataServiceImpl;
 
     private ServerData serverData;
     private ServerDataRegisterRequest serverDataRegisterRequest;
+    private Server server;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
+
+        server = new Server(
+                "192.168.32.1", "javaMe"
+        );
 
         serverDataRegisterRequest = new ServerDataRegisterRequest
-                ("192.168.32.5", "Mail Server", "Network",
-                        20.0, 80.0, "nhn_academy"
-        );
+                (1, "power_meter", "modbus",
+                        "power_watts", 80.0, 99.9
+                );
 
         serverData = new ServerData(
-                serverDataRegisterRequest.getIphost(),
-                serverDataRegisterRequest.getServerDataCategory(),
-                serverDataRegisterRequest.getServerDataTopic(),
+                server,
+                serverDataRegisterRequest.getServerDataLocation(),
+                serverDataRegisterRequest.getServerDataGateway(),
+                serverDataRegisterRequest.getServerDataName(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold(),
-                serverDataRegisterRequest.getCompanyDomain()
+                serverDataRegisterRequest.getMaxThreshold()
         );
+
+        server.addServerData(serverData);
 
         ReflectionTestUtils.setField(serverData, "serverDataNo", 1L);
         log.debug("serverData.getServerDataNo():{}", serverData.getServerDataNo());
     }
 
 
-
     @Test
     @DisplayName("서버 데이터 등록")
     void registerServerData() {
 
-        Mockito.when(serverDataRepository.existsServerDataByIphost(Mockito.anyString())).thenReturn(false);
+        Mockito.when(serverDataRepository.existsByServer_ServerNoAndServerDataName(
+                Mockito.anyLong(), Mockito.anyString())).thenReturn(false);
         Mockito.when(serverDataRepository.save(Mockito.any(ServerData.class))).thenReturn(serverData);
-
+        Mockito.when(serverRepository.getServerByServerNo(Mockito.anyLong())).thenReturn(Optional.of(server));
         //실제 서비스 메서드 호출
-        ServerDataResponse serverDataResponse = serverDataServiceImpl.registerServerData(serverDataRegisterRequest);
+        ServerDataResponse serverDataResponse = serverDataServiceImpl.registerServerData(
+                server.getServerNo(), serverDataRegisterRequest);
 
-        Mockito.verify(serverDataRepository, Mockito.times(1)).existsServerDataByIphost(Mockito.anyString());
+        Mockito.verify(serverDataRepository, Mockito.times(1))
+                .existsByServer_ServerNoAndServerDataName(Mockito.anyLong(), Mockito.anyString());
 
-        Assertions.assertNotNull(serverDataResponse.getServerDataNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1L, serverDataResponse.getServerDataNo()),
-                ()-> Assertions.assertEquals("192.168.32.5", serverDataResponse.getIphost()),
-                ()-> Assertions.assertEquals("Mail Server", serverDataResponse.getServerDataCategory()),
-                ()-> Assertions.assertEquals("Network", serverDataResponse.getServerDataTopic()),
-                ()-> Assertions.assertEquals(20.0, serverDataResponse.getMinThreshold()),
-                ()-> Assertions.assertEquals(80.0, serverDataResponse.getMaxThreshold())
+                () -> Assertions.assertEquals(1L, serverDataResponse.getServerDataNo()),
+                () -> Assertions.assertEquals("power_meter", serverDataResponse.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus", serverDataResponse.getServerDataGateway()),
+                () -> Assertions.assertEquals("power_watts", serverDataResponse.getServerDataName()),
+                () -> Assertions.assertEquals(80.0, serverDataResponse.getMinThreshold()),
+                () -> Assertions.assertEquals(99.9, serverDataResponse.getMaxThreshold())
         );
 
     }
@@ -86,14 +101,17 @@ public class ServerDataServiceImplTest {
 
     @Test
     @DisplayName("서버 데이터 등록 - ip 주소 중복 확인")
-    void registerServerData_exception_case1(){
-        Mockito.when(serverDataRepository.existsServerDataByIphost(Mockito.anyString())).thenReturn(true);
+    void registerServerData_exception_case1() {
+        Mockito.when(serverDataRepository.existsByServer_ServerNoAndServerDataName(
+                Mockito.anyLong(), Mockito.anyString())).thenReturn(true);
 
-        Assertions.assertThrows(AlreadyServerDataExistsException.class, ()->{
-            serverDataServiceImpl.registerServerData(serverDataRegisterRequest);
+        long serverNo = server.getServerNo();
+        Assertions.assertThrows(AlreadyServerDataExistsException.class, () -> {
+            serverDataServiceImpl.registerServerData(serverNo, serverDataRegisterRequest);
         });
 
-        Mockito.verify(serverDataRepository, Mockito.times(1)).existsServerDataByIphost(Mockito.anyString());
+        Mockito.verify(serverDataRepository, Mockito.times(1))
+                .existsByServer_ServerNoAndServerDataName(Mockito.anyLong(), Mockito.anyString());
         Mockito.verify(serverDataRepository, Mockito.never()).save(Mockito.any(ServerData.class));
 
     }
@@ -113,23 +131,25 @@ public class ServerDataServiceImplTest {
 
         Assertions.assertNotNull(serverDataResponse);
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1, serverDataResponse.getServerDataNo()),
-                ()-> Assertions.assertEquals("192.168.32.5", serverDataResponse.getIphost()),
-                ()-> Assertions.assertEquals("Mail Server", serverDataResponse.getServerDataCategory()),
-                ()-> Assertions.assertEquals("Network", serverDataResponse.getServerDataTopic()),
-                ()-> Assertions.assertEquals(20.0, serverDataResponse.getMinThreshold()),
-                ()-> Assertions.assertEquals(80.0, serverDataResponse.getMaxThreshold())
+                () -> Assertions.assertEquals(1, serverDataResponse.getServerDataNo()),
+                () -> Assertions.assertEquals("power_meter", serverDataResponse.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus", serverDataResponse.getServerDataGateway()),
+                () -> Assertions.assertEquals("power_watts", serverDataResponse.getServerDataName()),
+                () -> Assertions.assertEquals(80.0, serverDataResponse.getMinThreshold()),
+                () -> Assertions.assertEquals(99.9, serverDataResponse.getMaxThreshold())
         );
     }
 
 
     @Test
     @DisplayName("서버 데이터 번호로 서버 데이터 조회 - 서버 데이터 번호 중복 확인")
-    void getServerData_exception_case1(){
+    void getServerData_exception_case1() {
         Mockito.when(serverDataRepository.existsServerDataByServerDataNo(Mockito.anyLong())).thenReturn(false);
 
-        Assertions.assertThrows(ServerDataNotExistsException.class, ()->{
-            serverDataServiceImpl.getServerData(serverData.getServerDataNo());
+        long serverDataNo = serverData.getServerDataNo();
+
+        Assertions.assertThrows(ServerDataNotExistsException.class, () -> {
+            serverDataServiceImpl.getServerData(serverDataNo);
         });
 
         Mockito.verify(serverDataRepository, Mockito.times(1)).existsServerDataByServerDataNo(Mockito.anyLong());
@@ -142,10 +162,11 @@ public class ServerDataServiceImplTest {
     void updateServerData() {
 
         ServerDataUpdateRequest serverDataUpdateRequest = new ServerDataUpdateRequest(
-                "Data Server",
-                "Usage",
-                45.2,
-                87.8
+                "power_meter",
+                "modbus1",
+                "power_watts",
+                45.8,
+                82.0
         );
 
         Mockito.when(serverDataRepository.existsServerDataByServerDataNo(Mockito.anyLong())).thenReturn(true);
@@ -159,15 +180,14 @@ public class ServerDataServiceImplTest {
 
         Assertions.assertNotNull(serverDataResponse);
         Assertions.assertAll(
-                ()-> Assertions.assertEquals(1, serverDataResponse.getServerDataNo()),
-                ()-> Assertions.assertEquals("192.168.32.5", serverDataResponse.getIphost()),
-                ()-> Assertions.assertEquals("Data Server", serverDataResponse.getServerDataCategory()),
-                ()-> Assertions.assertEquals("Usage", serverDataResponse.getServerDataTopic()),
-                ()-> Assertions.assertEquals(45.2, serverDataResponse.getMinThreshold()),
-                ()-> Assertions.assertEquals(87.8, serverDataResponse.getMaxThreshold())
+                () -> Assertions.assertEquals(1, serverDataResponse.getServerDataNo()),
+                () -> Assertions.assertEquals("power_meter", serverDataResponse.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus1", serverDataResponse.getServerDataGateway()),
+                () -> Assertions.assertEquals("power_watts", serverDataResponse.getServerDataName()),
+                () -> Assertions.assertEquals(45.8, serverDataResponse.getMinThreshold()),
+                () -> Assertions.assertEquals(82.0, serverDataResponse.getMaxThreshold())
         );
     }
-
 
 
     @Test
