@@ -5,6 +5,7 @@ import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.serverData.domain.ServerData;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @DataJpaTest
 @Slf4j
 @ActiveProfiles("test")
+@Transactional
 public class ServerDataRepositoryTest {
 
     @Autowired
@@ -35,10 +37,10 @@ public class ServerDataRepositoryTest {
     private ServerData savedServerData;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         servers = new ArrayList<>();
 
-        for(int i = 1; i<6; i++) {
+        for (int i = 1; i < 6; i++) {
             Server server = Server.ofNewServer(
 
                     "192.168.32.%d".formatted(i),
@@ -48,7 +50,6 @@ public class ServerDataRepositoryTest {
             serverRepository.save(server);
             servers.add(server);
         }
-
         Server server2 = Server.ofNewServer(
 
                 "173.224.89.1",
@@ -58,57 +59,68 @@ public class ServerDataRepositoryTest {
         servers.add(server2);
 
         ServerDataRegisterRequest serverDataRegisterRequest = new ServerDataRegisterRequest(
-                "192.168.32.5", "Mail Server", "Network",
-                20.0, 80.0, "nhn_academy"
+                1, "power_meter", "modbus",
+                "power_watts", 80.0, 99.9
         );
+        Optional<Server> optionalFoundServer = serverRepository.getServerByServerNo(servers.get(1).getServerNo());
+        Server foundServer = optionalFoundServer.get();
+
+
         serverData = new ServerData(
-                serverDataRegisterRequest.getIphost(),
-                serverDataRegisterRequest.getServerDataCategory(),
-                serverDataRegisterRequest.getServerDataTopic(),
+                foundServer,
+                serverDataRegisterRequest.getServerDataLocation(),
+                serverDataRegisterRequest.getServerDataGateway(),
+                serverDataRegisterRequest.getServerDataName(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold(),
-                serverDataRegisterRequest.getCompanyDomain()
+                serverDataRegisterRequest.getMaxThreshold()
         );
 
+        foundServer.addServerData(serverData);
         savedServerData = serverDataRepository.save(serverData);
+
+
     }
 
 
     @Test
     @DisplayName("서버 데이터 등록")
-    void registerServerData(){
+    void registerServerData() {
         ServerDataRegisterRequest serverDataRegisterRequest = new ServerDataRegisterRequest(
-                "192.168.32.4", "DB Server", "Performance",
-                10.0, 95.0, "nhn_academy"
+                servers.get(1).getServerNo(), "server_resource_data", "modbus",
+                "current_amps", 10.2, 89.9
         );
 
-       Boolean isExist = serverDataRepository.existsServerDataByIphost("192.168.32.4");
-       Assertions.assertFalse(isExist);
+        Boolean isExist = serverDataRepository.existsByServer_ServerNoAndServerDataName(
+                serverDataRegisterRequest.getServerNo(), serverDataRegisterRequest.getServerDataName());
+        Assertions.assertFalse(isExist);
 
-       ServerData serverData = new ServerData(
-                serverDataRegisterRequest.getIphost(),
-                serverDataRegisterRequest.getServerDataCategory(),
-                serverDataRegisterRequest.getServerDataTopic(),
+        Optional<Server> optionalServer = serverRepository.getServerByServerNo(serverDataRegisterRequest.getServerNo());
+        Server foundServer = optionalServer.get();
+
+        ServerData serverData = new ServerData(
+                foundServer,
+                serverDataRegisterRequest.getServerDataLocation(),
+                serverDataRegisterRequest.getServerDataGateway(),
+                serverDataRegisterRequest.getServerDataName(),
                 serverDataRegisterRequest.getMinThreshold(),
-                serverDataRegisterRequest.getMaxThreshold(),
-                serverDataRegisterRequest.getCompanyDomain()
-       );
+                serverDataRegisterRequest.getMaxThreshold()
+        );
 
-       ServerData savedServerData = serverDataRepository.save(serverData);
+        serverDataRepository.save(serverData);
 
-       Assertions.assertAll(
-               ()-> Assertions.assertNotNull(savedServerData.getServerDataNo()),
-               ()-> Assertions.assertEquals("192.168.32.4", savedServerData.getIphost()),
-               ()-> Assertions.assertEquals("DB Server", savedServerData.getServerDataCategory()),
-               ()-> Assertions.assertEquals("Performance", savedServerData.getServerDataTopic()),
-               ()-> Assertions.assertEquals(10.0, savedServerData.getMinThreshold()),
-               ()-> Assertions.assertEquals(95.0, savedServerData.getMaxThreshold())
-       );
+        Assertions.assertAll(
+                () -> Assertions.assertNotNull(serverData.getServerDataNo()),
+                () -> Assertions.assertEquals("server_resource_data", serverData.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus", serverData.getServerDataGateway()),
+                () -> Assertions.assertEquals("current_amps", serverData.getServerDataName()),
+                () -> Assertions.assertEquals(10.2, serverData.getMinThreshold()),
+                () -> Assertions.assertEquals(89.9, serverData.getMaxThreshold())
+        );
     }
 
     @Test
     @DisplayName("서버 데이터 조회 - 서버 데이터 번호")
-    void getServerDataByServerDataNo(){
+    void getServerDataByServerDataNo() {
         Boolean isExist = serverDataRepository.existsServerDataByServerDataNo(savedServerData.getServerDataNo());
         Assertions.assertTrue(isExist);
 
@@ -116,77 +128,72 @@ public class ServerDataRepositoryTest {
 
         Assertions.assertNotNull(foundServerData.getServerDataNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals("192.168.32.5", foundServerData.getIphost()),
-                ()-> Assertions.assertEquals("Mail Server", foundServerData.getServerDataCategory()),
-                ()-> Assertions.assertEquals("Network", foundServerData.getServerDataTopic()),
-                ()-> Assertions.assertEquals(20.0, foundServerData.getMinThreshold()),
-                ()-> Assertions.assertEquals(80.0, foundServerData.getMaxThreshold())
+                () -> Assertions.assertEquals("power_meter", foundServerData.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus", foundServerData.getServerDataGateway()),
+                () -> Assertions.assertEquals("power_watts", foundServerData.getServerDataName()),
+                () -> Assertions.assertEquals(80.0, foundServerData.getMinThreshold()),
+                () -> Assertions.assertEquals(99.9, foundServerData.getMaxThreshold())
 
         );
     }
 
     @Test
-    @DisplayName("서버 데이터 조회 - iphost")
-    void getServerDataByiphost(){
-        Boolean isExist = serverDataRepository.existsServerDataByIphost(savedServerData.getIphost());
-        Assertions.assertTrue(isExist);
+    @DisplayName("서버 데이터 리스트 조회 - 서버 번호 - 실패 케이스")
+    void getServerDataListByServerNo() {
+        Boolean isExist = serverRepository.existsServerByServerNo(3);
+        Assertions.assertTrue(isExist); //서버가 존재한다는걸 확인.
 
-        ServerData foundServerData = serverDataRepository.getServerDataByIphost(savedServerData.getIphost());
-
-        Assertions.assertNotNull(foundServerData.getServerDataNo());
-        Assertions.assertAll(
-                ()-> Assertions.assertEquals("192.168.32.5", foundServerData.getIphost()),
-                ()-> Assertions.assertEquals("Mail Server", foundServerData.getServerDataCategory()),
-                ()-> Assertions.assertEquals("Network", foundServerData.getServerDataTopic()),
-                ()-> Assertions.assertEquals(20.0, foundServerData.getMinThreshold()),
-                ()-> Assertions.assertEquals(80.0, foundServerData.getMaxThreshold())
-        );
+        List<ServerData> serverDataList = serverDataRepository.getServerDataByServer_ServerNo(3);
+        Assertions.assertTrue(serverDataList.isEmpty());
     }
+
 
     @Test
     @DisplayName("서버 데이터 업데이트")
-    void updateServerData(){
+    void updateServerData() {
 
-        Boolean isExist = serverDataRepository.existsServerDataByIphost(savedServerData.getIphost());
-        Assertions.assertTrue(isExist);
+        Boolean isExist = serverDataRepository.existsServerDataByServerDataNo(savedServerData.getServerDataNo());
+        Assertions.assertTrue(isExist); //서버 데이터가 존재한다는 것을 확인.
 
-        ServerData targetServerData = serverDataRepository.getServerDataByIphost(savedServerData.getIphost());
-        Assertions.assertNotNull(targetServerData);
+        ServerData targetServerData = serverDataRepository.getServerDataByServerDataNo(savedServerData.getServerDataNo());
+        Assertions.assertNotNull(targetServerData); // 업데이트 타켓 서버 데이터.
 
         ServerDataUpdateRequest serverDataUpdateRequest = new ServerDataUpdateRequest(
-                "DB Server",  "Performance", 5.0, 79.4);
+                "server_resource_data", "modbus",
+                "current_amps", 5.0, 79.4);
 
         targetServerData.update(
-                serverDataUpdateRequest.getServerDataCategory(),
-                serverDataUpdateRequest.getServerDataTopic(),
+                serverDataUpdateRequest.getServerDataLocation(),
+                serverDataUpdateRequest.getServerDataGateway(),
+                serverDataUpdateRequest.getServerDataName(),
                 serverDataUpdateRequest.getMinThreshold(),
                 serverDataUpdateRequest.getMaxThreshold()
-                );
+        );
 
         ServerData updatedServerData = serverDataRepository.save(targetServerData);
         Assertions.assertNotNull(updatedServerData.getServerDataNo());
         Assertions.assertAll(
-                ()-> Assertions.assertEquals("192.168.32.5", updatedServerData.getIphost()),
-                ()-> Assertions.assertEquals("DB Server", updatedServerData.getServerDataCategory()),
-                ()-> Assertions.assertEquals("Performance", updatedServerData.getServerDataTopic()),
-                ()-> Assertions.assertEquals(5.0, updatedServerData.getMinThreshold()),
-                ()-> Assertions.assertEquals(79.4, updatedServerData.getMaxThreshold())
+                () -> Assertions.assertEquals("server_resource_data", updatedServerData.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus", updatedServerData.getServerDataGateway()),
+                () -> Assertions.assertEquals("current_amps", updatedServerData.getServerDataName()),
+                () -> Assertions.assertEquals(5.0, updatedServerData.getMinThreshold()),
+                () -> Assertions.assertEquals(79.4, updatedServerData.getMaxThreshold())
         );
 
     }
 
     @Test
     @DisplayName("서버 데이터 삭제")
-    void deleteServerData(){
-        Boolean isExist = serverDataRepository.existsServerDataByIphost(savedServerData.getIphost());
-        Assertions.assertTrue(isExist);
+    void deleteServerData() {
+        Boolean isExist = serverDataRepository.existsServerDataByServerDataNo(savedServerData.getServerDataNo());
+        Assertions.assertTrue(isExist); // 서버 데이터가 존재하는지 확인
 
-        ServerData targetServerData = serverDataRepository.getServerDataByIphost(savedServerData.getIphost());
+        ServerData targetServerData = serverDataRepository.getServerDataByServerDataNo(savedServerData.getServerDataNo());
         Assertions.assertNotNull(targetServerData);
 
         serverDataRepository.delete(targetServerData);
 
-        Assertions.assertNull(serverDataRepository.getServerDataByIphost(savedServerData.getIphost()));
+        Assertions.assertNull(serverDataRepository.getServerDataByServerDataNo(savedServerData.getServerDataNo()));
 
     }
 
