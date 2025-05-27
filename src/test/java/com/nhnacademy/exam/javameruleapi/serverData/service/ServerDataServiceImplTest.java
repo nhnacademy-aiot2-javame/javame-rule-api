@@ -87,7 +87,6 @@ public class ServerDataServiceImplTest {
         Mockito.verify(serverDataRepository, Mockito.times(1))
                 .existsByServer_ServerNoAndServerDataName(Mockito.anyLong(), Mockito.anyString());
 
-        Assertions.assertNotNull(serverDataResponse.getServerDataNo());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1L, serverDataResponse.getServerDataNo()),
                 () -> Assertions.assertEquals("power_meter", serverDataResponse.getServerDataLocation()),
@@ -106,8 +105,9 @@ public class ServerDataServiceImplTest {
         Mockito.when(serverDataRepository.existsByServer_ServerNoAndServerDataName(
                 Mockito.anyLong(), Mockito.anyString())).thenReturn(true);
 
+        long serverNo = server.getServerNo();
         Assertions.assertThrows(AlreadyServerDataExistsException.class, () -> {
-            serverDataServiceImpl.registerServerData(server.getServerNo(), serverDataRegisterRequest);
+            serverDataServiceImpl.registerServerData(serverNo, serverDataRegisterRequest);
         });
 
         Mockito.verify(serverDataRepository, Mockito.times(1))
@@ -146,8 +146,10 @@ public class ServerDataServiceImplTest {
     void getServerData_exception_case1() {
         Mockito.when(serverDataRepository.existsServerDataByServerDataNo(Mockito.anyLong())).thenReturn(false);
 
+        long serverDataNo = serverData.getServerDataNo();
+
         Assertions.assertThrows(ServerDataNotExistsException.class, () -> {
-            serverDataServiceImpl.getServerData(serverData.getServerDataNo());
+            serverDataServiceImpl.getServerData(serverDataNo);
         });
 
         Mockito.verify(serverDataRepository, Mockito.times(1)).existsServerDataByServerDataNo(Mockito.anyLong());

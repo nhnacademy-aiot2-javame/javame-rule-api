@@ -52,7 +52,7 @@ public class SensorDataServiceImpl implements SensorDataService {
                 sensorData.getSensorDataName(),
                 sensorData.getMinThreshold(),
                 sensorData.getMaxThreshold(),
-                sensorData.getCreated_at()
+                sensorData.getCreatedAt()
         );
     }
 
@@ -66,7 +66,7 @@ public class SensorDataServiceImpl implements SensorDataService {
      */
     @Override
     public SensorDataResponse register(long sensorNo, SensorDataRegisterRequest sensorDataRegisterRequest) {
-        Boolean isExist = sensorDataRepository.existsBySensor_SensorNoAndSensorDataName(sensorNo, sensorDataRegisterRequest.getSensorDataName());
+        boolean isExist = sensorDataRepository.existsBySensor_SensorNoAndSensorDataName(sensorNo, sensorDataRegisterRequest.getSensorDataName());
         if (isExist) {
             throw new AlreadySensorDataExistException("이미 존재하는 센서 데이터 입니다.");
         }
@@ -111,7 +111,7 @@ public class SensorDataServiceImpl implements SensorDataService {
      */
     @Override
     public List<SensorDataResponse> getSensorDatasBySensorNo(Long sensorNo) {
-        Boolean exists = sensorDataRepository.existsBySensor_SensorNo(sensorNo);
+        boolean exists = sensorDataRepository.existsBySensor_SensorNo(sensorNo);
         if (!exists) {
             throw new SensorDataNotExistException("해당 센서번호에 대한 센서 데이터가 존재하지 않습니다.");
         }

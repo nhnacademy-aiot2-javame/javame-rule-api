@@ -12,7 +12,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -86,7 +85,7 @@ public class SensorData {
      * 센서의 생성 일자를 저장합니다.
      */
     @Column(name = "created_at")
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     /**
      * 엔티티가 영속 상태가 되기 직전에 호출되는 롤백 메서드입니다.
@@ -97,7 +96,7 @@ public class SensorData {
      */
     @PrePersist
     protected void prePersist() {
-        this.created_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     /**

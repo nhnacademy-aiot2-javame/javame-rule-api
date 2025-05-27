@@ -97,7 +97,7 @@ public class ServerDataRepositoryTest {
         Optional<Server> optionalServer = serverRepository.getServerByServerNo(serverDataRegisterRequest.getServerNo());
         Server foundServer = optionalServer.get();
 
-        ServerData serverData = new ServerData(
+        ServerData serverData2 = new ServerData(
                 foundServer,
                 serverDataRegisterRequest.getServerDataLocation(),
                 serverDataRegisterRequest.getServerDataGateway(),
@@ -106,15 +106,14 @@ public class ServerDataRepositoryTest {
                 serverDataRegisterRequest.getMaxThreshold()
         );
 
-        serverDataRepository.save(serverData);
+        serverDataRepository.save(serverData2);
 
         Assertions.assertAll(
-                () -> Assertions.assertNotNull(serverData.getServerDataNo()),
-                () -> Assertions.assertEquals("server_resource_data", serverData.getServerDataLocation()),
-                () -> Assertions.assertEquals("modbus", serverData.getServerDataGateway()),
-                () -> Assertions.assertEquals("current_amps", serverData.getServerDataName()),
-                () -> Assertions.assertEquals(10.2, serverData.getMinThreshold()),
-                () -> Assertions.assertEquals(89.9, serverData.getMaxThreshold())
+                () -> Assertions.assertEquals("server_resource_data", serverData2.getServerDataLocation()),
+                () -> Assertions.assertEquals("modbus", serverData2.getServerDataGateway()),
+                () -> Assertions.assertEquals("current_amps", serverData2.getServerDataName()),
+                () -> Assertions.assertEquals(10.2, serverData2.getMinThreshold()),
+                () -> Assertions.assertEquals(89.9, serverData2.getMaxThreshold())
         );
     }
 
@@ -126,7 +125,6 @@ public class ServerDataRepositoryTest {
 
         ServerData foundServerData = serverDataRepository.getServerDataByServerDataNo(savedServerData.getServerDataNo());
 
-        Assertions.assertNotNull(foundServerData.getServerDataNo());
         Assertions.assertAll(
                 () -> Assertions.assertEquals("power_meter", foundServerData.getServerDataLocation()),
                 () -> Assertions.assertEquals("modbus", foundServerData.getServerDataGateway()),
@@ -141,7 +139,7 @@ public class ServerDataRepositoryTest {
     @DisplayName("서버 데이터 리스트 조회 - 서버 번호 - 실패 케이스")
     void getServerDataListByServerNo() {
         Boolean isExist = serverRepository.existsServerByServerNo(3);
-        Assertions.assertTrue(isExist); //서버가 존재한다는걸 확인.
+        Assertions.assertFalse(isExist); //서버가 존재한다는걸 확인.
 
         List<ServerData> serverDataList = serverDataRepository.getServerDataByServer_ServerNo(3);
         Assertions.assertTrue(serverDataList.isEmpty());
@@ -171,7 +169,6 @@ public class ServerDataRepositoryTest {
         );
 
         ServerData updatedServerData = serverDataRepository.save(targetServerData);
-        Assertions.assertNotNull(updatedServerData.getServerDataNo());
         Assertions.assertAll(
                 () -> Assertions.assertEquals("server_resource_data", updatedServerData.getServerDataLocation()),
                 () -> Assertions.assertEquals("modbus", updatedServerData.getServerDataGateway()),

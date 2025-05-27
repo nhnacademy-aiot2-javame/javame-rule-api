@@ -1,7 +1,7 @@
 package com.nhnacademy.exam.javameruleapi.serverData.service.Impl;
 
 
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.serverData.domain.ServerData;
@@ -62,7 +62,7 @@ public class ServerDataServiceImpl implements ServerDataService {
      */
     @Override
     public ServerDataResponse registerServerData(long serverNo, ServerDataRegisterRequest serverDataRegisterRequest) {
-        Boolean optionalServerData = serverDataRepository.existsByServer_ServerNoAndServerDataName(serverNo, serverDataRegisterRequest.getServerDataName());
+        boolean optionalServerData = serverDataRepository.existsByServer_ServerNoAndServerDataName(serverNo, serverDataRegisterRequest.getServerDataName());
         if (optionalServerData) {
             throw new AlreadyServerDataExistsException("이미 존재하는 서버 데이터 입니다.");
         }
@@ -90,7 +90,7 @@ public class ServerDataServiceImpl implements ServerDataService {
      */
     @Override
     public ServerDataResponse getServerData(long serverDataNo) {
-        Boolean optionalServerData = serverDataRepository.existsServerDataByServerDataNo(serverDataNo);
+        boolean optionalServerData = serverDataRepository.existsServerDataByServerDataNo(serverDataNo);
         if (!optionalServerData) {
             throw new ServerDataNotExistsException("서버 데이터가 존재하지 않습니다.");
         }
@@ -108,7 +108,7 @@ public class ServerDataServiceImpl implements ServerDataService {
      */
     @Override
     public List<ServerDataResponse> getServerDataList(long serverNo) {
-        Boolean isExist = serverRepository.existsServerByServerNo(serverNo);
+        boolean isExist = serverRepository.existsServerByServerNo(serverNo);
         if(!isExist) {
             throw new ServerNotExistException("존재하지 않는 서버 입니다.");
         }
@@ -132,7 +132,7 @@ public class ServerDataServiceImpl implements ServerDataService {
      */
     @Override
     public ServerDataResponse updateServerData(long serverDataNo, ServerDataUpdateRequest serverDataUpdateRequest) {
-        Boolean optionalServerData = serverDataRepository.existsServerDataByServerDataNo(serverDataNo);
+        boolean optionalServerData = serverDataRepository.existsServerDataByServerDataNo(serverDataNo);
         if (!optionalServerData) {
             throw new ServerDataNotExistsException("서버 데이터가 존재하지 않습니다.");
         }
@@ -159,7 +159,7 @@ public class ServerDataServiceImpl implements ServerDataService {
      */
     @Override
     public Void delete(long serverDataNo) {
-        Boolean optionalServerData = serverDataRepository.existsServerDataByServerDataNo(serverDataNo);
+        boolean optionalServerData = serverDataRepository.existsServerDataByServerDataNo(serverDataNo);
         if (!optionalServerData) {
             throw new ServerDataNotExistsException("서버 데이터가 존재하지 않습니다.");
         }

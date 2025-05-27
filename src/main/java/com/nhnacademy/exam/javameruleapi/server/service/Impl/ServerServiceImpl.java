@@ -1,8 +1,8 @@
 package com.nhnacademy.exam.javameruleapi.server.service.Impl;
 
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.AlreadyServerExistException;
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.NoServerExistException;
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.AlreadyServerExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.NoServerExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
