@@ -75,6 +75,7 @@ public class ServerDataController {
      * @param serverNo 서버 번호
      * @return 조회된 서버 데이터 리스트
      */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
     @GetMapping("/by-server-no/{server-no}")
     public ResponseEntity<List<ServerDataResponse>> getServerDataList(@PathVariable("server-no") long serverNo){
         List<ServerDataResponse> serverDataResponses = serverDataService.getServerDataList(serverNo);
