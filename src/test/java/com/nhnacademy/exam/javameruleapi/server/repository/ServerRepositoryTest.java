@@ -1,6 +1,6 @@
 package com.nhnacademy.exam.javameruleapi.server.repository;
 
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.ServerListNotExistsException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -77,14 +77,14 @@ public class ServerRepositoryTest {
     @DisplayName("회사 도메인에 등록된 서버목록 조회")
     void getServersByCompanyDomain() {
 
-        List<Server> servers = serverRepository.getServersByCompanyDomain("javaMe")
-                .orElseThrow(() -> new ServerNotExistException("서버 목록이 존재하지 않습니다."));
+        List<Server> servers2 = serverRepository.getServersByCompanyDomain("javaMe")
+                .orElseThrow(() -> new ServerListNotExistsException("서버 목록이 존재하지 않습니다."));
 
         // 반환된 서버 리스트 크기가 5인지 확인.
-        Assertions.assertEquals(5, servers.size(), "서버 리스트의 크기가 예상과 다릅니다.");
+        Assertions.assertEquals(5, servers2.size(), "서버 리스트의 크기가 예상과 다릅니다.");
 
         // 리스트의 모든 서버가 도메인을 javaMe로 가지고 있는지 확인
-        servers.forEach(server -> {
+        servers2.forEach(server -> {
                     Assertions.assertEquals("javaMe", server.getCompanyDomain(), " 서버의 도메인이 javaMe가 아닙니다.");
                 }
         );
@@ -123,6 +123,7 @@ public class ServerRepositoryTest {
         Assertions.assertTrue(isExist);
 
         Optional<Server> optionalServer = serverRepository.getServerByServerNo(servers.get(4).getServerNo());
+        Assertions.assertTrue(optionalServer.isPresent());
         Server foundServer = optionalServer.get();
 
         serverRepository.deleteServerByServerNo(foundServer.getServerNo());

@@ -1,13 +1,13 @@
 package com.nhnacademy.exam.javameruleapi.server.service;
 
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.AlreadyServerExistException;
-import com.nhnacademy.exam.javameruleapi.server.common.Exception.ServerNotExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.AlreadyServerExistException;
+import com.nhnacademy.exam.javameruleapi.server.common.exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
-import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepositoryTest;
+
 import com.nhnacademy.exam.javameruleapi.server.service.Impl.ServerServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -43,7 +42,6 @@ public class ServerServiceImplTest {
 
     private ServerRegisterRequest serverRegisterRequest;
     private Server server;
-    private static final Logger log = LoggerFactory.getLogger(ServerRepositoryTest.class);
 
 
     @BeforeEach
@@ -77,8 +75,6 @@ public class ServerServiceImplTest {
         Mockito.verify(serverRepository, Mockito.times(1))
                 .existsByCompanyDomainAndIphost(Mockito.anyString(), Mockito.anyString());
 
-        // 서버가 올바른 서버 넘버로 저장되었는지 확인
-        Assertions.assertNotNull(serverResponse.getServerNo());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1L, serverResponse.getServerNo()),
                 () -> Assertions.assertEquals("192.168.0.1", serverResponse.getIphost()),
@@ -110,7 +106,6 @@ public class ServerServiceImplTest {
 
         Mockito.verify(serverRepository, Mockito.times(1)).getServerByServerNo(Mockito.anyLong());
 
-        Assertions.assertNotNull(serverResponse.getServerNo());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1L, serverResponse.getServerNo()),
                 () -> Assertions.assertEquals("192.168.0.1", serverResponse.getIphost()),
@@ -125,8 +120,10 @@ public class ServerServiceImplTest {
 
         Mockito.when(serverRepository.getServerByServerNo(Mockito.anyLong())).thenReturn(Optional.empty());
 
+        long serverNo = server.getServerNo();
+
         Assertions.assertThrows(ServerNotExistException.class, () -> {
-            serverServiceImpl.getServer(server.getServerNo());
+            serverServiceImpl.getServer(serverNo);
         });
 
         Mockito.verify(serverRepository, Mockito.times(1)).getServerByServerNo(Mockito.anyLong());
@@ -147,7 +144,7 @@ public class ServerServiceImplTest {
 
         Mockito.verify(serverRepository, Mockito.times(1)).getServersByCompanyDomain(Mockito.anyString());
 
-        Assertions.assertEquals(serverResponses.size(), 1, "해당 회사 도메인으로 조회된 서버가 1개 아닙니다.");
+        Assertions.assertEquals(1, serverResponses.size(), "해당 회사 도메인으로 조회된 서버가 1개 아닙니다.");
 
         serverResponses.forEach(serverResponse -> {
             Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain(), "서버의 도메인이 javaMe.com 이 아닙니다.");
@@ -167,7 +164,6 @@ public class ServerServiceImplTest {
 
         Mockito.verify(serverRepository, Mockito.times(1)).getServerByServerNo(Mockito.anyLong());
 
-        Assertions.assertNotNull(serverResponse.getServerNo());
         Assertions.assertAll(
                 () -> Assertions.assertEquals("333.2444.22", serverResponse.getIphost()),
                 () -> Assertions.assertEquals("javaMe.com", serverResponse.getCompanyDomain())

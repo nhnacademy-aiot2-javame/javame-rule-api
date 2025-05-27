@@ -34,7 +34,7 @@ public class SensorResponse {
     /**
      * 센서의 생성일자.
      */
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
 
 }

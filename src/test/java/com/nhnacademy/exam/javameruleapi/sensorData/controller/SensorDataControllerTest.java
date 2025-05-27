@@ -16,8 +16,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -41,7 +41,7 @@ public class SensorDataControllerTest {
     private MockMvc mockMvc;
 
 
-    @MockBean
+    @MockitoBean
     private SensorDataService sensorDataService; // 서비스 계층을 모킹해서 주입
 
     private Sensor sensor;
@@ -81,7 +81,7 @@ public class SensorDataControllerTest {
                 sensor.getSensorNo(), sensor.getCompanyDomain(),
                 sensorData.getSensorDataNo(), sensorData.getSensorDataLocation(),
                 sensorData.getSensorDataGateway(), sensorData.getSensorDataName(),
-                sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreated_at()
+                sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreatedAt()
         );
 
         Mockito.when(sensorDataService.register(Mockito.anyLong(), Mockito.any(SensorDataRegisterRequest.class))).thenReturn(sensorDataResponse);
@@ -115,7 +115,7 @@ public class SensorDataControllerTest {
                         sensor.getSensorNo(), sensor.getCompanyDomain(),
                         sensorData.getSensorDataNo(), sensorData.getSensorDataLocation(),
                         sensorData.getSensorDataGateway(), sensorData.getSensorDataName(),
-                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreated_at()
+                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreatedAt()
                 );
 
         Mockito.when(sensorDataService.getSensorDataBySensorDataNo(Mockito.anyLong())).thenReturn(sensorDataResponse);
@@ -147,7 +147,7 @@ public class SensorDataControllerTest {
                         sensor.getSensorNo(), sensor.getCompanyDomain(),
                         sensorData.getSensorDataNo(), sensorData.getSensorDataLocation(),
                         sensorData.getSensorDataGateway(), sensorData.getSensorDataName(),
-                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreated_at()
+                        sensorData.getMinThreshold(), sensorData.getMaxThreshold(), sensorData.getCreatedAt()
                 );
 
         sensorDataResponses.add(sensorDataResponse);
