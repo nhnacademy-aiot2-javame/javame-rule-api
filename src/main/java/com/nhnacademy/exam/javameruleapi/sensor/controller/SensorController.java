@@ -24,7 +24,7 @@ import java.util.List;
  * 이 클래스는 센서의 등록, 조회, 삭제와 관련된 API 엔드포인트를 제공합니다.
  */
 @RestController
-@RequestMapping("/sensors")
+@RequestMapping("/rule/sensors")
 @RequiredArgsConstructor
 public class SensorController {
 
@@ -68,7 +68,7 @@ public class SensorController {
      * @param companyDomain 회사 도메인
      * @return 센서 응답 객체 리스트와 함께 HTTP 200(OK) 반환
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
+//    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @GetMapping
     ResponseEntity<List<SensorResponse>> getSensors(@RequestParam String companyDomain) {
         List<SensorResponse> sensorResponses = sensorService.getSensors(companyDomain);
