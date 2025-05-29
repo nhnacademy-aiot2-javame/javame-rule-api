@@ -53,7 +53,7 @@ public class ServerControllerTest {
         Mockito.when(serverService.register(Mockito.any(ServerRegisterRequest.class))).thenReturn(serverResponse);
 
         mockMvc.perform(
-                        post("/servers")
+                        post("/rule/servers")
                                 .content("""
                                         {
                                         "companyDomain":"javaMe.com",
@@ -83,7 +83,7 @@ public class ServerControllerTest {
         Mockito.when(serverService.getServer(Mockito.anyLong())).thenReturn(serverResponse);
 
         mockMvc.perform(
-                        get("/servers/1")
+                        get("/rule/servers/no/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -115,7 +115,7 @@ public class ServerControllerTest {
         Mockito.when(serverService.getServers(Mockito.anyString())).thenReturn(serverResponses);
 
         mockMvc.perform(
-                        get("/servers/domain")
+                        get("/rule/servers/cp/javaMe.com")
                                 .param("domain", "javaMe.com")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ public class ServerControllerTest {
         Mockito.when(serverService.update(Mockito.anyLong(), Mockito.any(ServerUpdateRequest.class))).thenReturn(serverResponse);
 
         mockMvc.perform(
-                        put("/servers/1")
+                        put("/rule/servers/1")
                                 .content("""
                                         {
                                         "iphost":"200.31.2"
@@ -173,7 +173,7 @@ public class ServerControllerTest {
         Mockito.doNothing().when(serverService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/servers/1")
+                        MockMvcRequestBuilders.delete("/rule/servers/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)

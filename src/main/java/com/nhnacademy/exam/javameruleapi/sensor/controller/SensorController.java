@@ -56,7 +56,7 @@ public class SensorController {
      * @return 센서 응답 객체와 함께 HTTP 200(OK) 반환
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/{sensor-id}")
+    @GetMapping("/id/{sensor-id}")
     ResponseEntity<SensorResponse> getSensor(@PathVariable("sensor-id") long sensorNo) {
         SensorResponse sensorResponse = sensorService.getSensor(sensorNo);
         return ResponseEntity.ok(sensorResponse);
@@ -69,8 +69,8 @@ public class SensorController {
      * @return 센서 응답 객체 리스트와 함께 HTTP 200(OK) 반환
      */
 //    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
-    @GetMapping
-    ResponseEntity<List<SensorResponse>> getSensors(@RequestParam String companyDomain) {
+    @GetMapping("/cp/{companyDomain}")
+    ResponseEntity<List<SensorResponse>> getSensors(@PathVariable("companyDomain") String companyDomain) {
         List<SensorResponse> sensorResponses = sensorService.getSensors(companyDomain);
         return ResponseEntity.ok(sensorResponses);
     }
