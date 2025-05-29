@@ -26,7 +26,7 @@ import java.util.List;
  * 서버 데이터의 등록, 조회, 수정, 삭제 기능을 제공합니다.
  */
 @RestController
-@RequestMapping("/server-datas")
+@RequestMapping("/rule/server-datas")
 @RequiredArgsConstructor
 public class ServerDataController {
 
@@ -75,9 +75,9 @@ public class ServerDataController {
      * @param serverNo 서버 번호
      * @return 조회된 서버 데이터 리스트
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/by-server-no/{server-no}")
-    public ResponseEntity<List<ServerDataResponse>> getServerDataList(@PathVariable("server-no") long serverNo){
+//    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
+    @GetMapping("/by-server-no/{serverNo}")
+    public ResponseEntity<List<ServerDataResponse>> getServerDataList(@PathVariable("serverNo") long serverNo){
         List<ServerDataResponse> serverDataResponses = serverDataService.getServerDataList(serverNo);
         return ResponseEntity
                 .ok(serverDataResponses);

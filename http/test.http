@@ -1,0 +1,22 @@
+GET http://localhost:80/api/item?id=99
+Accept: application/json
+
+###
+GET http://localhost:10274/rule/servers?domain=javame
+Accept: application/json
+
+###
+GET http://localhost:10279/api/v1/rule/servers?domain=javame
+Accept: application/json
+
+###
+GET http://localhost:10279/api/v1/rule/server-datas/by-server-no/1
+
+###
+GET http://localhost:10279/api/v1/rule/sensors?companyDomain=javame
+Accept: application/json
+
+###
+GET http://localhost:10279/api/v1/rule/sensor-datas/by-sensor-no/1
+Accept: application/json
+

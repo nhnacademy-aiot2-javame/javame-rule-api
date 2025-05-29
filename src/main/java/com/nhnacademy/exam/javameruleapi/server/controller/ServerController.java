@@ -26,7 +26,7 @@ import java.util.List;
  * 서버등록, 조회, 수정, 삭제 기능을 제공합니다.
  */
 @RestController
-@RequestMapping("/servers")
+@RequestMapping("/rule/servers")
 @RequiredArgsConstructor
 public class ServerController {
 
@@ -73,8 +73,8 @@ public class ServerController {
      * @param companyDomain 회사 도메인
      * @return 조회된 서버 정보 리스트 응답. HTTP Status 200(OK).
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
-    @GetMapping("/domain")
+//    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
+    @GetMapping
     public ResponseEntity<List<ServerResponse>> getServers(@RequestParam("domain") String companyDomain) {
         List<ServerResponse> servers = serverService.getServers(companyDomain);
         return ResponseEntity
