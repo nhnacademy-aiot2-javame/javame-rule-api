@@ -3,8 +3,9 @@ package com.nhnacademy.exam.javameruleapi.serverData.repository;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.serverData.domain.ServerData;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
+
+import com.nhnacademy.javame.common.dto.serverData.ServerDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataUpdateRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

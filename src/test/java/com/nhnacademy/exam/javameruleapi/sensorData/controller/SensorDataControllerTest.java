@@ -2,12 +2,13 @@ package com.nhnacademy.exam.javameruleapi.sensorData.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
 
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataResponse;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataUpdateRequest;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -90,7 +91,7 @@ public class SensorDataControllerTest {
         String jsonRequest = objectMapper.writeValueAsString(sensorDataRegisterRequest);
 
         mockMvc.perform(
-                        post("/sensor-datas/1")
+                        post("/rule/sensor-datas/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .content(jsonRequest)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -121,7 +122,7 @@ public class SensorDataControllerTest {
         Mockito.when(sensorDataService.getSensorDataBySensorDataNo(Mockito.anyLong())).thenReturn(sensorDataResponse);
 
         mockMvc.perform(
-                        get("/sensor-datas/by-dt-no/3")
+                        get("/rule/sensor-datas/by-dt-no/3")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -155,7 +156,7 @@ public class SensorDataControllerTest {
         Mockito.when(sensorDataService.getSensorDatasBySensorNo(Mockito.anyLong())).thenReturn(sensorDataResponses);
 
         mockMvc.perform(
-                        get("/sensor-datas/by-sensor-no/1")
+                        get("/rule/sensor-datas/by-sensor-no/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -187,7 +188,7 @@ public class SensorDataControllerTest {
         Mockito.when(sensorDataService.update(Mockito.anyLong(), Mockito.any(SensorDataUpdateRequest.class))).thenReturn(sensorDataResponse);
 
         mockMvc.perform(
-                        put("/sensor-datas/3")
+                        put("/rule/sensor-datas/3")
                                 .content("""
                                         {
                                         "sensorDataLocation":"출구",
@@ -219,7 +220,7 @@ public class SensorDataControllerTest {
         Mockito.doNothing().when(sensorDataService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/sensor-datas/3")
+                        MockMvcRequestBuilders.delete("/rule/sensor-datas/3")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)

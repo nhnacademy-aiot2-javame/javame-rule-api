@@ -1,10 +1,9 @@
 package com.nhnacademy.exam.javameruleapi.server.controller;
 
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
-
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
+import com.nhnacademy.javame.common.dto.server.ServerRegisterRequest;
+import com.nhnacademy.javame.common.dto.server.ServerResponse;
+import com.nhnacademy.javame.common.dto.server.ServerUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -145,7 +144,7 @@ public class ServerControllerTest {
 
         ServerUpdateRequest serverUpdateRequest = new ServerUpdateRequest("200.31.2");
 
-        Mockito.when(serverService.update(Mockito.anyLong(), Mockito.any(ServerUpdateRequest.class))).thenReturn(serverResponse);
+        Mockito.when(serverService.update(Mockito.anyLong() ,Mockito.any(ServerUpdateRequest.class))).thenReturn(serverResponse);
 
         mockMvc.perform(
                         put("/rule/servers/1")

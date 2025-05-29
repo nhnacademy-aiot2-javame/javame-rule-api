@@ -3,13 +3,14 @@ package com.nhnacademy.exam.javameruleapi.server.service;
 import com.nhnacademy.exam.javameruleapi.server.common.exception.AlreadyServerExistException;
 import com.nhnacademy.exam.javameruleapi.server.common.exception.ServerNotExistException;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 
 import com.nhnacademy.exam.javameruleapi.server.service.Impl.ServerServiceImpl;
 
+import com.nhnacademy.javame.common.dto.server.ServerRegisterRequest;
+import com.nhnacademy.javame.common.dto.server.ServerResponse;
+import com.nhnacademy.javame.common.dto.server.ServerUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

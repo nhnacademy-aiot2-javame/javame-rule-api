@@ -3,10 +3,11 @@ package com.nhnacademy.exam.javameruleapi.sensor.service.Impl;
 import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.AlreadySensorExistException;
 import com.nhnacademy.exam.javameruleapi.sensor.common.Exception.SensorNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
+
 import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
+import com.nhnacademy.javame.common.dto.sensor.SensorRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensor.SensorResponse;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -4,13 +4,15 @@ import com.nhnacademy.exam.javameruleapi.sensor.repository.SensorRepository;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.AlreadySensorDataExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.common.Exception.SensorDataNotExistException;
 import com.nhnacademy.exam.javameruleapi.sensorData.domain.SensorData;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.sensorData.repository.SensorDataRepository;
 import com.nhnacademy.exam.javameruleapi.sensorData.service.Impl.SensorDataServiceImpl;
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
+
+import com.nhnacademy.javame.common.dto.sensor.SensorRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataResponse;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

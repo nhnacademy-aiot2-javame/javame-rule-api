@@ -1,9 +1,10 @@
 package com.nhnacademy.exam.javameruleapi.sensor.controller;
 
 import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
+
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
+import com.nhnacademy.javame.common.dto.sensor.SensorRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensor.SensorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class SensorController {
      * @param sensorRegisterRequest 센서 등록 요청 객체
      * @return 셍성된 센서 정보와 함께 HTTP 201(CREATED) 상태 반환
      */
-    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
+//    @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping
     ResponseEntity<SensorResponse> registerSensor(@Validated @RequestBody SensorRegisterRequest sensorRegisterRequest) {
         SensorResponse sensorResponse = sensorService.register(sensorRegisterRequest);

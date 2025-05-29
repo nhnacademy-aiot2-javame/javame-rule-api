@@ -1,10 +1,11 @@
 package com.nhnacademy.exam.javameruleapi.server.controller;
 
 import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.server.service.ServerService;
+import com.nhnacademy.javame.common.dto.server.ServerRegisterRequest;
+import com.nhnacademy.javame.common.dto.server.ServerResponse;
+import com.nhnacademy.javame.common.dto.server.ServerUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class ServerController {
 
 
     /**
-     * 새로운 서버 정보를 등록합니다.
+     * 새로운 서버 정보를 등록합니다. -> environment-api와 연결
      *
      * @param serverRegisterRequest 서버 등록 요청 dto
      * @return 등록된 서버 정보 응답. HTTP Status 201(CREATED)
@@ -81,15 +82,16 @@ public class ServerController {
     }
 
     /**
-     *  서버 정보 업데이트.
+     * 서버 정보 업데이트.
      *
      * @param serverUpdateRequest 서버 업데이트 요청
-     * @param serverNo 서버 번호
+     * @param serverNo            서버 번호
      * @return 업데이트 된 서버 정보 응답. HTTP Status 200(OK).
      */
     @HasRole({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/{server-no}")
-    public ResponseEntity<ServerResponse> updateServer(@Validated @RequestBody ServerUpdateRequest serverUpdateRequest, @PathVariable("server-no") long serverNo) {
+    public ResponseEntity<ServerResponse> updateServer(@Validated @RequestBody ServerUpdateRequest serverUpdateRequest,
+                                                       @PathVariable("server-no") long serverNo) {
         ServerResponse serverResponse = serverService.update(serverNo, serverUpdateRequest);
         return ResponseEntity
                 .ok(serverResponse);

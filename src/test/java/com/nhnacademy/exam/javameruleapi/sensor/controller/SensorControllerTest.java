@@ -1,10 +1,11 @@
 package com.nhnacademy.exam.javameruleapi.sensor.controller;
 
 import com.nhnacademy.exam.javameruleapi.sensor.domain.Sensor;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
+
 import com.nhnacademy.exam.javameruleapi.sensor.service.SensorService;
 
+import com.nhnacademy.javame.common.dto.sensor.SensorRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensor.SensorResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

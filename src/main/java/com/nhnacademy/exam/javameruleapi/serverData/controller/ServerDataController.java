@@ -1,10 +1,11 @@
 package com.nhnacademy.exam.javameruleapi.serverData.controller;
 
 import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.serverData.service.ServerDataService;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataResponse;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ public class ServerDataController {
 
 
     /**
+     * 서버 데이터를 등록합니다.
      *
      * @param serverNo 서버 번호
      * @param serverDataRegisterRequest 서버 데이터 등록 요청

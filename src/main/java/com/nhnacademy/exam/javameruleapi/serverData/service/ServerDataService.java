@@ -1,8 +1,9 @@
 package com.nhnacademy.exam.javameruleapi.serverData.service;
 
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
+
+import com.nhnacademy.javame.common.dto.serverData.ServerDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataResponse;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataUpdateRequest;
 
 import java.util.List;
 

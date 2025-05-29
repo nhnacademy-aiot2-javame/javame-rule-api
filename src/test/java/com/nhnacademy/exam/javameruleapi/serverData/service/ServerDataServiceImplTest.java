@@ -3,13 +3,14 @@ package com.nhnacademy.exam.javameruleapi.serverData.service;
 import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.repository.ServerRepository;
 import com.nhnacademy.exam.javameruleapi.serverData.domain.ServerData;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataResponse;
-import com.nhnacademy.exam.javameruleapi.serverData.dto.ServerDataUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.serverData.repository.ServerDataRepository;
 import com.nhnacademy.exam.javameruleapi.serverData.service.Impl.ServerDataServiceImpl;
 import com.nhnacademy.exam.javameruleapi.serverData.service.common.Exception.AlreadyServerDataExistsException;
 import com.nhnacademy.exam.javameruleapi.serverData.service.common.Exception.ServerDataNotExistsException;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataResponse;
+import com.nhnacademy.javame.common.dto.serverData.ServerDataUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

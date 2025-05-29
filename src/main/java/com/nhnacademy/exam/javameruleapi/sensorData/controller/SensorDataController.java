@@ -1,10 +1,11 @@
 package com.nhnacademy.exam.javameruleapi.sensorData.controller;
 
 import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataResponse;
-import com.nhnacademy.exam.javameruleapi.sensorData.dto.SensorDataUpdateRequest;
+
 import com.nhnacademy.exam.javameruleapi.sensorData.service.SensorDataService;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataResponse;
+import com.nhnacademy.javame.common.dto.sensorData.SensorDataUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

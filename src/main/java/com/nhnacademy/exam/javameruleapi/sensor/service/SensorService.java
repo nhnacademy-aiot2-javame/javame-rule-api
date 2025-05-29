@@ -1,7 +1,9 @@
 package com.nhnacademy.exam.javameruleapi.sensor.service;
 
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorRegisterRequest;
-import com.nhnacademy.exam.javameruleapi.sensor.dto.SensorResponse;
+
+
+import com.nhnacademy.javame.common.dto.sensor.SensorRegisterRequest;
+import com.nhnacademy.javame.common.dto.sensor.SensorResponse;
 
 import java.util.List;
 
