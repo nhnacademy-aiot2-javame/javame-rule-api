@@ -105,7 +105,7 @@ public class ServerDataControllerTest {
                 .thenReturn(serverDataResponse);
 
         mockMvc.perform(
-                        post("/server-datas?serverNo=1")
+                        post("/rule/server-datas?serverNo=1")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
@@ -155,7 +155,7 @@ public class ServerDataControllerTest {
         Mockito.when(serverDataService.getServerData(Mockito.anyLong())).thenReturn(serverDataResponse);
 
         mockMvc.perform(
-                        get("/server-datas/by-server-data-no/1")
+                        get("/rule/server-datas/by-server-data-no/1")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
@@ -231,7 +231,7 @@ public class ServerDataControllerTest {
         Mockito.when(serverDataService.getServerDataList(Mockito.anyLong())).thenReturn(serverDataResponseList);
 
         mockMvc.perform(
-                        get("/server-datas/by-server-no/1")
+                        get("/rule/server-datas/by-server-no/1")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("X-USER-ROLE", "ROLE_ADMIN", "ROLE_USER")
@@ -278,7 +278,7 @@ public class ServerDataControllerTest {
         Mockito.when(serverDataService.updateServerData(Mockito.anyLong(), Mockito.any(ServerDataUpdateRequest.class))).thenReturn(serverDataResponse);
 
         mockMvc.perform(
-                        put("/server-datas/1")
+                        put("/rule/server-datas/1")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
@@ -311,7 +311,7 @@ public class ServerDataControllerTest {
         Mockito.doNothing().when(serverDataService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                        delete("/server-datas/1")
+                        delete("/rule/server-datas/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
