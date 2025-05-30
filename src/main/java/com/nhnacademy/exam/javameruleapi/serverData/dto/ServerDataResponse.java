@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ServerDataResponse {
 
     /**
-     *  서버의 IP 주소.
+     *  서버의 번호
      */
     private long serverNo;
 

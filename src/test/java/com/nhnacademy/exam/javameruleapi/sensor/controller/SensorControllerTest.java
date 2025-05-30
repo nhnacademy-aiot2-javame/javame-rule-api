@@ -62,7 +62,7 @@ public class SensorControllerTest {
         Mockito.when(sensorService.register(Mockito.any(SensorRegisterRequest.class))).thenReturn(sensorResponse);
 
         mockMvc.perform(
-                        post("/sensors")
+                        post("/rule/sensors")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public class SensorControllerTest {
         Mockito.when(sensorService.getSensor(Mockito.anyLong())).thenReturn(sensorResponse);
 
         mockMvc.perform(
-                        get("/sensors/1")
+                        get("/rule/sensors/id/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -124,7 +124,7 @@ public class SensorControllerTest {
 
 
         mockMvc.perform(
-                        get("/sensors?companyDomain=nhn_domain")
+                        get("/rule/sensors/cp/nhn_domain")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -146,7 +146,7 @@ public class SensorControllerTest {
         Mockito.doNothing().when(sensorService).delete(Mockito.anyLong());
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/sensors/1")
+                        MockMvcRequestBuilders.delete("/rule/sensors/1")
                                 .header("X-USER-ROLE", "ROLE_ADMIN")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
