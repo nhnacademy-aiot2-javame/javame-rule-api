@@ -44,6 +44,11 @@ public class ServerServiceImpl implements ServerService {
         return ServerResponse.from(server);
     }
 
+    @Override
+    public ServerResponse getServerResponseByIphost(String companyDomain, String iphost) {
+        Server server = serverRepository.findServerByCompanyDomainAndIphost(companyDomain, iphost).orElseThrow(()-> new ServerNotExistException("존재하지 않는 서버입니다."));
+        return ServerResponse.from(server);
+    }
 
     @Override
     public List<ServerResponse> getServers(String companyDomain) {

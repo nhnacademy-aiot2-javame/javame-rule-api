@@ -63,4 +63,12 @@ public interface ServerRepository extends JpaRepository<Server, Long> {
      * @param serverNo
      */
     void deleteServerByServerNo(long serverNo);
+
+    /**
+     * 회사 도메인, iphost를 이용하여 서버를 조회합니다.
+     * @param companyDomain 회사 도메인
+     * @param iphost iphost
+     * @return 서버 정보
+     */
+    Optional<Server> findServerByCompanyDomainAndIphost(String companyDomain, String iphost);
 }
