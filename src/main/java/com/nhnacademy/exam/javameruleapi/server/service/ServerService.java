@@ -27,6 +27,14 @@ public interface ServerService {
      */
     ServerResponse getServer(long serverNo);
 
+    /**
+     * Iphost를 기반으로 서버 정보 조회.
+     * @param companyDomain 회사 도메인
+     * @param iphost iphost
+     * @return 서버 정보
+     */
+    ServerResponse getServerResponseByIphost(String companyDomain, String iphost);
+
 
     /**
      *  특정 회사 도메인에 속한 모든 서버를 조회합니다.
