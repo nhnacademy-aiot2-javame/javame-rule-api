@@ -1,6 +1,7 @@
 package com.nhnacademy.exam.javameruleapi.server.controller;
 
 import com.nhnacademy.exam.javameruleapi.config.annotation.HasRole;
+import com.nhnacademy.exam.javameruleapi.server.domain.Server;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerResponse;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerRegisterRequest;
 import com.nhnacademy.exam.javameruleapi.server.dto.ServerUpdateRequest;
@@ -63,6 +64,19 @@ public class ServerController {
         ServerResponse serverResponse = serverService.getServer(serverNo);
         return ResponseEntity
                 .ok(serverResponse);
+    }
+
+
+    /**
+     * 서버 Iphost를 기반으로 서버정보를 조회합니다.
+     * @param iphost iphost
+     * @return 서버 정보
+     */
+    @HasRole({"ROLE_ADMIN", "ROLE_OWNER", "ROLE_USER"})
+    @GetMapping("/{company-domain}/iphost/{iphost}")
+    public ResponseEntity<ServerResponse> getServerByIphost(@PathVariable("iphost") String iphost, @PathVariable("company-domain") String companyDomain){
+        ServerResponse serverResponse = serverService.getServerResponseByIphost(companyDomain, iphost);
+        return ResponseEntity.ok(serverResponse);
     }
 
 

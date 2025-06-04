@@ -20,3 +20,5 @@ Accept: application/json
 GET http://localhost:10279/api/v1/rule/sensor-datas/by-sensor-no/1
 Accept: application/json
 
+###
+GET http://localhost:10274/rule/sensors/cp/javame
